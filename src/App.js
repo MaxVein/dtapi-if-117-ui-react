@@ -1,12 +1,11 @@
-import logo from './logo.svg'
+import { Route } from 'react-router-dom'
 import './App.css'
+import SpecialityView from './speciality/SpecialityView'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Hell2o</h2>
-      </header>
+    <div>
+      <SpecialityView />
     </div>
   )
 }
