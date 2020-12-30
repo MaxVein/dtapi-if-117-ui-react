@@ -1,11 +1,10 @@
-import { Route } from 'react-router-dom'
 import './App.css'
-import SpecialityView from './speciality/SpecialityView'
+import Speciality from './components/admin/speciality'
 
 function App() {
   return (
     <div>
-      <SpecialityView />
+      <Speciality />
     </div>
   )
 }

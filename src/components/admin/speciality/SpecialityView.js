@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow'
 import SpecialityViewList from './SpecialityViewList'
 import SpecialityAddDialig from './SpecialityAddDialog'
 
-import { getEntityData, login } from './utils'
+import { getEntityData, login } from '../../../common/utils'
 
 const SpecialityView = () => {
   const [specialityDates, setSpecialityDate] = useState([])

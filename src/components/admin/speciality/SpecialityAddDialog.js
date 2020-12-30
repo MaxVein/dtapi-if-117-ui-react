@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Formik } from 'formik'
-import { addEntity, updateEntity } from './utils'
+import { addEntity, updateEntity } from '../../../common/utils'
 const SpecialityAddDialig = ({
   open,
   setOpen,

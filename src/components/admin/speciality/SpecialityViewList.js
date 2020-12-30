@@ -5,8 +5,7 @@ import SpecialityAddDialig from './SpecialityAddDialog'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { Button } from '@material-ui/core'
-import { deleteEntity } from './utils'
-import { Route } from 'react-router-dom'
+import { deleteEntity } from '../../../common/utils'
 
 const SpecialityViewList = ({
   speciality,
@@ -20,18 +19,14 @@ const SpecialityViewList = ({
     setEdit(true)
   }
   const deleteSpecialityHandler = () => {
-    deleteEntity('Speciality', speciality_id)
-      .then((res) => {
-        if (res.data.response === 'ok') {
-          const newArray = specialityDates.filter(
-            (item) => item.speciality_id !== speciality_id
-          )
-          setSpecialityDate(newArray)
-        }
-      })
-      .catch((e) => {
-        console.log('Something goes wrong', e)
-      })
+    deleteEntity('Speciality', speciality_id).then((res) => {
+      if (res.data.response === 'ok') {
+        const newArray = specialityDates.filter(
+          (item) => item.speciality_id !== speciality_id
+        )
+        setSpecialityDate(newArray)
+      }
+    })
   }
   return (
     <TableRow>
