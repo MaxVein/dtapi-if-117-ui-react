@@ -15,7 +15,7 @@ import { navList } from '../../common/navUtils'
 
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import { MainListItems } from './mainList'
+import { MainListItems } from './AdminNavItem'
 import { Link, Route, Switch } from 'react-router-dom'
 import Speciality from './speciality'
 import { ExitToApp, HomeOutlined } from '@material-ui/icons'
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: 'flex',

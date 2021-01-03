@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
 
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { isLogged, login } from '../../common/utils'
-
+import { Formik } from 'formik'
+import * as Yup from 'yup'
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -35,23 +34,20 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = ({ setAuthInfo }) => {
   const classes = useStyles()
-  const [name, setName] = useState('')
-  const [password, setPassword] = useState('')
 
-  const submitHandler = async (e) => {
-    e.preventDefault()
-
-    const logInfo = { username: name, password }
+  const initialValues = {
+    name: '',
+    password: '',
+  }
+  const validationSchema = Yup.object({
+    name: Yup.string().required(`Обов'язкове поле`),
+    password: Yup.string().required(`Обов'язкове поле`),
+  })
+  const submitHandler = async (value) => {
+    const logInfo = { username: value.name, password: value.password }
     await login(logInfo)
     const isAuth = await isLogged()
     setAuthInfo(isAuth)
-  }
-
-  const nameChangeHandle = (e) => {
-    setName(e.target.value)
-  }
-  const passwordChangeHandle = (e) => {
-    setPassword(e.target.value)
   }
 
   return (
@@ -64,47 +60,62 @@ const Login = ({ setAuthInfo }) => {
         <Typography component="h1" variant="h5">
           Log in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={submitHandler}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Name"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={name}
-            onChange={nameChangeHandle}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            autoComplete="current-password"
-            onChange={passwordChangeHandle}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Log In
-          </Button>
-        </form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={submitHandler}
+          validateOnMount={true}
+        >
+          {(props) => (
+            <form
+              className={classes.form}
+              noValidate
+              onSubmit={props.handleSubmit}
+            >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                value={props.values.name}
+                onBlur={props.handleBlur}
+                onChange={props.handleChange}
+                helperText={props.touched.name ? props.errors.name : ''}
+                error={props.touched.name && Boolean(props.errors.name)}
+              />
+
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                onBlur={props.handleBlur}
+                value={props.values.password}
+                onChange={props.handleChange}
+                helperText={props.touched.password ? props.errors.password : ''}
+                error={props.touched.password && Boolean(props.errors.password)}
+              />
+
+              <Button
+                disabled={!props.isValid}
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Log In
+              </Button>
+            </form>
+          )}
+        </Formik>
       </div>
     </Container>
   )
