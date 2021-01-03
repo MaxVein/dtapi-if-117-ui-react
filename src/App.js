@@ -1,12 +1,10 @@
-import logo from './logo.svg'
 import './App.css'
+import Speciality from './components/admin/speciality'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Hell2o</h2>
-      </header>
+    <div>
+      <Speciality />
     </div>
   )
 }
