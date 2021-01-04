@@ -8,16 +8,15 @@ module.exports = {
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
         'plugin:prettier/recommended',
-        'plugin:jsx-a11y/strict',
     ],
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
         },
-        ecmaVersion: 2018,
+        ecmaVersion: 12,
         sourceType: 'module',
     },
-    plugins: ['react', 'jsx-a11y'],
+    plugins: ['react'],
     rules: {
         'react-hooks/exhaustive-deps': 'error',
         'no-var': 'error',
@@ -26,6 +25,10 @@ module.exports = {
         'space-before-blocks': 'error',
         'import/prefer-default-export': 'off',
         'react/prop-types': 'off',
+        'no-unused-vars': 'off',
+        'react/react-in-jsx-scope': 0,
+        'react/display-name': 0,
+        'no-undef': 0,
     },
     overrides: [
         {

@@ -5,13 +5,7 @@ const LoginRoute = ({ component: Component, path, authInfo, setAuthInfo }) => {
         <Route
             render={(props) => {
                 if (authInfo.data?.response === 'non logged') {
-                    return (
-                        <Component
-                            setAuthInfo={setAuthInfo}
-                            path={path}
-                            {...props}
-                        />
-                    );
+                    return <Component setAuthInfo={setAuthInfo} path={path} {...props} />;
                 } else if (authInfo.data?.roles) {
                     const goTo = authInfo.data.roles.includes('admin');
                     if (goTo) {

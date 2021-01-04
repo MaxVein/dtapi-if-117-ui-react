@@ -4,8 +4,8 @@ module.exports = {
     singleQuote: true,
     semi: true,
     trailingComma: 'all',
-    arrowParens: "always",
-    endOfLine: "auto",
+    arrowParens: 'always',
+    endOfLine: 'auto',
     overrides: [
         {
             files: '*.{js,jsx,tsx,ts,scss,json,html}',

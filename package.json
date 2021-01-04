@@ -54,11 +54,13 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "lint-staged"
+            "pre-commit": "lint-staged && npm run lint",
+            "pre-push": "ng build --prod"
         }
     },
     "lint-staged": {
         "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-             "prettier --write"
-            ]    }
+            "prettier --write"
+        ]
+    }
 }

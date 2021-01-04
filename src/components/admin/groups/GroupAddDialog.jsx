@@ -39,11 +39,7 @@ const GroupAddDialog = ({ open, setOpen, group }) => {
             .catch((e) => {});
     };
     return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="form-dialog-title"
-        >
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">
                 {group ? 'Редагувати групу' : 'Додати групу'}
             </DialogTitle>
@@ -94,17 +90,11 @@ const GroupAddDialog = ({ open, setOpen, group }) => {
                                 helperText={touched.code ? errors.code : ''}
                                 error={touched.code && Boolean(errors.code)}
                             />
-                            <div
-                                style={{ margin: '1rem', textAlign: 'center' }}
-                            >
+                            <div style={{ margin: '1rem', textAlign: 'center' }}>
                                 <Button onClick={handleClose} color="primary">
                                     Відмінити
                                 </Button>
-                                <Button
-                                    disabled={!isValid}
-                                    type="submit"
-                                    color="primary"
-                                >
+                                <Button disabled={!isValid} type="submit" color="primary">
                                     {group ? 'Редагувати' : 'Додати'}
                                 </Button>
                             </div>
