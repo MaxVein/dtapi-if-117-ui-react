@@ -17,7 +17,6 @@ import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import { MainListItems } from './AdminNavItem'
 import { Link, Route, Switch } from 'react-router-dom'
-import Speciality from './speciality'
 import { ExitToApp, HomeOutlined } from '@material-ui/icons'
 
 import ListItem from '@material-ui/core/ListItem'
@@ -25,6 +24,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
 import { logOut, isLogged } from '../../common/utils'
+
+import Speciality from "./speciality";
+import DashboardCards from './dashboard'
 
 const drawerWidth = 240
 
@@ -148,7 +150,7 @@ export default function AdminPanel({ setAuthInfo }) {
             noWrap
             className={classes.title}
           >
-            <Link style={{ color: 'white' }} to="/">
+            <Link style={{ color: "white" }} to="/">
               Dashboard
             </Link>
           </Typography>
@@ -199,8 +201,11 @@ export default function AdminPanel({ setAuthInfo }) {
           <Switch>
             <Route path="/admin/speciality" component={Speciality} />
           </Switch>
+          <Switch>
+            <Route path="/admin/dashboard" component={DashboardCards} />
+          </Switch>
         </Container>
       </main>
     </div>
-  )
+  );
 }
