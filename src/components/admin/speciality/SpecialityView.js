@@ -60,11 +60,7 @@ const SpecialityView = () => {
         <div>
             <div style={styles.btn}>
                 <h2>Спеціальності</h2>
-                <Button
-                    onClick={dialogOpenHandler}
-                    variant="contained"
-                    color="primary"
-                >
+                <Button onClick={dialogOpenHandler} variant="contained" color="primary">
                     Добавити спеціальність
                 </Button>
             </div>
@@ -79,10 +75,7 @@ const SpecialityView = () => {
                     </TableHead>
                     <TableBody>
                         {specialityDates
-                            .slice(
-                                page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage
-                            )
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((speciality) => (
                                 <SpecialityViewList
                                     speciality={speciality}

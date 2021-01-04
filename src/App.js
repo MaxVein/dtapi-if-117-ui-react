@@ -22,10 +22,7 @@ function App() {
         <div>
             <Switch>
                 <Redirect path="/" to="/login" exact />
-                <Route
-                    path="/student"
-                    component={() => <h1>Hello Student</h1>}
-                />
+                <Route path="/student" component={() => <h1>Hello Student</h1>} />
                 <Redirect path="/admin" exact to="/admin/dashboard" />
                 <ProtectedRoute
                     authInfo={authInfo}

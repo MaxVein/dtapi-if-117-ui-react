@@ -10,7 +10,6 @@ module.exports = {
         'plugin:prettier/recommended',
         'plugin:jsx-a11y/strict',
     ],
-    parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
@@ -18,15 +17,15 @@ module.exports = {
         ecmaVersion: 2018,
         sourceType: 'module',
     },
-    plugins: ['react', 'jsx-a11y', '@typescript-eslint'],
+    plugins: ['react', 'jsx-a11y'],
     rules: {
         'react-hooks/exhaustive-deps': 'error',
         'no-var': 'error',
         'brace-style': 'error',
         'prefer-template': 'error',
-        radix: 'error',
         'space-before-blocks': 'error',
         'import/prefer-default-export': 'off',
+        'react/prop-types': 'off',
     },
     overrides: [
         {

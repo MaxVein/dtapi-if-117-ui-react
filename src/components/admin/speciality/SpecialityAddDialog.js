@@ -35,9 +35,7 @@ const SpecialityAddDialig = ({
             speciality_code: data.code,
         }).then((res) => {
             const updatedList = specialityDates.map((item) =>
-                res.data[0].speciality_id === item.speciality_id
-                    ? res.data[0]
-                    : item
+                res.data[0].speciality_id === item.speciality_id ? res.data[0] : item,
             );
             setSpecialityDate(updatedList);
             setEdit(false);
@@ -55,15 +53,9 @@ const SpecialityAddDialig = ({
             .catch((e) => {});
     };
     return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="form-dialog-title"
-        >
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">
-                {speciality
-                    ? 'Редагувати спеціальність'
-                    : 'Додати спеціальність'}
+                {speciality ? 'Редагувати спеціальність' : 'Додати спеціальність'}
             </DialogTitle>
             <DialogContent>
                 <Formik
@@ -71,9 +63,7 @@ const SpecialityAddDialig = ({
                     validationSchema={validationSchema}
                     validateOnMount={true}
                     onSubmit={(data) => {
-                        speciality
-                            ? updateSpeciality(data)
-                            : addSpeciality(data);
+                        speciality ? updateSpeciality(data) : addSpeciality(data);
                     }}
                 >
                     {({
@@ -114,17 +104,11 @@ const SpecialityAddDialig = ({
                                 helperText={touched.code ? errors.code : ''}
                                 error={touched.code && Boolean(errors.code)}
                             />
-                            <div
-                                style={{ margin: '1rem', textAlign: 'center' }}
-                            >
+                            <div style={{ margin: '1rem', textAlign: 'center' }}>
                                 <Button onClick={handleClose} color="primary">
                                     Відмінити
                                 </Button>
-                                <Button
-                                    disabled={!isValid}
-                                    type="submit"
-                                    color="primary"
-                                >
+                                <Button disabled={!isValid} type="submit" color="primary">
                                     {speciality ? 'Редагувати' : 'Додати'}
                                 </Button>
                             </div>

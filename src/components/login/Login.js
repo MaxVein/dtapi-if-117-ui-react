@@ -67,11 +67,7 @@ const Login = ({ setAuthInfo }) => {
                     validateOnMount={true}
                 >
                     {(props) => (
-                        <form
-                            className={classes.form}
-                            noValidate
-                            onSubmit={props.handleSubmit}
-                        >
+                        <form className={classes.form} noValidate onSubmit={props.handleSubmit}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -83,13 +79,8 @@ const Login = ({ setAuthInfo }) => {
                                 value={props.values.name}
                                 onBlur={props.handleBlur}
                                 onChange={props.handleChange}
-                                helperText={
-                                    props.touched.name ? props.errors.name : ''
-                                }
-                                error={
-                                    props.touched.name &&
-                                    Boolean(props.errors.name)
-                                }
+                                helperText={props.touched.name ? props.errors.name : ''}
+                                error={props.touched.name && Boolean(props.errors.name)}
                             />
 
                             <TextField
@@ -104,15 +95,8 @@ const Login = ({ setAuthInfo }) => {
                                 onBlur={props.handleBlur}
                                 value={props.values.password}
                                 onChange={props.handleChange}
-                                helperText={
-                                    props.touched.password
-                                        ? props.errors.password
-                                        : ''
-                                }
-                                error={
-                                    props.touched.password &&
-                                    Boolean(props.errors.password)
-                                }
+                                helperText={props.touched.password ? props.errors.password : ''}
+                                error={props.touched.password && Boolean(props.errors.password)}
                             />
 
                             <Button

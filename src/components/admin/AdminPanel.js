@@ -136,10 +136,7 @@ export default function AdminPanel({ setAuthInfo }) {
                         color="inherit"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
-                        className={clsx(
-                            classes.menuButton,
-                            open && classes.menuButtonHidden
-                        )}
+                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -162,10 +159,7 @@ export default function AdminPanel({ setAuthInfo }) {
             <Drawer
                 variant="permanent"
                 classes={{
-                    paper: clsx(
-                        classes.drawerPaper,
-                        !open && classes.drawerPaperClose
-                    ),
+                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
                 }}
                 open={open}
             >
@@ -182,12 +176,7 @@ export default function AdminPanel({ setAuthInfo }) {
                 <Divider />
                 <List className="navBar">
                     {navList.map(({ path, icon, title }, index) => (
-                        <MainListItems
-                            key={index + title}
-                            path={path}
-                            icon={icon}
-                            title={title}
-                        />
+                        <MainListItems key={index + title} path={path} icon={icon} title={title} />
                     ))}
                     <ListItem onClick={logoutHandle}>
                         <ListItemIcon>
@@ -202,10 +191,7 @@ export default function AdminPanel({ setAuthInfo }) {
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth={false} className={classes.container}>
                     <Switch>
-                        <Route
-                            path="/admin/speciality"
-                            component={Speciality}
-                        />
+                        <Route path="/admin/speciality" component={Speciality} />
                         <Route path="/admin/group" component={Groups} />
                     </Switch>
                 </Container>

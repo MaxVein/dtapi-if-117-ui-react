@@ -7,12 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { Button } from '@material-ui/core';
 import { deleteEntity } from '../../../common/utils';
 
-const SpecialityViewList = ({
-    speciality,
-    setOpen,
-    setSpecialityDate,
-    specialityDates,
-}) => {
+const SpecialityViewList = ({ speciality, setOpen, setSpecialityDate, specialityDates }) => {
     const { speciality_name, speciality_code, speciality_id } = speciality;
     const [edit, setEdit] = useState(false);
     const editSpecialityHandler = () => {
@@ -22,7 +17,7 @@ const SpecialityViewList = ({
         deleteEntity('Speciality', speciality_id).then((res) => {
             if (res.data.response === 'ok') {
                 const newArray = specialityDates.filter(
-                    (item) => item.speciality_id !== speciality_id
+                    (item) => item.speciality_id !== speciality_id,
                 );
                 setSpecialityDate(newArray);
             }
