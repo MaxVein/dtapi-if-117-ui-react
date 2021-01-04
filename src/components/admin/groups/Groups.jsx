@@ -12,7 +12,8 @@ import axios from 'axios';
 
 import { getEntityData } from '../../../common/utils';
 import GroupRow from './GroupRow';
-import GroupAddDialog from './GroupAddDialog';;;;
+
+import GroupAddDialog from './GroupAddDialog';
 
 import '../../../styles/app.scss';
 
@@ -73,12 +74,7 @@ const Groups = () => {
             }}
         >
             <div className="header">
-                <Typography
-                    component="h2"
-                    variant="h6"
-                    color="primary"
-                    gutterBottom
-                >
+                <Typography component="h2" variant="h6" color="primary" gutterBottom>
                     Групи і студенти
                 </Typography>
                 <Button color="primary">Додати групу</Button>
@@ -94,15 +90,9 @@ const Groups = () => {
                     </TableHead>
                     <TableBody>
                         {groupsData
-                            .slice(
-                                page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage
-                            )
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((groupData) => (
-                                <GroupRow
-                                    groupData={groupData}
-                                    key={groupData.group_id}
-                                />
+                                <GroupRow groupData={groupData} key={groupData.group_id} />
                             ))}
                     </TableBody>
                 </Table>
