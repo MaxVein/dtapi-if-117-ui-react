@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 
 import { getEntityData, login } from '../../../common/utils';
 import GroupRow from './GroupRow';
-import './group.scss';
+import '../../../styles/app.scss';
 
 const Groups = () => {
     const [page, setPage] = useState(0);
@@ -60,6 +60,7 @@ const Groups = () => {
     const fieldsName = ['№', 'Шифр групи', 'Спеціальність', 'Факультет', 'Дії'];
     return (
         <div
+            className="groups"
             style={{
                 width: '90%',
                 margin: 'auto',
@@ -74,7 +75,7 @@ const Groups = () => {
                 >
                     Групи і студенти
                 </Typography>
-                <Button color="primary">Primary</Button>
+                <Button color="primary">Додати групу</Button>
             </div>
             <div style={{ boxShadow: '0.5rem 1rem 2rem gray' }}>
                 <Table stickyHeader aria-label="sticky table">
