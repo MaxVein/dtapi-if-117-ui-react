@@ -1,14 +1,12 @@
-import logo from './logo.svg'
-import './App.css'
+import './App.css';
+import Groups from './components/admin/groups';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Hell2o</h2>
-      </header>
-    </div>
-  )
+    return (
+        <div>
+            <Groups />
+        </div>
+    );
 }
 
-export default App
+export default App;
