@@ -11,7 +11,8 @@ import TableRow from '@material-ui/core/TableRow'
 import SpecialityViewList from './SpecialityViewList'
 import SpecialityAddDialig from './SpecialityAddDialog'
 
-import { getEntityData, login } from '../../../common/utils'
+import { getEntityData } from '../../../common/utils'
+import axios from 'axios'
 
 const SpecialityView = () => {
   const [specialityDates, setSpecialityDate] = useState([])
@@ -22,12 +23,16 @@ const SpecialityView = () => {
   const headerName = ['ID', 'Спеціальність', 'Код', 'Дія']
 
   useEffect(() => {
+    const source = axios.CancelToken.source()
     async function fetchData() {
-      await login()
-      const specialityDate = await getEntityData('Speciality')
+      const specialityDate = await getEntityData('Speciality', source)
       setSpecialityDate(specialityDate.data)
     }
+
     fetchData()
+    return () => {
+      source.cancel()
+    }
   }, [])
 
   const handleChangePage = (event, newPage) => {
@@ -50,13 +55,9 @@ const SpecialityView = () => {
   const dialogOpenHandler = () => {
     setOpen(true)
   }
+
   return (
-    <div
-      style={{
-        width: '90%',
-        margin: 'auto',
-      }}
-    >
+    <div>
       <div style={styles.btn}>
         <h2>Спеціальності</h2>
         <Button onClick={dialogOpenHandler} variant="contained" color="primary">
