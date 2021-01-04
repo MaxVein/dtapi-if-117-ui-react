@@ -86,7 +86,6 @@ const Login = ({ setAuthInfo }) => {
                 helperText={props.touched.name ? props.errors.name : ''}
                 error={props.touched.name && Boolean(props.errors.name)}
               />
-
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -96,8 +95,8 @@ const Login = ({ setAuthInfo }) => {
                 label="Password"
                 type="password"
                 id="password"
-                onBlur={props.handleBlur}
                 value={props.values.password}
+                onBlur={props.handleBlur}
                 onChange={props.handleChange}
                 helperText={props.touched.password ? props.errors.password : ''}
                 error={props.touched.password && Boolean(props.errors.password)}

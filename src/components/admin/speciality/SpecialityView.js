@@ -13,6 +13,7 @@ import SpecialityAddDialig from './SpecialityAddDialog'
 
 import { getEntityData } from '../../../common/utils'
 import axios from 'axios'
+import '../../../App.css'
 
 const SpecialityView = () => {
   const [specialityDates, setSpecialityDate] = useState([])
@@ -57,7 +58,7 @@ const SpecialityView = () => {
   }
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={styles.btn}>
         <h2>Спеціальності</h2>
         <Button onClick={dialogOpenHandler} variant="contained" color="primary">
@@ -67,7 +68,7 @@ const SpecialityView = () => {
       <div style={{ boxShadow: '0.5rem 1rem 2rem gray' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
+            <TableRow className="tableStyle">
               {headerName.map((column) => (
                 <TableCell key={column + 1}>{column}</TableCell>
               ))}

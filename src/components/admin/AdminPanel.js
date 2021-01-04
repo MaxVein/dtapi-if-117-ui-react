@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    [theme.breakpoints.down('415')]: {
+      display: 'none',
+    },
   },
   menuButton: {
     marginRight: 36,
@@ -74,6 +77,9 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    [theme.breakpoints.down('415')]: {
+      width: '100vw',
+    },
   },
   drawerPaperClose: {
     overflowX: 'hidden',
@@ -81,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    width: theme.spacing(7),
+    width: 0,
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9),
     },
@@ -178,6 +184,7 @@ export default function AdminPanel({ setAuthInfo }) {
         <List className="navBar">
           {navList.map(({ path, icon, title }, index) => (
             <MainListItems
+              handleDrawerClose={handleDrawerClose}
               key={index + title}
               path={path}
               icon={icon}

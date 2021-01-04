@@ -35,3 +35,8 @@
   background: rgb(123, 143, 231);
   color: white;
 }
+
+.tableStyle td,
+.tableStyle th {
+  padding: 5px;
+}

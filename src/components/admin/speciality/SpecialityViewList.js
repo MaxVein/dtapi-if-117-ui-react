@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { Button } from '@material-ui/core'
 import { deleteEntity } from '../../../common/utils'
 
+import '../../../App.css'
 const SpecialityViewList = ({
   speciality,
   setOpen,
@@ -29,19 +30,17 @@ const SpecialityViewList = ({
     })
   }
   return (
-    <TableRow>
+    <TableRow className="tableStyle">
       <TableCell>{speciality_id}</TableCell>
       <TableCell>{speciality_name}</TableCell>
       <TableCell>{speciality_code}</TableCell>
       <TableCell>
-        <div>
-          <Button color="primary" onClick={editSpecialityHandler}>
-            <EditIcon />
-          </Button>
-          <Button color="primary" onClick={deleteSpecialityHandler}>
-            <DeleteIcon />
-          </Button>
-        </div>
+        <Button color="primary" onClick={editSpecialityHandler}>
+          <EditIcon />
+        </Button>
+        <Button color="primary" onClick={deleteSpecialityHandler}>
+          <DeleteIcon />
+        </Button>
       </TableCell>
 
       <SpecialityAddDialig
