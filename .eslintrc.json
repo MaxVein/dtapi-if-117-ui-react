@@ -4,11 +4,7 @@
         "es2021": true,
         "jest": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "standard",
-        "plugin:prettier/recommended"
-    ],
+    "extends": ["standard", "plugin:prettier/recommended"],
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -16,13 +12,13 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": ["react"],
     "rules": {
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-unused-vars": [
             "warn",
             { "args": "none", "argsIgnorePattern": "req|res|next|val" }
         ],
-        "react/react-in-jsx-scope": "off"
+        "array-callback-return": 0,
+        "camelcase": 0
     }
 }

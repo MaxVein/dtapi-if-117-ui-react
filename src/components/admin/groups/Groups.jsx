@@ -8,9 +8,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
 
-import { getEntityData, login } from '../../../common/utils';
+import { getEntityData } from '../../../common/utils';
 import GroupRow from './GroupRow';
+import GroupAddDialog from './GroupAddDialog';
+
 import '../../../styles/app.scss';
 
 const Groups = () => {
@@ -18,17 +21,20 @@ const Groups = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [groupsData, setGroupsData] = useState([]);
     useEffect(() => {
+        const source = axios.CancelToken.source();
         (async function fetchData() {
-            await login();
             const requests = [
-                getEntityData('Group'),
-                getEntityData('speciality'),
-                getEntityData('faculty'),
+                getEntityData('Group', source),
+                getEntityData('speciality', source),
+                getEntityData('faculty', source),
             ];
             const response = await Promise.all(requests);
             const newData = genereteTableData(response);
             setGroupsData(newData);
         })();
+        return () => {
+            source.cancel();
+        };
     }, []);
 
     const handleChangePage = (event, newPage) => {
