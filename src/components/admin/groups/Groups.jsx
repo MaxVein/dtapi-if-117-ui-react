@@ -12,7 +12,7 @@ import axios from 'axios';
 
 import { getEntityData } from '../../../common/utils';
 import GroupRow from './GroupRow';
-import GroupAddDialog from './GroupAddDialog';
+import GroupAddDialog from './GroupAddDialog';;;;
 
 import '../../../styles/app.scss';
 
