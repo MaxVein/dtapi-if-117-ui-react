@@ -7,10 +7,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 import { getEntityData, login } from '../../../common/utils';
-
 import GroupRow from './GroupRow';
+import './group.scss';
 
 const Groups = () => {
     const [page, setPage] = useState(0);
@@ -26,7 +27,6 @@ const Groups = () => {
             ];
             const response = await Promise.all(requests);
             const newData = genereteTableData(response);
-            console.log(newData);
             setGroupsData(newData);
         })();
     }, []);
@@ -65,7 +65,7 @@ const Groups = () => {
                 margin: 'auto',
             }}
         >
-            <div>
+            <div className="header">
                 <Typography
                     component="h2"
                     variant="h6"
