@@ -7,16 +7,11 @@ class StudentsService {
   }
 
   async fetchStudentsByGroup(id, notPhotos = true) {
-    try {
-      const response = await axios.get(
-        `${this.url}Student/getStudentsByGroup/${id}/${
-          notPhotos ? "withoutPhoto" : ""
-        }`
-      );
-      return await response.data;
-    } catch (e) {
-      return e;
-    }
+    return await axios.get(
+      `${this.url}Student/getStudentsByGroup/${id}/${
+        notPhotos ? "withoutPhoto" : ""
+      }`
+    );
   }
 }
 

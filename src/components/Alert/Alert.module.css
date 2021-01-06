@@ -1,0 +1,44 @@
+.Alert {
+    width: 350px;
+    padding: 10px 10px;
+}
+
+.Alert .DialogTitle {
+    text-align: center;
+}
+
+.Alert .DialogContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.Alert .Icon {
+    width: 50px !important;
+    height: 50px !important;
+    color: #3f51b5;
+    margin: -10px auto 10px auto;
+}
+
+.Alert .Message {
+    margin: 10px auto;
+    text-align: center;
+    font-weight: 500;
+    font-size: 15px;
+    color: #000;
+}
+
+.Alert .Divider {
+    margin-bottom: 10px;
+}
+
+.Alert .Actions {
+    width: 100%;
+    justify-content: center;
+}
+
+.Alert .Button {
+    width: 100%;
+    height: 45px;
+}
