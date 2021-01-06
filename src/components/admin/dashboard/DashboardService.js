@@ -1,6 +1,6 @@
 import axios from "axios";
 import { environment } from "../../../environments/environment";
-import SnackbarHandler from "../../../common/snackbar";
+// import SnackbarHandler from "../../../common/snackbar";
 
 export async function getNumberOfRecords() {
   const FacultiesNumber = await axios
@@ -31,8 +31,8 @@ export async function getNumberOfRecords() {
       StudentsNumber,
       AdminsNumber,
     ])
-    .then((res) => res)
-    .catch((err) => SnackbarHandler(err.message, "error"));
+    .then((res) => res);
+  // .catch((err) => SnackbarHandler(err.message, "error"));
   return result;
 }
 
