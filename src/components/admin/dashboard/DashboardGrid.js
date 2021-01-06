@@ -1,74 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import DashboardCard from "./DashboardCard";
-import './Dashboard.css'
-
-  const cards = [
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Факультети",
-      path: "/admin/faculties",
-      component: "Faculty",
-    },
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Групи",
-      path: "/admin/groups",
-      component: "Groups",
-    },
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Спеціальності",
-      path: "/admin/speciality",
-      component: "Speciality",
-    },
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Предмети",
-      path: "admin/subjects",
-      component: "Subject",
-    },
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Студенти",
-      path: "admin/groups",
-      component: "Groups",
-    },
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Адміни",
-      path: "admin/admins",
-      component: "Admins",
-    },
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Результати",
-      path: "admin/results",
-      component: "Results",
-    },
-    {
-      image:
-        "https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg",
-      title: "Протокол",
-      path: "admin/protocol",
-      component: "Protocol",
-    },
-  ];
+import "./Dashboard.css";
+import { getNumberOfRecords } from "./DashboardService";
+import { createCardsArray } from "./DashboardService";
 
 function DashboardGrid() {
+  const [loaded, setLoad] = useState(false);
+  const [cards, setCards] = useState([]);
+  useEffect(() => {
+    getNumberOfRecords().then((res) => {
+      setCards(createCardsArray(res));
+      if (!res) {
+        return null;
+      } else {
+        setLoad(true);
+      }
+    });
+  }, []);
 
-  return (
+  return loaded ? (
     <div className="cards-grid">
       {cards.map((item, index) => (
         <DashboardCard card={item} key={index} />
       ))}
+    </div>
+  ) : (
+    <div className="loader">
+      <CircularProgress />
     </div>
   );
 }

@@ -1,43 +1,25 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { Route, Switch } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-  },
-});
-
+import "./Dashboard.css";
 function DashboardCard({ card }) {
-  const classes = useStyles();
   return (
-    <Card className={classes.root}>
+    <Card className="card">
+      <Link to={card.path} className="card-link"></Link>
+      {card.hasCount ? <span className="card-count">{card.count}</span> : null}
       <CardMedia
         component="img"
-        alt="Faculty"
-        height="250"
+        alt={card.title}
         image={card.image}
-        title="Faculty"
+        title={card.title}
+        className="card-image"
       />
-      <CardContent>
-        <Typography variant="h5" component="h2">
-          {card.title}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="large">
-          <Switch>
-            <Route path={card.path} component={card.component} />
-          </Switch>
-          Перейти
-        </Button>
-      </CardActions>
+      <h2 className="card-title">{card.title}</h2>
+      <div className="card_hover">
+        <h3>Перейти</h3>
+      </div>
     </Card>
   );
 }
