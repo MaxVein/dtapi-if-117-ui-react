@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import DashboardCard from "./DashboardCard";
@@ -10,6 +9,7 @@ import { createCardsArray } from "./DashboardService";
 function DashboardGrid() {
   const [loaded, setLoad] = useState(false);
   const [cards, setCards] = useState([]);
+
   useEffect(() => {
     getNumberOfRecords().then((res) => {
       setCards(createCardsArray(res));
