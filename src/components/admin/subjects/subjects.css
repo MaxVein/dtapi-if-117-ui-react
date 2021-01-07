@@ -1,0 +1,36 @@
+.subject-btn {
+    text-align: end;
+    margin: 20px;
+}
+
+.subjects-container {
+    padding: 20px;
+}
+
+.action-btn-container {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-dialog-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 350px;
+}
+
+.MuiTypography-root {
+    text-align: center;
+}
+
+.form-dialog-btn-group {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
