@@ -10,7 +10,7 @@
 /coverage
 
 # production
-/build
+/public
 
 # misc
 .eslintcache
@@ -26,3 +26,4 @@ yarn-error.log*
 debug.log
 
 ./eslintcache
+./debug.log
