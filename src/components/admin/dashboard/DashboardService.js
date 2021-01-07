@@ -79,7 +79,7 @@ export function createCardsArray(counts) {
         "Speciality",
         true,
         counts[2].numberOfRecords,
-        "https://lh3.googleusercontent.com/proxy/LaZdciHFYb2nFU7mycBES2iNt3YD84-2_XMm7THZOMY1YFi-g93Jz2j8ma5DJyJomtVepjl4k6qfnGEqBaU_gz8wCoveIu0fBtD6I-U44bTFWBOVUu1VLb6lc8obCzNItg"
+        "https://prontomarketing.pi.bypronto.com/3/wp-content/uploads/sites/3/2020/08/Managed-Services-Provider-e1596510425847.jpg"
       ),
       createCardData(
         "Предмети",
