@@ -9,7 +9,7 @@ import '../../App.css';
 
 export const MainListItems = ({ path, icon, title }) => {
     return (
-        <NavLink to={path} exact activeClassName="active">
+        <NavLink to={path} style={{ color: 'black' }} exact activeClassName="active">
             <ListItem>
                 <ListItemIcon>{icon()}</ListItemIcon>
                 <ListItemText primary={title} />

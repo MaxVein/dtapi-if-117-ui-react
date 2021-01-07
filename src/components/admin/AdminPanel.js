@@ -17,16 +17,17 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { MainListItems } from './AdminNavItem';
 import { Link, Route, Switch } from 'react-router-dom';
-import Speciality from './speciality';
-import Groups from './groups';
-
-import { ExitToApp, HomeOutlined } from '@material-ui/icons';
+import { Block, ExitToApp, HomeOutlined } from '@material-ui/icons';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import { logOut, isLogged } from '../../common/utils';
+
+import Speciality from './speciality';
+import DashboardCards from './dashboard';
+import Groups from './groups';
 
 const drawerWidth = 240;
 
@@ -95,14 +96,21 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
     },
     container: {
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4),
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
     },
     paper: {
         padding: theme.spacing(2),
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
+    },
+    contentBlock: {
+        position: 'relative',
+        display: 'block',
+        width: '100%',
+        height: 'fit-content',
+        padding: theme.spacing(3),
     },
 }));
 
@@ -148,7 +156,7 @@ export default function AdminPanel({ setAuthInfo }) {
                         className={classes.title}
                     >
                         <Link style={{ color: 'white' }} to="/">
-                            Dashboard
+                            D-TESTER
                         </Link>
                     </Typography>
                     <IconButton color="inherit" onClick={logoutHandle}>
@@ -189,12 +197,17 @@ export default function AdminPanel({ setAuthInfo }) {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth={false} className={classes.container}>
+                <div className={classes.contentBlock}>
                     <Switch>
                         <Route path="/admin/speciality" component={Speciality} />
+                    </Switch>
+                    <Switch>
                         <Route path="/admin/group" component={Groups} />
                     </Switch>
-                </Container>
+                    <Switch>
+                        <Route path="/admin/dashboard" component={DashboardCards} />
+                    </Switch>
+                </div>
             </main>
         </div>
     );

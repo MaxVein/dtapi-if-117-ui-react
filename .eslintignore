@@ -1,3 +1,5 @@
-build
+public
 node_modules
 .github
+.vscode
+./README.md
