@@ -6,6 +6,7 @@ module.exports = {
     trailingComma: 'all',
     arrowParens: 'always',
     endOfLine: 'auto',
+    parser: 'flow',
     overrides: [
         {
             files: '*.{js,jsx,tsx,ts,scss,json,html}',
