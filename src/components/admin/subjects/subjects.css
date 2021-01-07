@@ -34,3 +34,8 @@
     display: flex;
     justify-content: space-between;
 }
+
+.search-icon-wrap {
+    height: 100%;
+    vertical-align: middle;
+}

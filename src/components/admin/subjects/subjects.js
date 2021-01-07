@@ -18,16 +18,21 @@ import SpeakerNotesIcon from "@material-ui/icons/SpeakerNotes";
 import { Link } from "react-router-dom";
 import { findIndex } from "lodash";
 
-import OpenSnackbar from "../../../common/snackbar";
+import OpenSnackbar from "./snackbar";
 import "./subjects.css";
 import DeleteComponent from "./confirmDelete";
-import SubJectServices from "./subjectService";
+import {
+  getRecords,
+  createSubjects,
+  deleteSubjects,
+  updateSubjects,
+  filterArr,
+} from "./subjectService";
 import FormDialog from "./dialog";
 import SearchComponent from "./searchComponent";
 import TablePaginationActions from "./tablePagination";
 
 export default function SubjectComponent() {
-  const service = new SubJectServices();
   const [initialSubjectData, setInitialSetSubjectData] = useState([]);
   const [subjectData, setSubjectData] = useState([]);
   const [subject, setSubject] = useState({ create: false, data: {} });
@@ -43,7 +48,7 @@ export default function SubjectComponent() {
   const [searchData, setSearchData] = useState("");
   //Read
   useEffect(() => {
-    service.getRecords().then((res) => {
+    getRecords().then((res) => {
       setInitialSetSubjectData(res.data);
       setSubjectData(res.data);
     });
@@ -77,8 +82,7 @@ export default function SubjectComponent() {
   };
   useEffect(() => {
     if (subject.create) {
-      service
-        .createSubject(subject.data)
+      createSubjects(subject.data)
         .then((res) => {
           const newSubjectData = [...res.data, ...subjectData];
           setSubjectData(newSubjectData);
@@ -95,8 +99,7 @@ export default function SubjectComponent() {
   //Delete
   useEffect(() => {
     if (deleteSubject.delete) {
-      service
-        .deleteSubject(deleteSubject.id)
+      deleteSubjects(deleteSubject.id)
         .then((res) => {
           if (res.data.response === "ok") {
             const newSubjectData = subjectData.filter(
@@ -128,8 +131,7 @@ export default function SubjectComponent() {
         subject_description: editSubject.data.subject_description,
         subject_name: editSubject.data.subject_name,
       };
-      service
-        .editSubject(editSubject.data.subject_id, body)
+      updateSubjects(editSubject.data.subject_id, body)
         .then((res) => {
           setOpenForm(false);
           setOpenSnackbar(true);
@@ -150,12 +152,7 @@ export default function SubjectComponent() {
   //search
   useEffect(() => {
     if (searchData !== "") {
-      const searchElems = initialSubjectData.filter((subject) => {
-        return (
-          subject.subject_name.includes(searchData) ||
-          subject.subject_description.includes(searchData)
-        );
-      });
+      const searchElems = filterArr(initialSubjectData, searchData);
       setSubjectData(searchElems);
     } else {
       setSubjectData(initialSubjectData);
@@ -195,10 +192,10 @@ export default function SubjectComponent() {
                   page * rowsPerPage + rowsPerPage
                 )
               : subjectData
-            ).map((subject, index) => (
+            ).map((subject) => (
               <TableRow key={subject.subject_id}>
                 <TableCell component="th" scope="row">
-                  {index + 1}
+                  {subject.subject_id}
                 </TableCell>
                 <TableCell align="left">{subject.subject_name}</TableCell>
                 <TableCell align="left">
@@ -210,16 +207,14 @@ export default function SubjectComponent() {
                       to={{
                         pathname: "/admin/tests",
                         id: subject.subject_id,
-                      }}
-                    >
+                      }}>
                       <SpeakerNotesIcon />
                     </Link>
                     <Link
                       to={{
                         pathname: "/admin/timetable",
                         id: subject.subject_id,
-                      }}
-                    >
+                      }}>
                       <ScheduleIcon />
                     </Link>
                     <EditOutlined

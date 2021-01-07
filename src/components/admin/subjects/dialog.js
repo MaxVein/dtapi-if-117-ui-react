@@ -71,14 +71,12 @@ export default function FormDialog({
       <Dialog
         open={openForm}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
+        aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{dialogTitle}</DialogTitle>
         <DialogContent>
           <form
             onSubmit={formik.handleSubmit}
-            className="form-dialog-container"
-          >
+            className="form-dialog-container">
             <TextField
               id="subject_name"
               name="subject_name"
@@ -118,15 +116,13 @@ export default function FormDialog({
                 disabled={
                   Boolean(formik.errors.subject_description) ||
                   Boolean(formik.errors.subject_name)
-                }
-              >
+                }>
                 {submitBtnTitle}
               </Button>
               <Button
                 color="primary"
                 variant="contained"
-                onClick={() => handleClose()}
-              >
+                onClick={() => handleClose()}>
                 Скасувати
               </Button>
             </div>
