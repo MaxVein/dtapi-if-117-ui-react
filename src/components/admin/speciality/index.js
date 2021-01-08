@@ -1,2 +1,2 @@
-import Speciality from './SpecialityView'
-export default Speciality
+import Speciality from './SpecialityView';
+export default Speciality;
