@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StudentsCreateUpdateModal from "../StudentsCreateUpdateModal/StudentsCreateUpdateModal";
 import PropTypes from "prop-types";
 import classes from "./StudentsTable.module.css";
@@ -20,14 +20,18 @@ import EditIcon from "@material-ui/icons/Edit";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-const StudentsTable = ({ students }) => {
-  const [dataSource] = useState(students || []);
+const StudentsTable = ({ students, setSnackBar, setError }) => {
+  const [dataSource, setDataSource] = useState([]);
   const displayedColumns = ["No.", "Номер залікової книжки", "ПІБ", "Дії"];
   const [open, setOpen] = useState({
     open: false,
     isUpdate: true,
     student: {},
   });
+
+  useEffect(() => {
+    setDataSource(students);
+  }, [students]);
 
   return (
     <div className={classes.Table}>
@@ -96,12 +100,17 @@ const StudentsTable = ({ students }) => {
           <h1>Студенти відсутні</h1>
         </div>
       )}
-      <StudentsCreateUpdateModal
-        open={open.open}
-        setOpen={setOpen}
-        isUpdate={open.isUpdate}
-        student={open.student}
-      />
+      {open.open ? (
+        <StudentsCreateUpdateModal
+          open={open.open}
+          setOpen={setOpen}
+          isUpdate={open.isUpdate}
+          student={open.student}
+          setSnackBar={setSnackBar}
+          setDataSource={setDataSource}
+          setError={setError}
+        />
+      ) : null}
     </div>
   );
 };

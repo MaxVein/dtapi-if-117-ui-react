@@ -46,7 +46,7 @@ const StudentsPage = () => {
         history.push("/admin/group");
       }
     })();
-  }, []);
+  }, [history]);
 
   return (
     <div className={classes.Page}>
@@ -66,7 +66,15 @@ const StudentsPage = () => {
           Додати студента
         </Button>
       </div>
-      {loading ? <Loader /> : <StudentsTable students={students} />}
+      {loading ? (
+        <Loader />
+      ) : (
+        <StudentsTable
+          students={students}
+          setSnackBar={setSnackBar}
+          setError={setError}
+        />
+      )}
       <SnackBar
         show={snackBar.open}
         message={snackBar.message}
@@ -80,12 +88,17 @@ const StudentsPage = () => {
           hide={setError}
         />
       ) : null}
-      <StudentsCreateUpdateModal
-        open={open.open}
-        setOpen={setOpen}
-        isUpdate={open.isUpdate}
-        groupID={494}
-      />
+      {open.open ? (
+        <StudentsCreateUpdateModal
+          open={open.open}
+          setOpen={setOpen}
+          isUpdate={open.isUpdate}
+          groupID={"494"}
+          setError={setError}
+          setStudents={setStudents}
+          setSnackBar={setSnackBar}
+        />
+      ) : null}
     </div>
   );
 };

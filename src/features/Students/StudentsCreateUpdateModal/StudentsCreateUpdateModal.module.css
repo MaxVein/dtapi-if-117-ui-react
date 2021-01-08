@@ -1,3 +1,42 @@
-.StudentsCreateUpdateModal {
+.Dialog {
+    overflow: hidden;
+}
 
+.StudentsDialog {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    max-height: 800px;
+    overflow-x: hidden;
+}
+
+.DialogTitle h1 {
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 25px;
+    text-align: center;
+}
+
+.TitleIcon {
+    vertical-align: middle;
+    font-size: 28px;
+    margin: -3px 10px 0 0;
+}
+
+.DialogContent  {
+
+}
+
+.DialogActions {
+
+}
+
+.DialogButton {
+
+}
+
+.Spinner {
+    position: relative;
+    left: 2%;
+    margin: 360px 210px;
 }

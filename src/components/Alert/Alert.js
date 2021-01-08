@@ -27,7 +27,7 @@ const Alert = ({ show, message, type, hide }) => {
           {type === "Помилка" ? (
             <ErrorIcon className={classes.Icon} />
           ) : (
-            <WarningIcon />
+            <WarningIcon className={classes.Icon} />
           )}
           <DialogContentText className={classes.Message}>
             {message}
@@ -39,6 +39,7 @@ const Alert = ({ show, message, type, hide }) => {
             variant={"contained"}
             className={classes.Button}
             onClick={() => hide({ open: false })}
+            type="reset"
           >
             Закрити
           </Button>
