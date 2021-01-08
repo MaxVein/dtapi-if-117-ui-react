@@ -30,7 +30,12 @@ const GroupAddDialog = ({
     };
 
     const validationSchema = Yup.object({
-        group_name: Yup.string().required('Заповни поле'),
+        group_name: Yup.string()
+            .required('Заповни поле')
+            .matches(
+                '[А-Я\u0406]{1,4}[мз]?-[0-9]{2}-[0-9]{1}[к]?',
+                'Будь ласка введіть правильну назву групи',
+            ),
         faculty_name: Yup.string().required('Заповни поле'),
         speciality_name: Yup.string().required('Заповни поле'),
     });

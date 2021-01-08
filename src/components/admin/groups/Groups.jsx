@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,16 +10,16 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { getEntityData } from '../../../common/utils';
 import GroupRow from './GroupRow';
-
 import GroupAddDialog from './GroupAddDialog';
 
 import '../../../styles/app.scss';
 
 const Groups = () => {
+    const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [groupsData, setGroupsData] = useState([]);
@@ -50,6 +51,7 @@ const Groups = () => {
             setFacultyData(faculties);
             const newData = genereteTableData(response);
             setGroupsData(newData);
+            setLoading(false);
         })();
         return () => {
             source.cancel();
@@ -61,6 +63,7 @@ const Groups = () => {
     };
 
     const handleChangeRowsPerPage = (event) => {
+        console.log(event.target.value);
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
@@ -87,7 +90,11 @@ const Groups = () => {
     };
 
     const fieldsName = ['№', 'Шифр групи', 'Спеціальність', 'Факультет', 'Дії'];
-    return (
+    return loading ? (
+        <div className="loader">
+            <CircularProgress />
+        </div>
+    ) : (
         <div
             className="groups"
             style={{
@@ -123,6 +130,10 @@ const Groups = () => {
                                     facultyData={facultyData}
                                     setGroupsData={setGroupsData}
                                     groupsData={groupsData}
+                                    setRowsPerPage={setRowsPerPage}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    setPage={setPage}
                                 />
                             ))}
                     </TableBody>

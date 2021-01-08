@@ -8,7 +8,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { deleteEntity } from '../../../common/utils';
 
-const ConfirmDelete = ({ open, setShowDelDialog, group, groupsData, setGroupsData }) => {
+const ConfirmDelete = ({
+    open,
+    setShowDelDialog,
+    group,
+    groupsData,
+    setGroupsData,
+    setRowsPerPage,
+    rowsPerPage,
+    page,
+    setPage,
+}) => {
     const handleClose = () => {
         setShowDelDialog(false);
     };
@@ -17,6 +27,11 @@ const ConfirmDelete = ({ open, setShowDelDialog, group, groupsData, setGroupsDat
             const updatedList = groupsData.filter((item) => id !== item.group_id);
             setGroupsData(updatedList);
             setShowDelDialog(false);
+            if (rowsPerPage === 1) {
+                setPage(--page);
+            } else {
+                setRowsPerPage(--rowsPerPage);
+            }
         });
     };
     return (
@@ -27,7 +42,7 @@ const ConfirmDelete = ({ open, setShowDelDialog, group, groupsData, setGroupsDat
             </DialogContent>
             <DialogActions>
                 <Button autoFocus onClick={handleClose} color="primary">
-                    Disagree
+                    Відмінити
                 </Button>
                 <Button
                     onClick={() => {
@@ -37,7 +52,7 @@ const ConfirmDelete = ({ open, setShowDelDialog, group, groupsData, setGroupsDat
                     color="primary"
                     autoFocus
                 >
-                    Agree
+                    Видалити
                 </Button>
             </DialogActions>
         </Dialog>
