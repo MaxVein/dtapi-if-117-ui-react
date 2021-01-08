@@ -12,29 +12,26 @@ export default function OpenSnackbar({
     setOpenSnackbar(false);
   };
   return (
-    <div>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        open={openSnackbar}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        message={messageToSnackbar}
-        action={
-          <React.Fragment>
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleClose}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </React.Fragment>
-        }
-      />
-    </div>
+    <Snackbar
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "center",
+      }}
+      open={openSnackbar}
+      autoHideDuration={100000}
+      onClose={handleClose}
+      message={messageToSnackbar}
+      action={
+        <React.Fragment>
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </React.Fragment>
+      }
+    />
   );
 }

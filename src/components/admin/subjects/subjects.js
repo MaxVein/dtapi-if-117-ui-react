@@ -10,29 +10,25 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import EditOutlined from "@material-ui/icons/EditOutlined";
 import TableHead from "@material-ui/core/TableHead";
-import ScheduleIcon from "@material-ui/icons/Schedule";
-import SpeakerNotesIcon from "@material-ui/icons/SpeakerNotes";
 
-import { Link } from "react-router-dom";
 import { findIndex } from "lodash";
 
 import OpenSnackbar from "./snackbar";
 import "./subjects.css";
-import DeleteComponent from "./confirmDelete";
+import TableList from "./tableList";
 import {
   getRecords,
   createSubjects,
   deleteSubjects,
   updateSubjects,
   filterArr,
-} from "./subjectService";
+} from "./apiService";
 import FormDialog from "./dialog";
 import SearchComponent from "./searchComponent";
 import TablePaginationActions from "./tablePagination";
 
-export default function SubjectComponent() {
+export default function Subjects() {
   const [initialSubjectData, setInitialSetSubjectData] = useState([]);
   const [subjectData, setSubjectData] = useState([]);
   const [subject, setSubject] = useState({ create: false, data: {} });
@@ -46,9 +42,10 @@ export default function SubjectComponent() {
     equal: false,
   });
   const [searchData, setSearchData] = useState("");
+
   //Read
   useEffect(() => {
-    getRecords().then((res) => {
+    getRecords("Subject").then((res) => {
       setInitialSetSubjectData(res.data);
       setSubjectData(res.data);
     });
@@ -56,7 +53,7 @@ export default function SubjectComponent() {
 
   const useStyles2 = makeStyles({
     table: {
-      minWidth: 500,
+      minWidth: 400,
     },
   });
   const classes = useStyles2();
@@ -82,7 +79,7 @@ export default function SubjectComponent() {
   };
   useEffect(() => {
     if (subject.create) {
-      createSubjects(subject.data)
+      createSubjects("Subject", subject.data)
         .then((res) => {
           const newSubjectData = [...res.data, ...subjectData];
           setSubjectData(newSubjectData);
@@ -95,11 +92,12 @@ export default function SubjectComponent() {
           setMessageToSnackbar("Схоже предмет з такою назвою уже існує");
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subject]);
   //Delete
   useEffect(() => {
     if (deleteSubject.delete) {
-      deleteSubjects(deleteSubject.id)
+      deleteSubjects("Subject", deleteSubject.id)
         .then((res) => {
           if (res.data.response === "ok") {
             const newSubjectData = subjectData.filter(
@@ -115,6 +113,7 @@ export default function SubjectComponent() {
           setMessageToSnackbar("Виникли проблеми на сервері спробуйте пізніше");
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteSubject]);
 
   //Update
@@ -131,7 +130,7 @@ export default function SubjectComponent() {
         subject_description: editSubject.data.subject_description,
         subject_name: editSubject.data.subject_name,
       };
-      updateSubjects(editSubject.data.subject_id, body)
+      updateSubjects("Subject", editSubject.data.subject_id, body)
         .then((res) => {
           setOpenForm(false);
           setOpenSnackbar(true);
@@ -148,6 +147,7 @@ export default function SubjectComponent() {
           setMessageToSnackbar("Виникли проблеми на сервері спробуйте пізніше");
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editSubject]);
   //search
   useEffect(() => {
@@ -157,10 +157,12 @@ export default function SubjectComponent() {
     } else {
       setSubjectData(initialSubjectData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchData]);
   return (
     <div className="subjects-container">
       <div className="subject-btn">
+        <div className="subject-title">Предмети</div>
         <Button variant="contained" color="primary" onClick={handleClickCreate}>
           Додати предмет
         </Button>
@@ -193,43 +195,13 @@ export default function SubjectComponent() {
                 )
               : subjectData
             ).map((subject) => (
-              <TableRow key={subject.subject_id}>
-                <TableCell component="th" scope="row">
-                  {subject.subject_id}
-                </TableCell>
-                <TableCell align="left">{subject.subject_name}</TableCell>
-                <TableCell align="left">
-                  {subject.subject_description}
-                </TableCell>
-                <TableCell id={subject.subject_id} align="left">
-                  <div className="action-btn-container">
-                    <Link
-                      to={{
-                        pathname: "/admin/tests",
-                        id: subject.subject_id,
-                      }}>
-                      <SpeakerNotesIcon />
-                    </Link>
-                    <Link
-                      to={{
-                        pathname: "/admin/timetable",
-                        id: subject.subject_id,
-                      }}>
-                      <ScheduleIcon />
-                    </Link>
-                    <EditOutlined
-                      label="Редагувати"
-                      onClick={() => handleEditSubject(subject)}
-                    />
-                    <DeleteComponent
-                      id={subject.subject_id}
-                      setDeleteSubject={setDeleteSubject}
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
+              <TableList
+                key={subject.subject_id}
+                subject={subject}
+                handleEditSubject={handleEditSubject}
+                setDeleteSubject={setDeleteSubject}
+              />
             ))}
-
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={6} />

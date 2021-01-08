@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Tooltip from "@material-ui/core/Tooltip";
 
-export default function DeleteComponent({ id, setDeleteSubject }) {
-  const [open, setOpen] = React.useState(false);
+export default function ConfirmDelete({ id, setDeleteSubject, message }) {
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,15 +23,14 @@ export default function DeleteComponent({ id, setDeleteSubject }) {
 
   return (
     <div>
-      <DeleteIcon onClick={handleClickOpen} />
+      <Tooltip title="Видалити">
+        <DeleteIcon onClick={handleClickOpen} />
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">
-          {"Ви впевнені що бажаєте видалити предмет?"}
-        </DialogTitle>
+        aria-labelledby="responsive-dialog-title">
+        <DialogTitle id="responsive-dialog-title">{message}</DialogTitle>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="primary">
             Скасувати
