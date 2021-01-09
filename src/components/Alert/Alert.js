@@ -15,7 +15,6 @@ import WarningIcon from "@material-ui/icons/Warning";
 const Alert = ({ show, message, type, hide }) => {
   return (
     <Dialog
-      modal={true}
       open={show}
       className={classes.Dialog}
       maxWidth={"xs"}

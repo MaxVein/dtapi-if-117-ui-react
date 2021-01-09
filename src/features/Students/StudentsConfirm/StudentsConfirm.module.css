@@ -1,4 +1,4 @@
-.Alert {
+.StudentsConfirm {
     width: 350px;
     padding: 10px 10px;
 }
@@ -7,51 +7,50 @@
 
 }
 
-.Alert .DialogTitle {
+.StudentsConfirm .Title {
     text-align: center;
     color: black;
 }
 
-.Alert .DialogContent {
+.StudentsConfirm .Content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.Alert .Icon {
+.StudentsConfirm .Icon {
     width: 50px !important;
     height: 50px !important;
     color: #3f51b5;
     margin: -10px auto 10px auto;
 }
 
-.Alert .Message {
+.StudentsConfirm .Message {
     margin: 10px auto;
     text-align: center;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 16px;
     color: #000;
 }
 
-.Alert .Divider {
+.StudentsConfirm .Divider {
     margin-bottom: 10px;
 }
 
-.Alert .Actions {
+.StudentsConfirm .Actions {
     width: 100%;
     justify-content: center;
 }
 
-.Alert .Button {
+.StudentsConfirm .Button {
     width: 100%;
     height: 40px;
     box-shadow: none;
     color: black;
-    font-weight: 600;
 }
 
-.Alert .Button:hover {
+.StudentsConfirm .Button:hover {
     box-shadow: none;
     outline: none;
 }

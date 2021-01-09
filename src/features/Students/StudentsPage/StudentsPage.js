@@ -37,16 +37,21 @@ const StudentsPage = () => {
           setLoading(false);
         }
       } catch (e) {
-        setError({
-          error: true,
-          message:
-            "Сталася помилка! Не вдалося завантажити студентів даної групи! Спробуйте знову",
-          type: "Помилка",
-        });
+        errorHandler(
+          "Сталася помилка! Не вдалося завантажити студентів даної групи! Спробуйте знову"
+        );
         history.push("/admin/group");
       }
     })();
   }, [history]);
+
+  const errorHandler = (message) => {
+    setError({
+      error: true,
+      message,
+      type: "Помилка",
+    });
+  };
 
   return (
     <div className={classes.Page}>
@@ -73,6 +78,7 @@ const StudentsPage = () => {
           students={students}
           setSnackBar={setSnackBar}
           setError={setError}
+          errorHandler={errorHandler}
         />
       )}
       <SnackBar

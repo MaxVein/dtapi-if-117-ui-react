@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StudentsServiceAPI } from "../services/StudentsService";
 import CreateUpdateForm from "./CreateUpdateForm/CreateUpdateForm";
+import PropTypes from "prop-types";
 import classes from "./StudentsCreateUpdateModal.module.css";
 
 import {
@@ -181,3 +182,15 @@ const StudentsCreateUpdateModal = ({
 };
 
 export default StudentsCreateUpdateModal;
+
+StudentsCreateUpdateModal.propTypes = {
+  open: PropTypes.bool,
+  isUpdate: PropTypes.bool,
+  groupID: PropTypes.string,
+  student: PropTypes.object,
+  setStudents: PropTypes.func,
+  setDataSource: PropTypes.func,
+  setOpen: PropTypes.func,
+  setError: PropTypes.func,
+  setSnackBar: PropTypes.func,
+};

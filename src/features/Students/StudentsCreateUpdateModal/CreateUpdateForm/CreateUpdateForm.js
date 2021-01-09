@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { StudentsServiceAPI } from "../../services/StudentsService";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import PropTypes from "prop-types";
 import classes from "./CreateUpdateForm.module.css";
 
 import {
@@ -550,8 +551,6 @@ const CreateUpdateForm = ({
             Скасувати
           </Button>
           <Button
-            variant={"contained"}
-            color="primary"
             className={classes.FormActionsBtn}
             type="submit"
             disabled={
@@ -569,3 +568,12 @@ const CreateUpdateForm = ({
 };
 
 export default CreateUpdateForm;
+
+CreateUpdateForm.propTypes = {
+  isUpdate: PropTypes.bool,
+  setOpen: PropTypes.func,
+  updateData: PropTypes.object,
+  setSnackBar: PropTypes.func,
+  setStudentData: PropTypes.func,
+  setSubmit: PropTypes.func,
+};

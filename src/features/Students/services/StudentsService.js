@@ -37,6 +37,10 @@ class StudentsService {
     return await axios.patch(`${this.url}Student/update/${id}`, student);
   }
 
+  async remove(id) {
+    return await axios.delete(`${this.url}Student/del/${id}`);
+  }
+
   async check(entity, check, value) {
     const res = await axios.get(`${this.url}${entity}/${check}/${value}`);
     const { response } = res.data;
