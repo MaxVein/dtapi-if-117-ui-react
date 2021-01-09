@@ -21,6 +21,10 @@ const GroupRow = ({
     setRowsPerPage,
     page,
     setPage,
+    openSnack,
+    setOpenSnack,
+    snackMes,
+    setSnackMes,
 }) => {
     const [edit, setEdit] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
@@ -64,6 +68,10 @@ const GroupRow = ({
                     setGroupsData={setGroupsData}
                     group={groupData}
                     groupsData={groupsData}
+                    openSnack={openSnack}
+                    setOpenSnack={setOpenSnack}
+                    snackMes={snackMes}
+                    setSnackMes={setSnackMes}
                 />
             ) : null}
             {showDelDialog ? (
@@ -78,6 +86,10 @@ const GroupRow = ({
                     setRowsPerPage={setRowsPerPage}
                     page={page}
                     setPage={setPage}
+                    openSnack={openSnack}
+                    setOpenSnack={setOpenSnack}
+                    snackMes={snackMes}
+                    setSnackMes={setSnackMes}
                 />
             ) : null}
         </TableRow>

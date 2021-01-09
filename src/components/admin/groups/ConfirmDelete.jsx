@@ -18,21 +18,29 @@ const ConfirmDelete = ({
     rowsPerPage,
     page,
     setPage,
+    openSnack,
+    setOpenSnack,
+    snackMes,
+    setSnackMes,
 }) => {
     const handleClose = () => {
         setShowDelDialog(false);
     };
     const delGroup = (id) => {
-        deleteEntity('group', id).then((res) => {
-            const updatedList = groupsData.filter((item) => id !== item.group_id);
-            setGroupsData(updatedList);
-            setShowDelDialog(false);
-            if (rowsPerPage === 1) {
-                setPage(--page);
-            } else {
-                setRowsPerPage(--rowsPerPage);
-            }
-        });
+        deleteEntity('group', id)
+            .then((res) => {
+                const updatedList = groupsData.filter((item) => id !== item.group_id);
+                setGroupsData(updatedList);
+                setShowDelDialog(false);
+                setPage(Math.ceil((groupsData.length - 1) / rowsPerPage) - 1);
+                setSnackMes('Групу видалено');
+                setOpenSnack(true);
+            })
+            .catch(() => {
+                setShowDelDialog(false);
+                setSnackMes('Помилка при видаленні');
+                setOpenSnack(true);
+            });
     };
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
