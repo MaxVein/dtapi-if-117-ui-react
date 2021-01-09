@@ -139,7 +139,13 @@ const StudentsCreateUpdateModal = ({
 
   return (
     <Paper className={classes.Dialog} elevation={0} variant={"outlined"}>
-      <Dialog className={classes.Dialog} open={open}>
+      <Dialog
+        autoScrollBodyContent={false}
+        fullWidth={false}
+        maxWidth={false}
+        className={classes.Dialog}
+        open={open}
+      >
         {loading ? (
           <CircularProgress
             className={classes.Spinner}

@@ -22,6 +22,7 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import EditIcon from "@material-ui/icons/Edit";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import DeleteIcon from "@material-ui/icons/Delete";
+import StudentsViewModal from "../StudentsViewModal/StudentsViewModal";
 
 const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
   const [dataSource, setDataSource] = useState([]);
@@ -83,7 +84,17 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
                     <TableCell>
                       <div className={classes.Actions}>
                         <Tooltip title="Переглянути дані студента">
-                          <Button color="primary" variant="contained">
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={() =>
+                              setOpen({
+                                open: true,
+                                type: "View",
+                                student: student,
+                              })
+                            }
+                          >
                             <AssignmentIndIcon className={classes.ActionIcon} />
                           </Button>
                         </Tooltip>
@@ -158,6 +169,16 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
           student={open.student}
           setSnackBar={setSnackBar}
           setDataSource={setDataSource}
+          setError={setError}
+        />
+      ) : null}
+      {open.open && open.type === "View" ? (
+        <StudentsViewModal
+          open={open.open}
+          setOpen={setOpen}
+          groupID={open.student.group_id}
+          studentID={open.student.user_id}
+          setSnackBar={setSnackBar}
           setError={setError}
         />
       ) : null}

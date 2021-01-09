@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  Paper,
 } from "@material-ui/core";
 import PersonAddDisabledIcon from "@material-ui/icons/PersonAddDisabled";
 
@@ -25,40 +26,43 @@ const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
   };
 
   return (
-    <Dialog
-      open={show}
-      className={classes.Dialog}
-      maxWidth={"xs"}
-      fullWidth={false}
-    >
-      <div className={classes.StudentsConfirm}>
-        <DialogTitle className={classes.Title}>Підтвердіть дію</DialogTitle>
-        <DialogContent className={classes.Content}>
-          <PersonAddDisabledIcon className={classes.Icon} />
-          <DialogContentText className={classes.Message}>
-            {`Видалити студента ${student.student_surname} ${student.student_name}?`}
-          </DialogContentText>
-        </DialogContent>
-        <Divider className={classes.Divider} />
-        <DialogActions className={classes.Actions}>
-          <Button
-            variant={"contained"}
-            className={classes.Button}
-            onClick={() => cancel()}
-            type="reset"
-          >
-            Скасувати
-          </Button>
-          <Button
-            className={classes.Button}
-            onClick={() => confirm()}
-            type="submit"
-          >
-            Підтвердити
-          </Button>
-        </DialogActions>
-      </div>
-    </Dialog>
+    <Paper className={classes.Dialog} elevation={0} variant={"outlined"}>
+      <Dialog
+        open={show}
+        className={classes.Dialog}
+        autoScrollBodyContent={false}
+        fullWidth={false}
+        maxWidth={false}
+      >
+        <div className={classes.StudentsConfirm}>
+          <DialogTitle className={classes.Title}>Підтвердіть дію</DialogTitle>
+          <DialogContent className={classes.Content}>
+            <PersonAddDisabledIcon className={classes.Icon} />
+            <DialogContentText className={classes.Message}>
+              {`Видалити студента ${student.student_surname} ${student.student_name}?`}
+            </DialogContentText>
+          </DialogContent>
+          <Divider className={classes.Divider} />
+          <DialogActions className={classes.Actions}>
+            <Button
+              variant={"contained"}
+              className={classes.Button}
+              onClick={() => cancel()}
+              type="reset"
+            >
+              Скасувати
+            </Button>
+            <Button
+              className={classes.Button}
+              onClick={() => confirm()}
+              type="submit"
+            >
+              Підтвердити
+            </Button>
+          </DialogActions>
+        </div>
+      </Dialog>
+    </Paper>
   );
 };
 

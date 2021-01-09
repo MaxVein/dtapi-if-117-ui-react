@@ -86,7 +86,7 @@ const StudentsPage = () => {
         message={snackBar.message}
         hide={setSnackBar}
       />
-      {error ? (
+      {error.error ? (
         <Alert
           show={error.error}
           message={error.message}

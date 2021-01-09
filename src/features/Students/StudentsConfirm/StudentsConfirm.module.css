@@ -1,10 +1,11 @@
 .StudentsConfirm {
-    width: 350px;
-    padding: 10px 10px;
+    width: 350px !important;
+    height: 100%;
+    padding: 10px 10px !important;
 }
 
 .Dialog {
-
+    overflow: hidden;
 }
 
 .StudentsConfirm .Title {

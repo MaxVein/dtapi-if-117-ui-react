@@ -46,6 +46,35 @@ class StudentsService {
     const { response } = res.data;
     return !response;
   }
+
+  async fetchEntityById(entity, id) {
+    const response = await axios.get(`${this.url}${entity}/getRecords/${id}`);
+    return response.data;
+  }
+
+  async fetchStudentInfo(studentId, groupId) {
+    const studentInfo = [];
+    const student = await this.fetchStudentById("Student", studentId);
+    studentInfo.push(student[0]);
+    const adminUser = await this.fetchStudentById("AdminUser", studentId);
+    studentInfo[0].username = adminUser[0].username;
+    studentInfo[0].email = adminUser[0].email;
+    const groupInfo = await this.fetchEntityById("Group", groupId);
+    studentInfo[0].group_name = groupInfo[0].group_name;
+    studentInfo[0].speciality_id = groupInfo[0].speciality_id;
+    const facultyInfo = await this.fetchEntityById(
+      "Faculty",
+      groupInfo[0].faculty_id
+    );
+    studentInfo[0].faculty_name = facultyInfo[0].faculty_name;
+    const specialityInfo = await this.fetchEntityById(
+      "Speciality",
+      studentInfo[0].speciality_id
+    );
+    studentInfo[0].speciality_code = specialityInfo[0].speciality_code;
+    studentInfo[0].speciality_name = specialityInfo[0].speciality_name;
+    return studentInfo;
+  }
 }
 
 export const StudentsServiceAPI = new StudentsService(environment.BASEURL);
