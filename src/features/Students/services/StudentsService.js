@@ -75,6 +75,14 @@ class StudentsService {
     studentInfo[0].speciality_name = specialityInfo[0].speciality_name;
     return studentInfo;
   }
+
+  async fetchFaculties() {
+    return await axios.get(`${this.url}Faculty/getRecords`);
+  }
+
+  async fetchGroupsByFaculty(id) {
+    return await axios.get(`${this.url}group/getGroupsByFaculty/${id}`);
+  }
 }
 
 export const StudentsServiceAPI = new StudentsService(environment.BASEURL);

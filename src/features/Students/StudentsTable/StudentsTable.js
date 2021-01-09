@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { StudentsServiceAPI } from "../services/StudentsService";
 import StudentsCreateUpdateModal from "../StudentsCreateUpdateModal/StudentsCreateUpdateModal";
+import StudentsViewModal from "../StudentsViewModal/StudentsViewModal";
+import StudentsTransferModal from "../StudentsTransferModal/StudentsTransferModal";
 import StudentsConfirm from "../StudentsConfirm/StudentsConfirm";
 import PropTypes from "prop-types";
 import classes from "./StudentsTable.module.css";
@@ -22,7 +24,6 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import EditIcon from "@material-ui/icons/Edit";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import DeleteIcon from "@material-ui/icons/Delete";
-import StudentsViewModal from "../StudentsViewModal/StudentsViewModal";
 
 const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
   const [dataSource, setDataSource] = useState([]);
@@ -38,6 +39,7 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
 
   useEffect(() => {
     setDataSource(students);
+    return () => setDataSource([]);
   }, [students]);
 
   const remove = async (id) => {
@@ -115,7 +117,17 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
                           </Button>
                         </Tooltip>
                         <Tooltip title="Перевести студента до іншої групи">
-                          <Button color="primary" variant="contained">
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={() =>
+                              setOpen({
+                                open: true,
+                                type: "Transfer",
+                                student: student,
+                              })
+                            }
+                          >
                             <CompareArrowsIcon className={classes.ActionIcon} />
                           </Button>
                         </Tooltip>
@@ -178,6 +190,16 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
           setOpen={setOpen}
           groupID={open.student.group_id}
           studentID={open.student.user_id}
+          setSnackBar={setSnackBar}
+          setError={setError}
+        />
+      ) : null}
+      {open.open && open.type === "Transfer" ? (
+        <StudentsTransferModal
+          open={open.open}
+          setOpen={setOpen}
+          student={open.student}
+          setDataSource={setDataSource}
           setSnackBar={setSnackBar}
           setError={setError}
         />

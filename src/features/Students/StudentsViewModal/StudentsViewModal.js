@@ -50,6 +50,7 @@ const StudentsViewModal = ({
       } catch (e) {
         setLoading(false);
         setOpen({ open: false });
+        setSnackBar({ open: true, message: "Закрито через помилку" });
         setError({
           error: true,
           message:
@@ -58,12 +59,12 @@ const StudentsViewModal = ({
         });
       }
     })();
+    return () => setStudent({});
   }, [groupID, studentID]);
 
   return (
     <Paper component="div" elevation={0} variant={"outlined"}>
       <Dialog
-        autoScrollBodyContent={false}
         fullWidth={false}
         maxWidth={false}
         className={classes.Dialog}

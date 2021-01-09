@@ -43,6 +43,7 @@ const StudentsPage = () => {
         history.push("/admin/group");
       }
     })();
+    return () => setStudents([]);
   }, [history]);
 
   const errorHandler = (message) => {

@@ -30,7 +30,6 @@ const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
       <Dialog
         open={show}
         className={classes.Dialog}
-        autoScrollBodyContent={false}
         fullWidth={false}
         maxWidth={false}
       >

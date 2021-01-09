@@ -150,7 +150,6 @@ const CreateUpdateForm = ({
   const form = useFormik({
     initialValues,
     validationSchema,
-    validateOnBlur: true,
     validateOnMount: true,
     onSubmit: (values) => {
       submit(values);

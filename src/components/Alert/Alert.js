@@ -19,7 +19,6 @@ const Alert = ({ show, message, type, hide }) => {
       <Dialog
         open={show}
         className={classes.Dialog}
-        autoScrollBodyContent={false}
         fullWidth={false}
         maxWidth={false}
       >
