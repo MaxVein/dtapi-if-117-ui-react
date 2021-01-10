@@ -51,26 +51,9 @@ const CreateUpdateForm = ({
     fathername: Yup.string().required(
       "Поле не заповнене! Будь-ласка введіть ім'я по-батькові студента"
     ),
-    gradebookID: Yup.string()
-      .required(
-        "Поле не заповнене! Будь-ласка введіть номер залікової книжки студента"
-      )
-      .test(
-        "unique-gradebookId",
-        "Користувач з таким номером залікової книжки вже існує",
-        function () {
-          const { touched, value } = form.getFieldMeta("gradebookID");
-          const { onBlur } = form.getFieldProps("gradebookID");
-          if ((isUpdate && value && onBlur) || (touched && value && onBlur)) {
-            return uniqueValidator(
-              value,
-              "Student",
-              "checkGradebookID",
-              "gradebook_id"
-            );
-          }
-        }
-      ),
+    gradebookID: Yup.string().required(
+      "Поле не заповнене! Будь-ласка введіть номер залікової книжки студента"
+    ),
     username: Yup.string()
       .matches(
         /^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
@@ -78,22 +61,6 @@ const CreateUpdateForm = ({
       )
       .required(
         "Поле не заповнене! Будь-ласка введіть системне ім'я користувача студента"
-      )
-      .test(
-        "unique-username",
-        "Користувач з таким ім'я уже існує",
-        function () {
-          const { touched, value } = form.getFieldMeta("username");
-          const { onBlur } = form.getFieldProps("username");
-          if ((isUpdate && value && onBlur) || (touched && value && onBlur)) {
-            return uniqueValidator(
-              value,
-              "AdminUser",
-              "checkUserName",
-              "username"
-            );
-          }
-        }
       )
       .min(6, "Мінімальна довжина ім'я користувача 6 символів")
       .max(
@@ -107,22 +74,6 @@ const CreateUpdateForm = ({
       )
       .required(
         "Поле не заповнене! Будь-ласка введіть електронну пошту студента"
-      )
-      .test(
-        "unique-email",
-        "Користувач з такою електронною адресою вже існує",
-        function () {
-          const { touched, value } = form.getFieldMeta("email");
-          const { onBlur } = form.getFieldProps("email");
-          if ((isUpdate && value && onBlur) || (touched && value && onBlur)) {
-            return uniqueValidator(
-              value,
-              "AdminUser",
-              "checkEmailAddress",
-              "email"
-            );
-          }
-        }
       )
       .email("Некоректні дані! Будь-ласка введіть коректну електронну пошту"),
     password: Yup.string()
@@ -164,6 +115,14 @@ const CreateUpdateForm = ({
   });
   const inputRef = useRef();
 
+  const notValid = (field, value, message) => {
+    form.setSubmitting(false);
+    form.isValid = true;
+    form.dirty = true;
+    form.setFieldError(field, value);
+    errorHandler(message);
+  };
+
   const uniqueValidator = (value, entity, method, check) => {
     if (isUpdate && updateData && updateData[check] === value) {
       return updateData[check] === value;
@@ -172,7 +131,55 @@ const CreateUpdateForm = ({
     }
   };
 
-  const submit = (data) => {
+  const submit = async (data) => {
+    const gradebook_id = await uniqueValidator(
+      data.gradebookID,
+      "Student",
+      "checkGradebookID",
+      "gradebook_id"
+    );
+
+    const username = await uniqueValidator(
+      data.username,
+      "AdminUser",
+      "checkUserName",
+      "username"
+    );
+
+    const email = await uniqueValidator(
+      data.email,
+      "AdminUser",
+      "checkEmailAddress",
+      "email"
+    );
+
+    if (!gradebook_id) {
+      notValid(
+        "gradebookID",
+        "Користувач з таким номером залікової книжки вже існує",
+        "Некоректні дані номеру залікової книжки! Операцію скасовано!"
+      );
+      return;
+    }
+
+    if (!username) {
+      notValid(
+        "username",
+        "Користувач з таким системним ім`я вже існує",
+        "Некоректні дані системного імені користувача! Операцію скасовано!"
+      );
+      return;
+    }
+
+    if (!email) {
+      notValid(
+        "email",
+        "Користувач з такою електронною адресою вже існує",
+        "Некоректні дані електронної пошти користувача! Операцію скасовано!"
+      );
+      return;
+    }
+
     if (!isUpdate && !(form.isValid && form.dirty)) {
       errorHandler();
       return;

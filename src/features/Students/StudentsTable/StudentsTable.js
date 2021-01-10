@@ -29,7 +29,7 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
   const [dataSource, setDataSource] = useState([]);
   const displayedColumns = ["No.", "Номер залікової книжки", "ПІБ", "Дії"];
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [open, setOpen] = useState({
     open: false,
     isUpdate: true,
@@ -156,7 +156,7 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
             component="div"
             labelRowsPerPage="Рядків у таблиці"
             className={classes.TablePaginator}
-            rowsPerPageOptions={[5, 10, 15, 20, 25, 30, 40, 50, 100]}
+            rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
             count={dataSource.length}
             page={page}
             onChangePage={(event, newPage) => setPage(newPage)}
