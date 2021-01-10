@@ -27,6 +27,7 @@ import { logOut, isLogged } from "../../common/utils";
 
 import Speciality from "./speciality";
 import DashboardCards from "./dashboard";
+import AdminsTable from "./admins";
 
 const drawerWidth = 240;
 
@@ -108,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     display: "block",
     width: "100%",
-    height:"fit-content",
+    height: "fit-content",
     padding: theme.spacing(3),
   },
 }));
@@ -210,6 +211,9 @@ export default function AdminPanel({ setAuthInfo }) {
           </Switch>
           <Switch>
             <Route path="/admin/dashboard" component={DashboardCards} />
+          </Switch>
+          <Switch>
+            <Route path="/admin/admins" component={AdminsTable} />
           </Switch>
         </div>
       </main>
