@@ -209,7 +209,7 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/dashboard" component={DashboardCards} />
                     </Switch>
                     <Switch>
-                        <Route path="/admin/group/students/:id" component={StudentsPage} />
+                        <Route path="/admin/students/:id" component={StudentsPage} />
                     </Switch>
                 </div>
             </main>

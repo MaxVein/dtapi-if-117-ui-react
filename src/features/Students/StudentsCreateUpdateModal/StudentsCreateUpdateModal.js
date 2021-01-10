@@ -25,6 +25,20 @@ const StudentsCreateUpdateModal = ({
     const [submit, setSubmit] = useState(false);
     const [loading, setLoading] = useState(!!isUpdate);
 
+    const errorHandler = useCallback(
+        (type, errorMessage, snackMessage) => {
+            setLoading(false);
+            setOpen({ open: false });
+            setSnackBar({ open: true, message: snackMessage });
+            setError({
+                error: true,
+                message: errorMessage,
+                type: type,
+            });
+        },
+        [setLoading, setOpen, setSnackBar, setError],
+    );
+
     useEffect(() => {
         if (isUpdate && student) {
             (async function getStudentInfo(id) {
@@ -119,20 +133,6 @@ const StudentsCreateUpdateModal = ({
         setDataSource,
         errorHandler,
     ]);
-
-    const errorHandler = useCallback(
-        (type, errorMessage, snackMessage) => {
-            setLoading(false);
-            setOpen({ open: false });
-            setSnackBar({ open: true, message: snackMessage });
-            setError({
-                error: true,
-                message: errorMessage,
-                type: type,
-            });
-        },
-        [setLoading, setOpen, setSnackBar, setError],
-    );
 
     return (
         <Paper className={classes.Dialog} elevation={0} variant={'outlined'}>

@@ -27,6 +27,20 @@ const StudentsTransferModal = ({
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    const errorHandler = useCallback(
+        (message) => {
+            setLoading(false);
+            setOpen({ open: false });
+            setSnackBar({ open: true, message: 'Закрито через помилку' });
+            setError({
+                error: true,
+                message,
+                type: 'Помилка',
+            });
+        },
+        [setLoading, setOpen, setSnackBar, setError],
+    );
+
     useEffect(() => {
         (async function getStudentInfo(id) {
             try {
@@ -67,20 +81,6 @@ const StudentsTransferModal = ({
             errorHandler('Сталася помилка при переведенні студента. Спробуйте знову');
         }
     };
-
-    const errorHandler = useCallback(
-        (message) => {
-            setLoading(false);
-            setOpen({ open: false });
-            setSnackBar({ open: true, message: 'Закрито через помилку' });
-            setError({
-                error: true,
-                message,
-                type: 'Помилка',
-            });
-        },
-        [setLoading, setOpen, setSnackBar, setError],
-    );
 
     return (
         <Paper component="div" elevation={0} variant={'outlined'}>
