@@ -1,37 +1,37 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .active li {
-  background: rgb(85, 119, 231);
-  color: white;
+    background: rgb(85, 119, 231);
+    color: white;
 }
 
 .active li svg {
-  color: white;
+    color: white;
 }
 
 .navBar li {
-  cursor: pointer;
+    cursor: pointer;
 }
 .navBar li:hover {
-  background: rgb(123, 143, 231);
-  color: white;
+    background: rgb(123, 143, 231);
+    color: white;
 }

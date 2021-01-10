@@ -1,0 +1,71 @@
+.DialogForm {
+    margin: 10px auto auto auto;
+    padding: 2% 5% !important;
+    overflow-x: hidden;
+}
+
+.FormControl {
+    width: 100%;
+    justify-content: center;
+    font-size: 16px;
+    margin-bottom: 18px !important;
+}
+
+.TextField {
+
+}
+
+.PasswordIcon {
+    margin-right: -12px;
+}
+
+.ImageFormControl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Avatar {
+    width: 250px !important;
+    height: 250px !important;
+    margin-top: 20px;
+}
+
+.FileInput {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.FileInputBtn {
+    font-size: 14px;
+    padding: 10px 35px !important;
+    font-weight: 600;
+}
+
+.FormActions {
+    margin: 25px auto 20px auto;
+    width: 100%;
+    justify-content: center;
+}
+
+.FormActionsBtn {
+    width: calc(50% - 10px);
+    padding: 10px 0 !important;
+    box-shadow: none;
+    color: black;
+}
+
+.FormActionsBtn:first-of-type {
+    margin-right: 15px;
+    background: #e1e1e1;
+}
+
+.FormActionsBtn:first-of-type:hover {
+    background: #e1e1e1;
+}
+
+.FormActionsBtn:hover {
+    box-shadow: none;
+    outline: none;
+}
