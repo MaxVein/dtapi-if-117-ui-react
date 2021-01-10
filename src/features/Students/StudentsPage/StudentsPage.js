@@ -12,18 +12,28 @@ import { Button } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 
-const StudentsPage = () => {
+const StudentsPage = ({ match, location }) => {
+    console.log(match);
+    console.log(location);
     const [students, setStudents] = useState([]);
     const [open, setOpen] = useState({ open: false, isUpdate: false });
     const [loading, setLoading] = useState(true);
     const [snackBar, setSnackBar] = useState({ open: false, message: '' });
     const [error, setError] = useState({ error: false, message: '', type: '' });
     const history = useHistory();
+    console.log(history);
+
+    if (location.query !== undefined) {
+        localStorage.setItem('group_name', location.query.group_name);
+    }
 
     useEffect(() => {
         (async function getStudentsByGroup() {
             try {
-                const students = await StudentsServiceAPI.fetchStudentsByGroup(494, true);
+                const students = await StudentsServiceAPI.fetchStudentsByGroup(
+                    match.params.id,
+                    true,
+                );
                 if (students.data.length) {
                     setSnackBar({ open: true, message: 'Студентів завантажено' });
                     setStudents(students.data);
@@ -41,7 +51,7 @@ const StudentsPage = () => {
             }
         })();
         return () => setStudents([]);
-    }, [history]);
+    }, [history, match.params.id]);
 
     const errorHandler = (message) => {
         setError({
@@ -56,7 +66,7 @@ const StudentsPage = () => {
             <div className={classes.Header}>
                 <h1>
                     <HowToRegIcon className={classes.Icon} />
-                    Студенти групи ІПмз-20-1
+                    Студенти групи {localStorage.getItem('group_name')}
                 </h1>
                 <Button
                     className={classes.Button}
@@ -93,7 +103,7 @@ const StudentsPage = () => {
                     open={open.open}
                     setOpen={setOpen}
                     isUpdate={open.isUpdate}
-                    groupID={'494'}
+                    groupID={match.params.id}
                     setError={setError}
                     setStudents={setStudents}
                     setSnackBar={setSnackBar}
