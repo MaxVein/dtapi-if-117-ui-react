@@ -17,6 +17,11 @@ module.exports = {
         sourceType: 'module',
     },
     plugins: ['react', 'prettier'],
+    settings: {
+        react: {
+            version: 'detect',
+        },
+    },
     rules: {
         'react-hooks/exhaustive-deps': 'error',
         'no-var': 'error',

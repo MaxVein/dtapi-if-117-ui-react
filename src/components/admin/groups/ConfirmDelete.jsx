@@ -8,16 +8,39 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { deleteEntity } from '../../../common/utils';
 
-const ConfirmDelete = ({ open, setShowDelDialog, group, groupsData, setGroupsData }) => {
+const ConfirmDelete = ({
+    open,
+    setShowDelDialog,
+    group,
+    groupsData,
+    setGroupsData,
+    setRowsPerPage,
+    rowsPerPage,
+    page,
+    setPage,
+    openSnack,
+    setOpenSnack,
+    snackMes,
+    setSnackMes,
+}) => {
     const handleClose = () => {
         setShowDelDialog(false);
     };
     const delGroup = (id) => {
-        deleteEntity('group', id).then((res) => {
-            const updatedList = groupsData.filter((item) => id !== item.group_id);
-            setGroupsData(updatedList);
-            setShowDelDialog(false);
-        });
+        deleteEntity('group', id)
+            .then((res) => {
+                const updatedList = groupsData.filter((item) => id !== item.group_id);
+                setGroupsData(updatedList);
+                setShowDelDialog(false);
+                setPage(Math.ceil((groupsData.length - 1) / rowsPerPage) - 1);
+                setSnackMes('Групу видалено');
+                setOpenSnack(true);
+            })
+            .catch(() => {
+                setShowDelDialog(false);
+                setSnackMes('Помилка при видаленні');
+                setOpenSnack(true);
+            });
     };
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
@@ -27,7 +50,7 @@ const ConfirmDelete = ({ open, setShowDelDialog, group, groupsData, setGroupsDat
             </DialogContent>
             <DialogActions>
                 <Button autoFocus onClick={handleClose} color="primary">
-                    Disagree
+                    Відмінити
                 </Button>
                 <Button
                     onClick={() => {
@@ -37,7 +60,7 @@ const ConfirmDelete = ({ open, setShowDelDialog, group, groupsData, setGroupsDat
                     color="primary"
                     autoFocus
                 >
-                    Agree
+                    Видалити
                 </Button>
             </DialogActions>
         </Dialog>

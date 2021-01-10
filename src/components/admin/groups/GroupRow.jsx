@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
+import GroupIcon from '@material-ui/icons/Group';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +11,21 @@ import { v4 as uuidv4 } from 'uuid';
 import GroupAddDialog from './GroupAddDialog';
 import ConfirmDelete from './ConfirmDelete';
 
-const GroupRow = ({ groupData, specialityData, facultyData, setGroupsData, groupsData }) => {
+const GroupRow = ({
+    groupData,
+    specialityData,
+    facultyData,
+    setGroupsData,
+    groupsData,
+    rowsPerPage,
+    setRowsPerPage,
+    page,
+    setPage,
+    openSnack,
+    setOpenSnack,
+    snackMes,
+    setSnackMes,
+}) => {
     const [edit, setEdit] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
     const [openDel, setOpenDel] = useState(false);
@@ -33,6 +48,9 @@ const GroupRow = ({ groupData, specialityData, facultyData, setGroupsData, group
             <TableCell>{groupData.faculty_name}</TableCell>
             <TableCell>
                 <div>
+                    <Button color="primary">
+                        <GroupIcon />
+                    </Button>
                     <Button color="primary" onClick={dialogOpenHandler}>
                         <EditIcon />
                     </Button>
@@ -50,6 +68,10 @@ const GroupRow = ({ groupData, specialityData, facultyData, setGroupsData, group
                     setGroupsData={setGroupsData}
                     group={groupData}
                     groupsData={groupsData}
+                    openSnack={openSnack}
+                    setOpenSnack={setOpenSnack}
+                    snackMes={snackMes}
+                    setSnackMes={setSnackMes}
                 />
             ) : null}
             {showDelDialog ? (
@@ -60,6 +82,14 @@ const GroupRow = ({ groupData, specialityData, facultyData, setGroupsData, group
                     group={groupData}
                     setShowDelDialog={setShowDelDialog}
                     groupsData={groupsData}
+                    rowsPerPage={rowsPerPage}
+                    setRowsPerPage={setRowsPerPage}
+                    page={page}
+                    setPage={setPage}
+                    openSnack={openSnack}
+                    setOpenSnack={setOpenSnack}
+                    snackMes={snackMes}
+                    setSnackMes={setSnackMes}
                 />
             ) : null}
         </TableRow>

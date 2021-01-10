@@ -8,8 +8,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { v4 as uuidv4 } from 'uuid';
 import { Formik } from 'formik';
-
 import { addEntity, updateEntity } from '../../../common/utils';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import * as Yup from 'yup';
 
@@ -22,6 +22,13 @@ const GroupAddDialog = ({
     setGroupsData,
     setEdit,
     groupsData,
+    setPage,
+    rowsPerPage,
+    setAllGroupsData,
+    openSnack,
+    setOpenSnack,
+    snackMes,
+    setSnackMes,
 }) => {
     const initialValues = {
         group_name: group ? group.group_name : '',
@@ -30,7 +37,12 @@ const GroupAddDialog = ({
     };
 
     const validationSchema = Yup.object({
-        group_name: Yup.string().required('Заповни поле'),
+        group_name: Yup.string()
+            .required('Заповни поле')
+            .matches(
+                '[А-Я\u0406]{1,4}[мз]?-[0-9]{2}-[0-9]{1}[к]?',
+                'Будь ласка введіть правильну назву групи',
+            ),
         faculty_name: Yup.string().required('Заповни поле'),
         speciality_name: Yup.string().required('Заповни поле'),
     });
@@ -43,18 +55,26 @@ const GroupAddDialog = ({
             group_name: data.group_name,
             faculty_id: getFacId(data.faculty_name),
             speciality_id: getSpecId(data.speciality_name),
-        }).then((res) => {
-            res.data[0] = {
-                ...res.data[0],
-                speciality_name: getSpecName(res.data[0].speciality_id),
-                faculty_name: getFacName(res.data[0].faculty_id),
-            };
-            const updatedList = groupsData.map((item) =>
-                res.data[0].group_id === item.group_id ? res.data[0] : item,
-            );
-            setGroupsData(updatedList);
-            setEdit(false);
-        });
+        })
+            .then((res) => {
+                res.data[0] = {
+                    ...res.data[0],
+                    speciality_name: getSpecName(res.data[0].speciality_id),
+                    faculty_name: getFacName(res.data[0].faculty_id),
+                };
+                const updatedList = groupsData.map((item) =>
+                    res.data[0].group_id === item.group_id ? res.data[0] : item,
+                );
+                setGroupsData(updatedList);
+                setEdit(false);
+                setSnackMes('Групу редаговано');
+                setOpenSnack(true);
+            })
+            .catch(() => {
+                setEdit(false);
+                setSnackMes('Виникла проблема під час редагування');
+                setOpenSnack(true);
+            });
     };
     const getSpecName = (param) => {
         const currentSpec = specialityData.filter((item) => item.speciality_id === param);
@@ -86,107 +106,116 @@ const GroupAddDialog = ({
                     faculty_name: getFacName(res.data[0].faculty_id),
                 };
                 setGroupsData([...groupsData, res.data[0]]);
+                setAllGroupsData([...groupsData, res.data[0]]);
                 setOpen(false);
+                setPage(Math.floor(groupsData.length / rowsPerPage));
+                setSnackMes('Групу додано');
+                setOpenSnack(true);
             })
-            .catch((e) => {});
+            .catch((e) => {
+                setOpen(false);
+                setSnackMes('Така група вже існує');
+                setOpenSnack(true);
+            });
     };
 
     return (
-        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">
-                {group ? 'Редагувати групу' : 'Додати групу'}
-            </DialogTitle>
-            <DialogContent>
-                <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    validateOnMount={true}
-                    onSubmit={(data) => {
-                        group ? updateGroup(data) : addGroup(data);
-                    }}
-                >
-                    {({
-                        isValid,
-                        errors,
-                        touched,
-                        values,
-                        handleChange,
-                        handleBlur,
-                        handleSubmit,
-                    }) => (
-                        <form onSubmit={handleSubmit}>
-                            <TextField
-                                name="group_name"
-                                value={values.group_name}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                autoFocus
-                                margin="dense"
-                                id="group_name"
-                                label="Name"
-                                type="text"
-                                fullWidth
-                                error={touched.group_name && Boolean(errors.group_name)}
-                            />
-                            <Select
-                                name="faculty_name"
-                                className="select"
-                                value={values.faculty_name}
-                                displayEmpty
-                                key={uuidv4()}
-                                fullWidth
-                                margin="dense"
-                                id="faculties"
-                                label="faculties"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                error={touched.faculty_name && Boolean(errors.faculty_name)}
-                            >
-                                <MenuItem key={uuidv4()} value={values.faculty_name}>
-                                    {values.faculty_name}
-                                </MenuItem>
-                                {facultyData.map((item) => (
-                                    <MenuItem key={uuidv4()} value={`${item.faculty_name}`}>
-                                        {item.faculty_name}
+        <div>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">
+                    {group ? 'Редагувати групу' : 'Додати групу'}
+                </DialogTitle>
+                <DialogContent>
+                    <Formik
+                        initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        validateOnMount={true}
+                        onSubmit={(data) => {
+                            group ? updateGroup(data) : addGroup(data);
+                        }}
+                    >
+                        {({
+                            isValid,
+                            errors,
+                            touched,
+                            values,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                        }) => (
+                            <form onSubmit={handleSubmit}>
+                                <TextField
+                                    name="group_name"
+                                    value={values.group_name}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    autoFocus
+                                    margin="dense"
+                                    id="group_name"
+                                    label="Name"
+                                    type="text"
+                                    fullWidth
+                                    error={touched.group_name && Boolean(errors.group_name)}
+                                />
+                                <Select
+                                    name="faculty_name"
+                                    className="select"
+                                    value={values.faculty_name}
+                                    displayEmpty
+                                    key={uuidv4()}
+                                    fullWidth
+                                    margin="dense"
+                                    id="faculties"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    error={touched.faculty_name && Boolean(errors.faculty_name)}
+                                >
+                                    <MenuItem value="" disabled>
+                                        Виберіть факультет
                                     </MenuItem>
-                                ))}
-                            </Select>
-                            <Select
-                                name="speciality_name"
-                                className="select"
-                                value={values.speciality_name}
-                                displayEmpty
-                                key={uuidv4()}
-                                fullWidth
-                                margin="dense"
-                                id="specialities"
-                                label="specialities"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                error={touched.faculty_name && Boolean(errors.faculty_name)}
-                            >
-                                <MenuItem key={uuidv4()} value={values.speciality_name}>
-                                    {values.speciality_name}
-                                </MenuItem>
-                                {specialityData.map((item) => (
-                                    <MenuItem key={uuidv4()} value={`${item.speciality_name}`}>
-                                        {item.speciality_name}
+                                    {facultyData.map((item) => (
+                                        <MenuItem key={uuidv4()} value={`${item.faculty_name}`}>
+                                            {item.faculty_name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <Select
+                                    name="speciality_name"
+                                    className="select"
+                                    value={values.speciality_name}
+                                    displayEmpty
+                                    key={uuidv4()}
+                                    fullWidth
+                                    margin="dense"
+                                    id="specialities"
+                                    label="specialities"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    error={touched.faculty_name && Boolean(errors.faculty_name)}
+                                >
+                                    <MenuItem value="" disabled>
+                                        Виберіть спеціальність
                                     </MenuItem>
-                                ))}
-                            </Select>
-                            <div style={{ margin: '1rem', textAlign: 'center' }}>
-                                <Button onClick={handleClose} color="primary">
-                                    Відмінити
-                                </Button>
-                                <Button disabled={!isValid} type="submit" color="primary">
-                                    {group ? 'Редагувати' : 'Додати'}
-                                </Button>
-                            </div>
-                        </form>
-                    )}
-                </Formik>
-            </DialogContent>
-        </Dialog>
+                                    {specialityData.map((item) => (
+                                        <MenuItem key={uuidv4()} value={`${item.speciality_name}`}>
+                                            {item.speciality_name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <div style={{ margin: '1rem', textAlign: 'center' }}>
+                                    <Button onClick={handleClose} color="primary">
+                                        Відмінити
+                                    </Button>
+                                    <Button disabled={!isValid} type="submit" color="primary">
+                                        {group ? 'Редагувати' : 'Додати'}
+                                    </Button>
+                                </div>
+                            </form>
+                        )}
+                    </Formik>
+                </DialogContent>
+            </Dialog>
+        </div>
     );
 };
 

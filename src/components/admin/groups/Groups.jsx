@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,22 +10,33 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Snackbar from '@material-ui/core/Snackbar';
 import { getEntityData } from '../../../common/utils';
 import GroupRow from './GroupRow';
-
 import GroupAddDialog from './GroupAddDialog';
+import GroupFilter from './GroupFilter';
 
 import '../../../styles/app.scss';
 
 const Groups = () => {
+    const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [groupsData, setGroupsData] = useState([]);
+    const [allGroupsData, setAllGroupsData] = useState([]);
+
     const [facultyData, setFacultyData] = useState([]);
     const [specialityData, setSpecialityData] = useState([]);
     const [open, setOpen] = useState(false);
+    const [filter, setFilter] = useState(false);
+    const [filterData, setFilterData] = useState([]);
+    const [isFacFilter, setIsFacFilter] = useState(false);
+    const [openSnack, setOpenSnack] = useState(false);
+    const [snackMes, setSnackMes] = useState('');
 
     useEffect(() => {
         const source = axios.CancelToken.source();
@@ -50,6 +62,8 @@ const Groups = () => {
             setFacultyData(faculties);
             const newData = genereteTableData(response);
             setGroupsData(newData);
+            setAllGroupsData(newData);
+            setLoading(false);
         })();
         return () => {
             source.cancel();
@@ -57,10 +71,12 @@ const Groups = () => {
     }, []);
 
     const handleChangePage = (event, newPage) => {
+        console.log(event);
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
+        console.log(event.target.value);
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
@@ -85,9 +101,38 @@ const Groups = () => {
     const dialogOpenHandler = () => {
         setOpen(true);
     };
+    const setAllGroupData = () => {
+        setGroupsData(allGroupsData);
+    };
+    const filterByFaculty = () => {
+        setFilter(true);
+        setIsFacFilter(true);
+        const newData = [];
+        facultyData.forEach((item) => {
+            newData.push(item.faculty_name);
+        });
+        setFilterData(newData);
+    };
+
+    const filterBySpec = () => {
+        setFilter(true);
+        const newData = [];
+        specialityData.forEach((item) => {
+            newData.push(item.speciality_name);
+        });
+        setFilterData(newData);
+    };
+
+    const handleCloseSnack = () => {
+        setOpenSnack(false);
+    };
 
     const fieldsName = ['№', 'Шифр групи', 'Спеціальність', 'Факультет', 'Дії'];
-    return (
+    return loading ? (
+        <div className="loader">
+            <CircularProgress />
+        </div>
+    ) : (
         <div
             className="groups"
             style={{
@@ -101,6 +146,18 @@ const Groups = () => {
                 </Typography>
                 <Button color="primary" onClick={dialogOpenHandler}>
                     Додати групу
+                </Button>
+            </div>
+
+            <div>
+                <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterBySpec}>
+                    Перелік груп по cпеціальності
+                </Button>
+                <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterByFaculty}>
+                    Перелік груп по факультету
+                </Button>
+                <Button variant="outlined" startIcon={<SearchIcon />} onClick={setAllGroupData}>
+                    Перелік всіх груп
                 </Button>
             </div>
             <div style={{ boxShadow: '0.5rem 1rem 2rem gray' }}>
@@ -123,6 +180,14 @@ const Groups = () => {
                                     facultyData={facultyData}
                                     setGroupsData={setGroupsData}
                                     groupsData={groupsData}
+                                    setRowsPerPage={setRowsPerPage}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    setPage={setPage}
+                                    openSnack={openSnack}
+                                    setOpenSnack={setOpenSnack}
+                                    snackMes={snackMes}
+                                    setSnackMes={setSnackMes}
                                 />
                             ))}
                     </TableBody>
@@ -144,6 +209,47 @@ const Groups = () => {
                 facultyData={facultyData}
                 setGroupsData={setGroupsData}
                 groupsData={groupsData}
+                setPage={setPage}
+                rowsPerPage={rowsPerPage}
+                setAllGroupsData={setAllGroupsData}
+                openSnack={openSnack}
+                setOpenSnack={setOpenSnack}
+                snackMes={snackMes}
+                setSnackMes={setSnackMes}
+            />
+            <GroupFilter
+                setFilter={setFilter}
+                open={filter}
+                data={filterData}
+                setGroupsData={setGroupsData}
+                groupsData={groupsData}
+                isFacFilter={isFacFilter}
+                allGroupsData={allGroupsData}
+                setIsFacFilter={setIsFacFilter}
+                openSnack={openSnack}
+                setOpenSnack={setOpenSnack}
+                snackMes={snackMes}
+                setSnackMes={setSnackMes}
+            />
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                open={openSnack}
+                autoHideDuration={3000}
+                onClose={handleCloseSnack}
+                message={snackMes}
+                action={
+                    <IconButton
+                        size="small"
+                        aria-label="close"
+                        color="inherit"
+                        onClick={handleCloseSnack}
+                    >
+                        <CloseIcon fontSize="small" />
+                    </IconButton>
+                }
             />
         </div>
     );
