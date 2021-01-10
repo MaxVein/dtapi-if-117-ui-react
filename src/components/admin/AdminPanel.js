@@ -28,6 +28,7 @@ import { logOut, isLogged } from '../../common/utils';
 import Speciality from './speciality';
 import DashboardCards from './dashboard';
 import Groups from './groups';
+import Protocols from './protocols';
 
 const drawerWidth = 240;
 
@@ -206,6 +207,9 @@ export default function AdminPanel({ setAuthInfo }) {
                     </Switch>
                     <Switch>
                         <Route path="/admin/dashboard" component={DashboardCards} />
+                    </Switch>
+                    <Switch>
+                        <Route path="/admin/protocol" component={Protocols} />
                     </Switch>
                 </div>
             </main>
