@@ -19,9 +19,9 @@ import "./subjects.css";
 import TableList from "./tableList";
 import {
   getRecords,
-  createSubjects,
-  deleteSubjects,
-  updateSubjects,
+  createEntities,
+  deleteEntities,
+  updateEntities,
   filterArr,
 } from "./apiService";
 import FormDialog from "./dialog";
@@ -34,7 +34,7 @@ export default function Subjects() {
   const [subject, setSubject] = useState({ create: false, data: {} });
   const [messageToSnackbar, setMessageToSnackbar] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [deleteSubject, setDeleteSubject] = useState({ delete: false, id: "" });
+  const [deleteEntity, setDeleteEntity] = useState({ delete: false, id: "" });
   const [openForm, setOpenForm] = useState(false);
   const [editSubject, setEditSubject] = useState({
     edit: false,
@@ -50,7 +50,7 @@ export default function Subjects() {
       setSubjectData(res.data);
     });
   }, []);
-
+  // Table
   const useStyles2 = makeStyles({
     table: {
       minWidth: 400,
@@ -79,7 +79,7 @@ export default function Subjects() {
   };
   useEffect(() => {
     if (subject.create) {
-      createSubjects("Subject", subject.data)
+      createEntities("Subject", subject.data)
         .then((res) => {
           const newSubjectData = [...res.data, ...subjectData];
           setSubjectData(newSubjectData);
@@ -96,12 +96,12 @@ export default function Subjects() {
   }, [subject]);
   //Delete
   useEffect(() => {
-    if (deleteSubject.delete) {
-      deleteSubjects("Subject", deleteSubject.id)
+    if (deleteEntity.delete) {
+      deleteEntities("Subject", deleteEntity.id)
         .then((res) => {
           if (res.data.response === "ok") {
             const newSubjectData = subjectData.filter(
-              (elem) => elem.subject_id !== deleteSubject.id
+              (elem) => elem.subject_id !== deleteEntity.id
             );
             setSubjectData(newSubjectData);
             setOpenSnackbar(true);
@@ -114,7 +114,7 @@ export default function Subjects() {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deleteSubject]);
+  }, [deleteEntity]);
 
   //Update
   const handleEditSubject = (item) => {
@@ -130,7 +130,7 @@ export default function Subjects() {
         subject_description: editSubject.data.subject_description,
         subject_name: editSubject.data.subject_name,
       };
-      updateSubjects("Subject", editSubject.data.subject_id, body)
+      updateEntities("Subject", editSubject.data.subject_id, body)
         .then((res) => {
           setOpenForm(false);
           setOpenSnackbar(true);
@@ -199,7 +199,7 @@ export default function Subjects() {
                 key={subject.subject_id}
                 subject={subject}
                 handleEditSubject={handleEditSubject}
-                setDeleteSubject={setDeleteSubject}
+                setDeleteEntity={setDeleteEntity}
               />
             ))}
             {emptyRows > 0 && (
@@ -212,7 +212,7 @@ export default function Subjects() {
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={3}
+                colSpan={4}
                 count={subjectData.length}
                 rowsPerPage={rowsPerPage}
                 page={page}

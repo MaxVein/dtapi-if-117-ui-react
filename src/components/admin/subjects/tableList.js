@@ -12,7 +12,7 @@ import ConfirmDelete from "./confirm";
 
 export default function TableList(props) {
   let { url } = useRouteMatch();
-  const { subject, handleEditSubject, setDeleteSubject } = props;
+  const { subject, handleEditSubject, setDeleteEntity } = props;
   return (
     <TableRow>
       <TableCell component="th" scope="row">
@@ -25,8 +25,8 @@ export default function TableList(props) {
           <Link
             className="subject-link"
             to={{
-              pathname: `${url}/${subject.subject_id}/tests`,
-              id: subject.subject_id,
+              pathname: `${url}/tests`,
+              state: { id: subject.subject_id, name: subject.subject_name },
             }}>
             <Tooltip title="Тести предмета">
               <SpeakerNotesIcon />
@@ -35,8 +35,8 @@ export default function TableList(props) {
           <Link
             className="subject-link"
             to={{
-              pathname: `${url}/${subject.subject_id}/timetable`,
-              id: subject.subject_id,
+              pathname: `${url}/timetable`,
+              state: { id: subject.subject_id, name: subject.subject_name },
             }}>
             <Tooltip title="Розклад тестування">
               <ScheduleIcon />
@@ -47,7 +47,7 @@ export default function TableList(props) {
           </Tooltip>
           <ConfirmDelete
             id={subject.subject_id}
-            setDeleteSubject={setDeleteSubject}
+            setDeleteEntity={setDeleteEntity}
             message="Ви впевнені що бажаєте видалити предмет?"
           />
         </div>

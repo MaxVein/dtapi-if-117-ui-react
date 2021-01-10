@@ -6,7 +6,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Tooltip from "@material-ui/core/Tooltip";
 
-export default function ConfirmDelete({ id, setDeleteSubject, message }) {
+export default function ConfirmDelete({ id, setDeleteEntity, message }) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -17,7 +17,7 @@ export default function ConfirmDelete({ id, setDeleteSubject, message }) {
     setOpen(false);
   };
   const handleDelete = () => {
-    setDeleteSubject({ delete: true, id: id });
+    setDeleteEntity({ delete: true, id: id });
     setOpen(false);
   };
 

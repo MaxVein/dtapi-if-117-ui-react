@@ -18,7 +18,7 @@ export default function OpenSnackbar({
         horizontal: "center",
       }}
       open={openSnackbar}
-      autoHideDuration={100000}
+      autoHideDuration={2000}
       onClose={handleClose}
       message={messageToSnackbar}
       action={

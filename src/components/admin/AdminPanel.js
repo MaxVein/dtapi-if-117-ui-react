@@ -16,7 +16,7 @@ import { navList } from "../../common/navUtils";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { MainListItems } from "./AdminNavItem";
-import { Link, Route, Switch, useLocation } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import { Block, ExitToApp, HomeOutlined } from "@material-ui/icons";
 
 import ListItem from "@material-ui/core/ListItem";
@@ -29,6 +29,7 @@ import Speciality from "./speciality";
 import DashboardCards from "./dashboard";
 import Subjects from "./subjects";
 import Tests from "./subjects/tests";
+import Timetable from "./subjects/timetable";
 import NotFoundPage from "../NotFoundPage";
 
 const drawerWidth = 240;
@@ -117,7 +118,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AdminPanel({ setAuthInfo }) {
-  const location = useLocation();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -208,9 +208,10 @@ export default function AdminPanel({ setAuthInfo }) {
           <Switch>
             <Route path="/admin/speciality" component={Speciality} />
             <Route exact path="/admin/subjects" component={Subjects} />
+            <Route path="/admin/subjects/tests" component={Tests}></Route>
             <Route
-              path={`/admin/subjects/${location.id}/tests`}
-              component={Tests}></Route>
+              path="/admin/subjects/timetable"
+              component={Timetable}></Route>
             <Route path="/admin/dashboard" component={DashboardCards} />
             <Route path="*" component={NotFoundPage} />
           </Switch>
