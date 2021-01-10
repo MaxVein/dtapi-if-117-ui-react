@@ -13,15 +13,12 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 
 const StudentsPage = ({ match, location }) => {
-    console.log(match);
-    console.log(location);
     const [students, setStudents] = useState([]);
     const [open, setOpen] = useState({ open: false, isUpdate: false });
     const [loading, setLoading] = useState(true);
     const [snackBar, setSnackBar] = useState({ open: false, message: '' });
     const [error, setError] = useState({ error: false, message: '', type: '' });
     const history = useHistory();
-    console.log(history);
 
     if (location.query !== undefined) {
         localStorage.setItem('group_name', location.query.group_name);
