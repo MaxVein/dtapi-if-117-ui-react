@@ -1,2 +1,2 @@
-import DashboardGrid from "./DashboardGrid";
+import DashboardGrid from './DashboardGrid';
 export default DashboardGrid;

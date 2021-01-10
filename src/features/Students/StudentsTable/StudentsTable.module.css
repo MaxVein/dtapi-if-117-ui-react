@@ -1,0 +1,53 @@
+.Table {
+    width: 100%;
+    height: auto;
+    margin: 50px auto;
+}
+
+.Empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 42%;
+    left: 44%;
+}
+
+.Empty h1 {
+    font-weight: 500;
+    font-size: 25px;
+}
+
+.EmptyIcon {
+    font-size: 70px !important;
+    margin-bottom: 20px;
+    color: #3f51b5;
+}
+
+.Actions button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    min-width: 30px;
+    margin: 0 0.5rem 0 0;
+    padding: 0 0.4rem;
+}
+
+.Actions button:last-child {
+    margin: 0 0 0 0;
+}
+
+.ActionIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.TablePaginator {
+
+}
