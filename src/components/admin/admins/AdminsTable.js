@@ -23,18 +23,18 @@ import AdminsContext from './AdminsContext';
 import SnackbarHandler from '../../../common/snackbar';
 
 const columns = [
-    { id: 'id', label: 'ID', minWidth: 170 },
-    { id: 'username', label: "Ім'я", minWidth: 170 },
+    { id: 'id', label: 'ID', minWidth: '25%' },
+    { id: 'username', label: "Ім'я", minWidth: '25%' },
     {
         id: 'email',
         label: 'Email',
-        minWidth: 170,
+        minWidth: '25%',
         align: 'left',
     },
     {
         id: 'operations',
         label: 'Операції',
-        minWidth: 170,
+        minWidth: '25%',
         align: 'center',
     },
 ];
@@ -44,6 +44,7 @@ export default function AdminsTable() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [dataSource, setDataSource] = React.useState([]);
     const [open, setOpen] = React.useState(false);
+    const [snack, setSnack] = React.useState({ open: false, message: '', type: 'success' });
 
     useEffect(() => {
         getAdmins().then((res) => {
@@ -67,10 +68,10 @@ export default function AdminsTable() {
     };
 
     return (
-        <AdminsContext.Provider value={{ dataSource, setDataSource }}>
+        <AdminsContext.Provider value={{ dataSource, setDataSource, snack, setSnack }}>
             <React.Fragment>
                 <div className="entity-header">
-                    <h1 className="entity-title">
+                    <h1 className="entity-header__title">
                         <SupervisedUserCircle />
                         Адміни
                     </h1>
@@ -79,14 +80,15 @@ export default function AdminsTable() {
                         disableElevation
                         variant="contained"
                         color="primary"
+                        className="entity-header__button"
                     >
                         <AddCircle />
                         Додати Адміна
                     </Button>
                 </div>
                 <Paper>
-                    <TableContainer>
-                        <Table aria-label="sticky table">
+                    <TableContainer className="entity-table-container">
+                        <Table className="entity-table">
                             <TableHead>
                                 <TableRow>
                                     {columns.map((column) => (
@@ -126,6 +128,7 @@ export default function AdminsTable() {
                     dataSource={dataSource}
                     setDataSource={setDataSource}
                 />
+                <SnackbarHandler snack={snack} setSnack={setSnack} />
             </React.Fragment>
         </AdminsContext.Provider>
     );
