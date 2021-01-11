@@ -1,99 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import EditIcon from '@material-ui/icons/Edit';
-import GroupIcon from '@material-ui/icons/Group';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Button from '@material-ui/core/Button';
 import { v4 as uuidv4 } from 'uuid';
+import { getEntityData } from '../../../common/utils';
+import axios from 'axios';
 
-import GroupAddDialog from './GroupAddDialog';
-import ConfirmDelete from './ConfirmDelete';
+const ProtocolsRow = ({ log }) => {
+    const [userName, setUserName] = useState('');
+    const [testName, setTestName] = useState('');
 
-const GroupRow = ({
-    groupData,
-    specialityData,
-    facultyData,
-    setGroupsData,
-    groupsData,
-    rowsPerPage,
-    setRowsPerPage,
-    page,
-    setPage,
-    openSnack,
-    setOpenSnack,
-    snackMes,
-    setSnackMes,
-}) => {
-    const [edit, setEdit] = useState(false);
-    const [showDialog, setShowDialog] = useState(false);
-    const [openDel, setOpenDel] = useState(false);
-    const [showDelDialog, setShowDelDialog] = useState(false);
-
-    const dialogOpenHandler = () => {
-        setEdit(true);
-        setShowDialog(true);
-    };
-
-    const dialogOpenDelHandler = () => {
-        setOpenDel(true);
-        setShowDelDialog(true);
-    };
+    useEffect(() => {
+        const source = axios.CancelToken.source();
+        (async function fetchData() {
+            const responseUser = await getEntityData('student', source, log.user_id);
+            setUserName(
+                `${responseUser.data[0].student_surname} ${responseUser.data[0].student_name} ${responseUser.data[0].student_fname}`,
+            );
+        })();
+        return () => {
+            source.cancel();
+        };
+    }, [log.user_id]);
     return (
         <TableRow key={uuidv4()}>
-            <TableCell>{groupData.group_id}</TableCell>
-            <TableCell>{groupData.group_name}</TableCell>
-            <TableCell>{groupData.speciality_name}</TableCell>
-            <TableCell>{groupData.faculty_name}</TableCell>
-            <TableCell>
-                <div>
-                    <Button color="primary">
-                        <GroupIcon />
-                    </Button>
-                    <Button color="primary" onClick={dialogOpenHandler}>
-                        <EditIcon />
-                    </Button>
-                    <Button color="primary" onClick={dialogOpenDelHandler}>
-                        <DeleteIcon />
-                    </Button>
-                </div>
-            </TableCell>
-            {showDialog ? (
-                <GroupAddDialog
-                    setEdit={setEdit}
-                    open={edit}
-                    specialityData={specialityData}
-                    facultyData={facultyData}
-                    setGroupsData={setGroupsData}
-                    group={groupData}
-                    groupsData={groupsData}
-                    openSnack={openSnack}
-                    setOpenSnack={setOpenSnack}
-                    snackMes={snackMes}
-                    setSnackMes={setSnackMes}
-                />
-            ) : null}
-            {showDelDialog ? (
-                <ConfirmDelete
-                    setEdit={setOpenDel}
-                    open={openDel}
-                    setGroupsData={setGroupsData}
-                    group={groupData}
-                    setShowDelDialog={setShowDelDialog}
-                    groupsData={groupsData}
-                    rowsPerPage={rowsPerPage}
-                    setRowsPerPage={setRowsPerPage}
-                    page={page}
-                    setPage={setPage}
-                    openSnack={openSnack}
-                    setOpenSnack={setOpenSnack}
-                    snackMes={snackMes}
-                    setSnackMes={setSnackMes}
-                />
-            ) : null}
+            <TableCell>{log.user_id}</TableCell>
+            <TableCell>{userName}</TableCell>
+            <TableCell>{log.test_name}</TableCell>
+            <TableCell>{log.log_date}</TableCell>
+            <TableCell>{log.log_time}</TableCell>
+            <TableCell>{log.remote_ip}</TableCell>
         </TableRow>
     );
 };
 
-export default GroupRow;
+export default ProtocolsRow;

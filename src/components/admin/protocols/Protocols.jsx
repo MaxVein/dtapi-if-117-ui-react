@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { v4 as uuidv4 } from 'uuid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,7 +15,11 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Snackbar from '@material-ui/core/Snackbar';
 import { getEntityData } from '../../../common/utils';
-
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { format } from 'date-fns/esm';
+import ProtocolsRow from './ProtocolsRow';
 import '../../../styles/app.scss';
 
 const Protocols = () => {
@@ -24,39 +27,35 @@ const Protocols = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [protocolsData, setProtocolsData] = useState([]);
+    const [testsData, setTestsData] = useState([]);
+
     const [allProtocolsData, setAllProtocolsData] = useState([]);
+    const [protocolsDataToShow, setProtocolsDataToShow] = useState([]);
 
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState(false);
     const [filterData, setFilterData] = useState([]);
     const [openSnack, setOpenSnack] = useState(false);
     const [snackMes, setSnackMes] = useState('');
+    const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+    const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
     useEffect(() => {
         const source = axios.CancelToken.source();
         (async function fetchData() {
-            const requests = [
-                getEntityData('Group', source),
-                getEntityData('speciality', source),
-                getEntityData('faculty', source),
-            ];
+            const requests = [getEntityData('log', source), getEntityData('test', source)];
             const response = await Promise.all(requests);
-            let specialities = [],
-                faculties = [];
+            let tests = [];
             response[1].data.forEach((item) =>
-                specialities.push({
-                    speciality_name: item.speciality_name,
-                    speciality_id: item.speciality_id,
+                tests.push({
+                    test_name: item.test_name,
+                    test_id: item.test_id,
                 }),
             );
-            setSpecialityData(specialities);
-            response[2].data.forEach((item) =>
-                faculties.push({ faculty_name: item.faculty_name, faculty_id: item.faculty_id }),
-            );
-            setFacultyData(faculties);
+            setTestsData(tests);
             const newData = genereteTableData(response);
-            setGroupsData(newData);
-            setAllGroupsData(newData);
+            setProtocolsData(newData);
+            setAllProtocolsData(newData);
             setLoading(false);
         })();
         return () => {
@@ -64,8 +63,19 @@ const Protocols = () => {
         };
     }, []);
 
+    const genereteTableData = (data) => {
+        const newData = data[0].data;
+        newData.map((item) => {
+            data[1].data.map((elem) => {
+                if (item.test_id === elem.test_id) {
+                    item.test_name = elem.test_name;
+                }
+            });
+        });
+        return newData;
+    };
+
     const handleChangePage = (event, newPage) => {
-        console.log(event);
         setPage(newPage);
     };
 
@@ -75,29 +85,10 @@ const Protocols = () => {
         setPage(0);
     };
 
-    const genereteTableData = (data) => {
-        const newData = data[0].data;
-        newData.map((item) => {
-            data[1].data.map((elem) => {
-                if (item.speciality_id === elem.speciality_id) {
-                    item.speciality_name = elem.speciality_name;
-                }
-            });
-            data[2].data.map((elem) => {
-                if (item.faculty_id === elem.faculty_id) {
-                    item.faculty_name = elem.faculty_name;
-                }
-            });
-        });
-        return newData;
-    };
-
     const dialogOpenHandler = () => {
         setOpen(true);
     };
-    const setAllGroupData = () => {
-        setGroupsData(allGroupsData);
-    };
+
     const filterByFaculty = () => {
         setFilter(true);
         setIsFacFilter(true);
@@ -121,7 +112,24 @@ const Protocols = () => {
         setOpenSnack(false);
     };
 
-    const fieldsName = ['№', 'Шифр групи', 'Спеціальність', 'Факультет', 'Дії'];
+    const handleStartDateChange = (date) => {
+        setStartDate(format(date, 'yyyy-MM-dd'));
+    };
+    const handleEndDateChange = (date) => {
+        setEndDate(format(date, 'yyyy-MM-dd'));
+    };
+
+    const showProtocolsData = () => {
+        const newData = [];
+        protocolsData.forEach(async (protocol) => {
+            if (protocol.log_date > startDate && protocol.log_date < endDate) {
+                newData.push(protocol);
+            }
+        });
+        setProtocolsDataToShow(newData);
+    };
+
+    const fieldsName = ['ID користувача', 'Студент', 'Тест', 'IP-адреса', 'Дата', 'Час'];
     return loading ? (
         <div className="loader">
             <CircularProgress />
@@ -136,21 +144,42 @@ const Protocols = () => {
         >
             <div className="header">
                 <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                    Групи і студенти
+                    Протокол
                 </Typography>
-                <Button color="primary" onClick={dialogOpenHandler}>
-                    Додати групу
-                </Button>
             </div>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Grid container justify="flex-start">
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="yyyy-MM-dd"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="Date picker inline"
+                        value={startDate}
+                        onChange={handleStartDateChange}
+                        spacing={3}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="yyyy-MM-dd"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="Date picker inline"
+                        value={endDate}
+                        onChange={handleEndDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
+                    <Button onClick={showProtocolsData}>Вивести дані</Button>
+                </Grid>
+            </MuiPickersUtilsProvider>
 
-            <div>
-                <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterBySpec}>
-                    Перелік протоколів по тесту
-                </Button>
-                <Button variant="outlined" startIcon={<SearchIcon />} onClick={setAllGroupData}>
-                    Перелік всіх протоколів
-                </Button>
-            </div>
             <div style={{ boxShadow: '0.5rem 1rem 2rem gray' }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -161,52 +190,25 @@ const Protocols = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {/* {groupsData
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((groupData) => (
-                                <GroupRow
-                                    groupData={groupData}
-                                    key={uuidv4()}
-                                    specialityData={specialityData}
-                                    facultyData={facultyData}
-                                    setGroupsData={setGroupsData}
-                                    groupsData={groupsData}
-                                    setRowsPerPage={setRowsPerPage}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    setPage={setPage}
-                                    openSnack={openSnack}
-                                    setOpenSnack={setOpenSnack}
-                                    snackMes={snackMes}
-                                    setSnackMes={setSnackMes}
-                                />
-                            ))} */}
+                        {protocolsDataToShow.length
+                            ? protocolsData
+                                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                  .map((protocolData) => (
+                                      <ProtocolsRow key={uuidv4()} log={protocolData} />
+                                  ))
+                            : null}
                     </TableBody>
                 </Table>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 50]}
                     component="div"
-                    count={groupsData.length}
+                    count={protocolsDataToShow.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </div>
-            {/* <GroupFilter
-                setFilter={setFilter}
-                open={filter}
-                data={filterData}
-                setGroupsData={setGroupsData}
-                groupsData={groupsData}
-                isFacFilter={isFacFilter}
-                allGroupsData={allGroupsData}
-                setIsFacFilter={setIsFacFilter}
-                openSnack={openSnack}
-                setOpenSnack={setOpenSnack}
-                snackMes={snackMes}
-                setSnackMes={setSnackMes}
-            /> */}
             <Snackbar
                 anchorOrigin={{
                     vertical: 'bottom',
