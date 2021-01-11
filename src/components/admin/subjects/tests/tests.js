@@ -17,12 +17,18 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { findIndex } from 'lodash';
 
-import './test.css';
-import { getTestRecords, updateEntities, createEntities, deleteEntities } from '../apiService';
+import {
+    getTestRecords,
+    updateEntities,
+    createEntities,
+    deleteEntities,
+    getRecords,
+} from '../apiService';
 import OpenSnackbar from '../snackbar';
 import TableList from './tableList';
 import TablePaginationActions from '../tablePagination';
 import FormDialog from './dialog';
+import SelectTest from './selectTest';
 
 export default function Tests() {
     const location = useLocation();
@@ -52,6 +58,7 @@ export default function Tests() {
             setTestData(res.data);
         });
     }, [id]);
+
     const useStyles2 = makeStyles({
         table: {
             minWidth: 400,
@@ -142,7 +149,6 @@ export default function Tests() {
     }, [deleteEntity]);
     //Sorting
     const handleSorting = (key) => {
-        console.log(`sort`, sort);
         let newTestData = [...testData];
         newTestData.forEach((elem) => {
             elem.tasks = +elem.tasks;
@@ -162,6 +168,10 @@ export default function Tests() {
         }
         setTestData(newTestData);
     };
+    //Select subject
+    const handleSubjectChange = (event) => {
+        console.log(`event`, event);
+    };
 
     return (
         <div>
@@ -175,23 +185,23 @@ export default function Tests() {
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
                     Додати тест
                 </Button>
-                {openForm && (
-                    <FormDialog
-                        editTest={editTest}
-                        openForm={openForm}
-                        setTest={setTest}
-                        setOpenForm={setOpenForm}
-                        setEditTest={setEditTest}
-                        subject_id={id}
-                    />
-                )}
             </div>
+            {openForm && (
+                <FormDialog
+                    editTest={editTest}
+                    openForm={openForm}
+                    setTest={setTest}
+                    setOpenForm={setOpenForm}
+                    setEditTest={setEditTest}
+                    subject_id={id}
+                />
+            )}
             <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="subjects table">
+                <Table className={classes.table} aria-label="test table">
                     <TableHead>
                         <TableRow>
                             <TableCell align="left" onClick={() => handleSorting('test_id')}>
-                                <div className="table-headd-title">
+                                <div className="table-head-title">
                                     <span className="sorting-arrows">
                                         {sort.test_id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                     </span>
@@ -199,7 +209,7 @@ export default function Tests() {
                                 </div>
                             </TableCell>
                             <TableCell align="left" onClick={() => handleSorting('test_name')}>
-                                <div className="table-headd-title">
+                                <div className="table-head-title">
                                     <span className="sorting-arrows">
                                         {sort.test_name ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                     </span>
@@ -208,7 +218,7 @@ export default function Tests() {
                             </TableCell>
                             <TableCell align="left">Предмет</TableCell>
                             <TableCell align="left" onClick={() => handleSorting('tasks')}>
-                                <div className="table-headd-title">
+                                <div className="table-head-title">
                                     <span className="sorting-arrows">
                                         {sort.tasks ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                     </span>
@@ -216,7 +226,7 @@ export default function Tests() {
                                 </div>
                             </TableCell>
                             <TableCell align="left" onClick={() => handleSorting('time_for_test')}>
-                                <div className="table-headd-title">
+                                <div className="table-head-title">
                                     <span className="sorting-arrows">
                                         {sort.time_for_test ? (
                                             <ExpandLessIcon />

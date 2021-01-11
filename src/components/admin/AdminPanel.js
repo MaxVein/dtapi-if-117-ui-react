@@ -34,6 +34,7 @@ import NotFoundPage from '../NotFoundPage';
 import Groups from './groups';
 import StudentsPage from '../../features/Students';
 import TestDetails from './subjects/tests/test-details';
+import Questions from './subjects/tests/questions';
 
 const drawerWidth = 240;
 
@@ -216,6 +217,7 @@ export default function AdminPanel({ setAuthInfo }) {
                             path="/admin/subjects/tests/test-detail"
                             component={TestDetails}
                         ></Route>
+                        <Route path="/admin/subjects/tests/questions" component={Questions}></Route>
                         <Route path="*" component={NotFoundPage} />
                     </Switch>
                 </div>

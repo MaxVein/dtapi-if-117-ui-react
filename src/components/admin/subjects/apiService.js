@@ -26,7 +26,7 @@ export function filterArr(arr, searchKey) {
 export function objectsAreSame(x, y) {
     let objectsAreSame = true;
     for (const propertyName in x) {
-        if (x[propertyName] !== y[propertyName]) {
+        if (x[propertyName].toString() !== y[propertyName].toString()) {
             objectsAreSame = false;
             break;
         }

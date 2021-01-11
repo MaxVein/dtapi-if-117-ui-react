@@ -27,7 +27,10 @@ export default function FormDialog({
         setOpenForm(false);
     };
     const validationSchema = yup.object({
-        test_name: yup.string('Введіть назву тесту').required("Це поле обов'язкове"),
+        test_name: yup
+            .string('Введіть назву тесту')
+            .min(3, 'Мінімальна довжина 3 символи')
+            .required("Це поле обов'язкове"),
         tasks: yup
             .number('Введіть кількість завдань тесту')
             .positive('Поле не може бути рівне або менше 0')
@@ -54,12 +57,6 @@ export default function FormDialog({
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            Object.keys(values).forEach((elem) => {
-                values[elem] = values[elem].toString();
-            });
-            Object.keys(editTest.data).forEach((elem) => {
-                editTest.data[elem] = editTest.data[elem].toString();
-            });
             if (editTest.edit) {
                 if (objectsAreSame(editTest.data, values)) {
                     return setEditTest({

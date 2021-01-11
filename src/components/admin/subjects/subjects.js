@@ -15,7 +15,6 @@ import TableHead from '@material-ui/core/TableHead';
 import { findIndex } from 'lodash';
 
 import OpenSnackbar from './snackbar';
-import './subjects.css';
 import TableList from './tableList';
 import {
     getRecords,
@@ -164,25 +163,25 @@ export default function Subjects() {
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
                     Додати предмет
                 </Button>
-                {openForm && (
-                    <FormDialog
-                        editSubject={editSubject}
-                        openForm={openForm}
-                        setSubject={setSubject}
-                        setOpenForm={setOpenForm}
-                        setEditSubject={setEditSubject}
-                    />
-                )}
             </div>
+            {openForm && (
+                <FormDialog
+                    editSubject={editSubject}
+                    openForm={openForm}
+                    setSubject={setSubject}
+                    setOpenForm={setOpenForm}
+                    setEditSubject={setEditSubject}
+                />
+            )}
             <SearchComponent setSearchData={setSearchData} />
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="subjects table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">ID</TableCell>
-                            <TableCell align="center">Назва</TableCell>
-                            <TableCell align="center">Опис</TableCell>
-                            <TableCell align="center">Дії</TableCell>
+                            <TableCell align="left">ID</TableCell>
+                            <TableCell align="left">Назва</TableCell>
+                            <TableCell align="left">Опис</TableCell>
+                            <TableCell align="left">Дії</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

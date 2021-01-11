@@ -17,12 +17,11 @@
     transition: 0.3s linear;
 }
 
-.table-headd-title {
+.table-head-title {
     display: flex !important;
     cursor: pointer;
-}
-
-.table-headd-title:hover .sorting-arrows .MuiSvgIcon-root {
-    opacity: 1;
-    transition: 0.3s linear;
+    &:hover .sorting-arrows .MuiSvgIcon-root {
+        opacity: 1;
+        transition: 0.3s linear;
+    }
 }

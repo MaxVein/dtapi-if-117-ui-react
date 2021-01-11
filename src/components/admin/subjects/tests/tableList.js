@@ -4,7 +4,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
-import ListAltIcon from '@material-ui/icons/ListAlt';
+import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
+import DescriptionIcon from '@material-ui/icons/Description';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import ConfirmDelete from '../confirm';
@@ -22,28 +23,6 @@ export default function TableList({ test, setDeleteEntity, handleEditTest, subje
             <TableCell align="left">{test.time_for_test}</TableCell>
             <TableCell id={test.test_id} align="left">
                 <div className="action-btn-container">
-                    <Link
-                        className="test-link"
-                        to={{
-                            pathname: `${url}/test-detail`,
-                            state: { id: test.test_id, name: test.test_name },
-                        }}
-                    >
-                        <Tooltip title="Параметри тесту">
-                            <ListAltIcon />
-                        </Tooltip>
-                    </Link>
-                    <Link
-                        className="test-link"
-                        to={{
-                            pathname: `${url}/questions`,
-                            state: { id: test.test_id, name: test.test_name },
-                        }}
-                    >
-                        <Tooltip title="Питання тесту">
-                            <ListAltIcon />
-                        </Tooltip>
-                    </Link>
                     <Tooltip title="Редагувати">
                         <EditOutlined onClick={() => handleEditTest(test)} />
                     </Tooltip>
@@ -52,6 +31,28 @@ export default function TableList({ test, setDeleteEntity, handleEditTest, subje
                         setDeleteEntity={setDeleteEntity}
                         message="Ви впевнені що бажаєте видалити тест?"
                     />
+                    <Link
+                        className="subject-link"
+                        to={{
+                            pathname: `${url}/test-detail`,
+                            state: { id: test.test_id, name: test.test_name },
+                        }}
+                    >
+                        <Tooltip title="Параметри тесту">
+                            <DescriptionIcon />
+                        </Tooltip>
+                    </Link>
+                    <Link
+                        className="subject-link"
+                        to={{
+                            pathname: `${url}/questions`,
+                            state: { id: test.test_id, name: test.test_name },
+                        }}
+                    >
+                        <Tooltip title="Питання тесту">
+                            <FormatListNumberedIcon />
+                        </Tooltip>
+                    </Link>
                 </div>
             </TableCell>
         </TableRow>
