@@ -25,7 +25,7 @@ export default function TableList(props) {
                     <Link
                         className="subject-link"
                         to={{
-                            pathname: `${url}/tests`,
+                            pathname: `${url}tests`,
                             state: { id: subject.subject_id, name: subject.subject_name },
                         }}
                     >
@@ -36,7 +36,7 @@ export default function TableList(props) {
                     <Link
                         className="subject-link"
                         to={{
-                            pathname: `${url}/timetable`,
+                            pathname: `${url}timetable`,
                             state: { id: subject.subject_id, name: subject.subject_name },
                         }}
                     >
