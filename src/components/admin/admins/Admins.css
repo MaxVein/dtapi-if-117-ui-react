@@ -1,0 +1,28 @@
+.entity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.entity-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.form {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 300px;
+}
+.form-body {
+  display: flex;
+  flex-flow: column nowrap;
+}
+.from-body__input {
+  margin-bottom: 0.7rem;
+}
+.MuiDialogTitle-root {
+  padding-bottom: 0.4rem !important;
+}

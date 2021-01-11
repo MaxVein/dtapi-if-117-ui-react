@@ -25,6 +25,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import { logOut, isLogged } from '../../common/utils';
 
+import AdminsTable from './admins';
 import Speciality from './speciality';
 import DashboardCards from './dashboard';
 import Subjects from './subjects';
@@ -209,6 +210,7 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/speciality" component={Speciality} />
                         <Route path="/admin/group" component={Groups} />
                         <Route path="/admin/dashboard" component={DashboardCards} />
+                        <Route path="/admin/admins" component={AdminsTable} />
                         <Route path="/admin/students/:id" component={StudentsPage} />
                         <Route exact path="/admin/subjects" component={Subjects} />
                         <Route exact path="/admin/subjects/tests" component={Tests}></Route>
