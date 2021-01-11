@@ -1,2 +1,2 @@
-import SubjectComponent from './subjects';
-export default SubjectComponent;
+import Subjects from './subjects';
+export default Subjects;

@@ -28,8 +28,14 @@ import { logOut, isLogged } from '../../common/utils';
 import AdminsTable from './admins';
 import Speciality from './speciality';
 import DashboardCards from './dashboard';
+import Subjects from './subjects';
+import Tests from './subjects/tests';
+import Timetable from './subjects/timetable';
+import NotFoundPage from '../NotFoundPage';
 import Groups from './groups';
 import StudentsPage from '../../features/Students';
+import TestDetails from './subjects/tests/test-details';
+import Questions from './subjects/tests/questions';
 
 const drawerWidth = 240;
 
@@ -90,29 +96,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9),
         },
-    },
-    appBarSpacer: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto',
-    },
-    container: {
-        paddingTop: theme.spacing(3),
-        paddingBottom: theme.spacing(3),
-    },
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
-    },
-    contentBlock: {
-        position: 'relative',
-        display: 'block',
-        width: '100%',
-        height: 'fit-content',
-        padding: theme.spacing(3),
     },
     appBarSpacer: theme.mixins.toolbar,
     content: {
@@ -229,6 +212,15 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/dashboard" component={DashboardCards} />
                         <Route path="/admin/admins" component={AdminsTable} />
                         <Route path="/admin/students/:id" component={StudentsPage} />
+                        <Route exact path="/admin/subjects" component={Subjects} />
+                        <Route exact path="/admin/subjects/tests" component={Tests}></Route>
+                        <Route path="/admin/subjects/timetable" component={Timetable}></Route>
+                        <Route
+                            path="/admin/subjects/tests/test-detail"
+                            component={TestDetails}
+                        ></Route>
+                        <Route path="/admin/subjects/tests/questions" component={Questions}></Route>
+                        <Route path="*" component={NotFoundPage} />
                     </Switch>
                 </div>
             </main>
