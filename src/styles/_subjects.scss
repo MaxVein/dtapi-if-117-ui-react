@@ -1,0 +1,51 @@
+.subject-btn {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.subjects-container {
+    padding: 20px;
+}
+
+.action-btn-container {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.subject-title {
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.search-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-dialog-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 350px;
+}
+
+.MuiTypography-root {
+    text-align: center;
+}
+
+.form-dialog-btn-group {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-icon-wrap {
+    height: 100%;
+    vertical-align: middle;
+}
+
+.subject-link .MuiSvgIcon-root {
+    fill: black !important;
+}

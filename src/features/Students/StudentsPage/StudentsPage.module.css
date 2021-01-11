@@ -1,0 +1,32 @@
+.Page {
+    max-width: 1750px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+.Header {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px auto;
+}
+
+.Icon {
+    vertical-align: middle;
+    font-size: 35px;
+    margin: -5px 5px 0 0;
+}
+
+.Header h1 {
+    padding: 5px 0 0 0;
+    font-weight: 500;
+}
+
+.Button {
+    padding: 12px 30px;
+    font-weight: 500;
+    font-size: 15px;
+    text-transform: none;
+}

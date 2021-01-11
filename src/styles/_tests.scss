@@ -1,0 +1,27 @@
+.form-error {
+    color: red;
+}
+
+.form-radio-group {
+    flex-direction: row !important;
+}
+
+.test-title {
+    font-size: 25px;
+}
+
+.sorting-arrows .MuiSvgIcon-root {
+    font-size: 1.25rem;
+    padding: 2px;
+    opacity: 0;
+    transition: 0.3s linear;
+}
+
+.table-head-title {
+    display: flex !important;
+    cursor: pointer;
+    &:hover .sorting-arrows .MuiSvgIcon-root {
+        opacity: 1;
+        transition: 0.3s linear;
+    }
+}
