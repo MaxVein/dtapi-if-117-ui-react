@@ -6,6 +6,7 @@ import {
     Group,
     InsertChartSharp,
     SupervisedUserCircle,
+    List,
 } from '@material-ui/icons';
 
 export const navList = [
@@ -43,5 +44,10 @@ export const navList = [
         path: '/admin/admins',
         icon: () => <SupervisedUserCircle />,
         title: 'Адміни',
+    },
+    {
+        path: '/admin/protocol',
+        icon: () => <List />,
+        title: 'Протокол',
     },
 ];

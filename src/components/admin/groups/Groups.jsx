@@ -71,10 +71,12 @@ const Groups = () => {
     }, []);
 
     const handleChangePage = (event, newPage) => {
+        console.log(event);
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
+        console.log(event.target.value);
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
