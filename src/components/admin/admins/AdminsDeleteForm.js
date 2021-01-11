@@ -6,12 +6,10 @@ import { Button } from '@material-ui/core';
 
 import './Admins.css';
 import { deleteAdmin } from './AdminsService';
-import SnackbarHandler from '../../../common/snackbar';
 import AdminsContext from './AdminsContext';
 
 function AdminsDeleteForm({ mode, open, setOpen, id }) {
-    const { dataSource, setDataSource } = useContext(AdminsContext);
-    const [deleted, setDeleted] = React.useState(true);
+    const { dataSource, setDataSource, snack, setSnack } = useContext(AdminsContext);
 
     const closeModal = () => {
         setOpen(false);
@@ -22,10 +20,16 @@ function AdminsDeleteForm({ mode, open, setOpen, id }) {
                 if (res.response === 'ok') {
                     setDataSource(dataSource.filter((admin) => admin.id !== id));
                     closeModal();
-                    setDeleted(true);
+                    setSnack({ open: true, message: 'Адміна успішно видалено', type: 'success' });
                 }
             })
-            .catch((err) => console.log(err));
+            .catch((err) =>
+                setSnack({
+                    open: true,
+                    message: `На сервері відбулась помилка - ${err}`,
+                    type: 'error',
+                }),
+            );
     };
     return (
         <React.Fragment>

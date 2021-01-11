@@ -12,7 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import './Admins.css';
 import { addAdmin, checkAdminName, updateAdmin } from './AdminsService';
 import AdminsContext from './AdminsContext';
-import SnackbarHandler from '../../../common/snackbar';
 
 const useStyles = makeStyles({
     DialogContent: {
@@ -55,9 +54,7 @@ const editValidationSchema = Yup.object().shape({
 });
 
 function AdminCreationForm({ open, setOpen, mode, admin }) {
-    const [added, setAdded] = React.useState(false);
-    const [edited, setEdited] = React.useState(false);
-    const { dataSource, setDataSource } = useContext(AdminsContext);
+    const { dataSource, setDataSource, snack, setSnack } = useContext(AdminsContext);
     const classes = useStyles();
     const closeModal = () => {
         setOpen(false);
@@ -75,34 +72,78 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
             .then((res) => {
                 if (mode === 'Add') {
                     if (res.response) {
-                        console.log('Such name already exists');
+                        setSnack({
+                            open: true,
+                            message: "Дане ім'я вже ісує",
+                            type: 'warning',
+                        });
+                        return null;
                     }
                     addAdmin(values)
                         .then((res) => {
                             setDataSource(dataSource.concat(res.data));
-                            setAdded(true);
+                            setSnack({
+                                open: true,
+                                message: 'Адміна успішно додано',
+                                type: 'success',
+                            });
                             closeModal();
                         })
-                        .catch((err) => console.warn(err));
+                        .catch((err) =>
+                            setSnack({
+                                open: true,
+                                message: `На сервері відбулась помилка - ${err}`,
+                                type: 'error',
+                            }),
+                        );
                 } else if (mode === 'Update') {
-                    updateAdmin(values, admin.id)
-                        .then((res) => {
-                            if (res.response === 'ok') {
-                                setDataSource(
-                                    dataSource.map((item) =>
-                                        item.id === admin.id
-                                            ? (item = { id: admin.id, ...values })
-                                            : item,
-                                    ),
+                    checkAdminName(values.username).then(() => {
+                        if (
+                            values.username === intialFormValues.username ||
+                            values.email === intialFormValues.email
+                        ) {
+                            setSnack({
+                                open: true,
+                                message: 'Потрібно щось змінити',
+                                type: 'info',
+                            });
+                        } else {
+                            updateAdmin(values, admin.id)
+                                .then((res) => {
+                                    if (res.response === 'ok') {
+                                        setDataSource(
+                                            dataSource.map((item) =>
+                                                item.id === admin.id
+                                                    ? (item = { id: admin.id, ...values })
+                                                    : item,
+                                            ),
+                                        );
+                                        setSnack({
+                                            open: true,
+                                            message: 'Адміна успішно оновлено',
+                                            type: 'success',
+                                        });
+                                        closeModal();
+                                    }
+                                })
+                                .catch((err) =>
+                                    setSnack({
+                                        open: true,
+                                        message: `На сервері відбулась помилка - ${err}`,
+                                        type: 'error',
+                                    }),
                                 );
-                                setEdited(true);
-                                closeModal();
-                            }
-                        })
-                        .catch((err) => console.warn(err));
+                        }
+                    });
                 }
             })
-            .catch((err) => console.warn(err));
+            .catch((err) =>
+                setSnack({
+                    open: true,
+                    message: `На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я`,
+                    type: 'error',
+                }),
+            );
     };
 
     return (
@@ -196,15 +237,6 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
                     )}
                 </Formik>
             </Dialog>
-            {/* {added ? (
-        <SnackbarHandler message={"Адміна успішно додано"} type="success" />
-      ) : null}
-      {edited ? (
-        <SnackbarHandler
-          message={"Адміна успішно відредаговано"}
-          type="success"
-        />
-      ) : null} */}
         </React.Fragment>
     );
 }
