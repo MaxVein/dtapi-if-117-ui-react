@@ -1,2 +1,2 @@
-import Timetable from "./timetable";
+import Timetable from './timetable';
 export default Timetable;

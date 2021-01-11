@@ -1,2 +1,2 @@
-import Tests from "./tests";
+import Tests from './tests';
 export default Tests;

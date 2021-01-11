@@ -1,2 +1,2 @@
-import Subjects from "./subjects";
+import Subjects from './subjects';
 export default Subjects;

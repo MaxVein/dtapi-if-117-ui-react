@@ -33,6 +33,7 @@ import Timetable from './subjects/timetable';
 import NotFoundPage from '../NotFoundPage';
 import Groups from './groups';
 import StudentsPage from '../../features/Students';
+import TestDetails from './subjects/tests/test-details';
 
 const drawerWidth = 240;
 
@@ -209,8 +210,12 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/dashboard" component={DashboardCards} />
                         <Route path="/admin/students/:id" component={StudentsPage} />
                         <Route exact path="/admin/subjects" component={Subjects} />
-                        <Route path="/admin/subjects/tests" component={Tests}></Route>
+                        <Route exact path="/admin/subjects/tests" component={Tests}></Route>
                         <Route path="/admin/subjects/timetable" component={Timetable}></Route>
+                        <Route
+                            path="/admin/subjects/tests/test-detail"
+                            component={TestDetails}
+                        ></Route>
                         <Route path="*" component={NotFoundPage} />
                     </Switch>
                 </div>
