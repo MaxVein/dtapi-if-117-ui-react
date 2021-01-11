@@ -25,6 +25,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import { logOut, isLogged } from '../../common/utils';
 
+import AdminsTable from './admins';
 import Speciality from './speciality';
 import DashboardCards from './dashboard';
 import Groups from './groups';
@@ -89,6 +90,29 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9),
         },
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    container: {
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+    },
+    contentBlock: {
+        position: 'relative',
+        display: 'block',
+        width: '100%',
+        height: 'fit-content',
+        padding: theme.spacing(3),
     },
     appBarSpacer: theme.mixins.toolbar,
     content: {
@@ -203,6 +227,7 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/speciality" component={Speciality} />
                         <Route path="/admin/group" component={Groups} />
                         <Route path="/admin/dashboard" component={DashboardCards} />
+                        <Route path="/admin/admins" component={AdminsTable} />
                         <Route path="/admin/students/:id" component={StudentsPage} />
                     </Switch>
                 </div>

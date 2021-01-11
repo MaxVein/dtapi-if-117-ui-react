@@ -60,7 +60,6 @@ const GroupFilter = ({
                     validationSchema={validationSchema}
                     validateOnMount={true}
                     onSubmit={(data) => {
-                        console.log(isFacFilter);
                         filterData(data);
                     }}
                 >

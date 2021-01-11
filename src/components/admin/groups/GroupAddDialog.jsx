@@ -50,7 +50,6 @@ const GroupAddDialog = ({
         group ? setEdit(false) : setOpen(false);
     };
     const updateGroup = (data) => {
-        console.log(data);
         updateEntity('group', group.group_id, {
             group_name: data.group_name,
             faculty_id: getFacId(data.faculty_name),
@@ -93,7 +92,6 @@ const GroupAddDialog = ({
         return currentSpec[0].faculty_id;
     };
     const addGroup = (data) => {
-        console.log(data);
         addEntity('group', {
             group_name: data.group_name,
             faculty_id: getFacId(data.faculty_name),

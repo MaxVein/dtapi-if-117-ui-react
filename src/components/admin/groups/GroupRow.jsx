@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import GroupAddDialog from './GroupAddDialog';
 import ConfirmDelete from './ConfirmDelete';
+import { Link } from 'react-router-dom';
 
 const GroupRow = ({
     groupData,
@@ -48,9 +49,16 @@ const GroupRow = ({
             <TableCell>{groupData.faculty_name}</TableCell>
             <TableCell>
                 <div>
-                    <Button color="primary">
-                        <GroupIcon />
-                    </Button>
+                    <Link
+                        to={{
+                            pathname: `/admin/students/${groupData.group_id}`,
+                            query: { group_name: groupData.group_name },
+                        }}
+                    >
+                        <Button color="primary">
+                            <GroupIcon />
+                        </Button>
+                    </Link>
                     <Button color="primary" onClick={dialogOpenHandler}>
                         <EditIcon />
                     </Button>
