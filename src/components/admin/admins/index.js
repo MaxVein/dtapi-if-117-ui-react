@@ -1,2 +1,2 @@
-import AdminsTable from "./AdminsTable";
+import AdminsTable from './AdminsTable';
 export default AdminsTable;
