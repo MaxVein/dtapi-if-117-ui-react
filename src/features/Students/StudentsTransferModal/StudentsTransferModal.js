@@ -47,12 +47,12 @@ const StudentsTransferModal = ({
                 const response = await StudentsServiceAPI.fetchStudentById('AdminUser', id);
                 const { username, email } = response[0];
                 if (response.length) {
-                    setLoading(false);
                     setStudentData((prevState) => {
                         prevState.username = username;
                         prevState.email = email;
                         return { ...prevState };
                     });
+                    setLoading(false);
                 }
             } catch (e) {
                 errorHandler('Сталася помилка при отриманні даних студента. Спробуйте знову');
