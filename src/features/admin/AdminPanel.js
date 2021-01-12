@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,38 +8,35 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-
-import { navList } from '../../common/navUtils';
-
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { MainListItems } from './AdminNavItem';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Block, ExitToApp, HomeOutlined, Palette } from '@material-ui/icons';
-
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
-import { logOut, isLogged } from '../../common/utils';
-
-import AdminsTable from './admins/index';
-import Speciality from '../../components/admin/speciality';
-import DashboardCards from './dashboard/index';
-import Subjects from '../../components/admin/subjects';
-import Tests from '../../components/admin/subjects/tests';
-import Timetable from '../../components/admin/subjects/timetable';
-import NotFoundPage from '../../components/NotFoundPage';
-import Groups from '../../components/admin/groups';
-import Protocols from '../../components/admin/protocols';
-import StudentsPage from '../Students';
-import TestDetails from '../../components/admin/subjects/tests/test-details';
-import Questions from '../../components/admin/subjects/tests/questions';
-
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { themes, ThemeToggle } from './themes';
 import { Paper } from '@material-ui/core';
+import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+
+import { logOut, isLogged } from '../../common/utils';
+import { navList } from '../../common/navUtils';
+import NotFoundPage from '../../common/components/NotFoundPage/index';
+
+import AdminsTable from './admins/index';
+import Speciality from './speciality/index';
+import DashboardCards from './dashboard/index';
+import Subjects from './subjects/index';
+import Tests from './subjects/tests/index';
+import Timetable from './subjects/timetable/index';
+import Groups from './groups/index';
+import Protocols from './protocols/index';
+import StudentsPage from '../Students/index';
+import TestDetails from './subjects/tests/test-details/index';
+import Questions from './subjects/tests/questions/index';
 
 const drawerWidth = 240;
 

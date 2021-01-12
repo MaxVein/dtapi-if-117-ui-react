@@ -19,8 +19,8 @@ import styles from './Admins.module.css';
 import AdminCreationForm from './AdminsCreationForm';
 import AdminsTableRow from './AdminTableRow';
 import AdminsContext from './AdminsContext';
-import SnackbarHandler from '../../../common/snackbar';
-import Loader from '../../../components/Loader/Loader';
+import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
+import Loader from '../../../common/components/Loader/Loader';
 
 export default function AdminsTable() {
     const [page, setPage] = React.useState(0);

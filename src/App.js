@@ -2,10 +2,11 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 import ProtectedRoute from './common/guards/ProtectedRoute';
 import { isLogged } from './common/utils';
-import Login from './components/login';
+import Login from './features/login';
 import LoginRoute from './common/guards/LoginRoute';
 import { useEffect, useState } from 'react';
 import AdminPanel from './features/admin/AdminPanel';
+
 function App() {
     const [authInfo, setAuthInfo] = useState({});
 
