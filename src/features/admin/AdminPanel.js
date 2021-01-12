@@ -24,7 +24,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import { logOut, isLogged } from '../../common/utils';
 
-import AdminsTable from '../../components/admin/admins';
+import AdminsTable from './admins/index';
 import Speciality from '../../components/admin/speciality';
 import DashboardCards from './dashboard/index';
 import Subjects from '../../components/admin/subjects';

@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -16,29 +14,12 @@ import { Typography } from '@material-ui/core';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AddCircle from '@material-ui/icons/AddCircle';
 
-import { createDataSource, getAdmins } from './AdminsService';
-import './Admins.css';
+import { createDataSource, getAdmins, columns } from './AdminsService';
+import styles from './Admins.module.css';
 import AdminCreationForm from './AdminsCreationForm';
 import AdminsTableRow from './AdminTableRow';
 import AdminsContext from './AdminsContext';
 import SnackbarHandler from '../../../common/snackbar';
-
-const columns = [
-    { id: 'id', label: 'ID', minWidth: '25%' },
-    { id: 'username', label: "Ім'я", minWidth: '25%' },
-    {
-        id: 'email',
-        label: 'Email',
-        minWidth: '25%',
-        align: 'left',
-    },
-    {
-        id: 'operations',
-        label: 'Операції',
-        minWidth: '10%',
-        align: 'center',
-    },
-];
 
 export default function AdminsTable() {
     const [page, setPage] = React.useState(0);
@@ -64,19 +45,16 @@ export default function AdminsTable() {
     const openModal = () => {
         setOpen(true);
     };
-    const closeModal = () => {
-        setOpen(false);
-    };
 
     return (
         <AdminsContext.Provider value={{ dataSource, setDataSource, snack, setSnack }}>
             <React.Fragment>
-                <div className="entity-header">
+                <div className={styles.entityHeader}>
                     <Typography
                         component="h2"
                         variant="h4"
                         color="textPrimary"
-                        className="entity-header__title"
+                        className={styles.entityHeaderTitle}
                     >
                         <SupervisedUserCircle fontSize="large" />
                         Адміни
@@ -86,15 +64,15 @@ export default function AdminsTable() {
                         disableElevation
                         variant="contained"
                         color="primary"
-                        className="entity-header__button"
+                        className={styles.entityHeaderButton}
                     >
                         <AddCircle />
                         Додати Адміна
                     </Button>
                 </div>
                 <Paper elevation={6}>
-                    <TableContainer className="entity-table-container">
-                        <Table stickyHeader className="entity-table">
+                    <TableContainer className={styles.entityTableContainer}>
+                        <Table stickyHeader className={styles.entityTable}>
                             <TableHead>
                                 <TableRow>
                                     {columns.map((column) => (
