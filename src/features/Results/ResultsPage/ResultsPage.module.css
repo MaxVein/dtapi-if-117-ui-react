@@ -1,0 +1,39 @@
+.Page {
+    max-width: 1750px;
+    padding: 0 15px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.Panel {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+.Table {
+    display: flex;
+    width: 70%;
+}
+
+.Header {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px auto;
+}
+
+.Icon {
+    vertical-align: middle;
+    font-size: 35px;
+    margin: -5px 5px 0 0;
+}
+
+.Header h1 {
+    padding: 5px 0 0 0;
+    font-weight: 500;
+}

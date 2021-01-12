@@ -34,7 +34,8 @@ import Timetable from './subjects/timetable';
 import NotFoundPage from '../NotFoundPage';
 import Groups from './groups';
 import Protocols from './protocols';
-import StudentsPage from '../../features/Students';
+import Students from '../../features/Students';
+import Results from '../../features/Results';
 import TestDetails from './subjects/tests/test-details';
 import Questions from './subjects/tests/questions';
 
@@ -212,7 +213,8 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/group" component={Groups} />
                         <Route path="/admin/dashboard" component={DashboardCards} />
                         <Route path="/admin/admins" component={AdminsTable} />
-                        <Route path="/admin/students/:id" component={StudentsPage} />
+                        <Route path="/admin/students/:id" component={Students} />
+                        <Route path="/admin/results" component={Results} />
                         <Route exact path="/admin/subjects" component={Subjects} />
                         <Route exact path="/admin/subjects/tests" component={Tests}></Route>
                         <Route path="/admin/subjects/timetable" component={Timetable}></Route>
