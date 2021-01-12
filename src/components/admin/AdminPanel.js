@@ -68,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
+        [theme.breakpoints.down('415')]: {
+            display: 'none',
+        },
     },
     menuButton: {
         marginRight: 36,
@@ -86,6 +89,9 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
+        [theme.breakpoints.down('415')]: {
+            width: '100vw',
+        },
     },
     drawerPaperClose: {
         overflowX: 'hidden',
@@ -93,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        width: theme.spacing(7),
+        width: 0,
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9),
         },
@@ -193,7 +199,13 @@ export default function AdminPanel({ setAuthInfo }) {
                 <Divider />
                 <List className="navBar">
                     {navList.map(({ path, icon, title }, index) => (
-                        <MainListItems key={index + title} path={path} icon={icon} title={title} />
+                        <MainListItems
+                            handleDrawerClose={handleDrawerClose}
+                            key={index + title}
+                            path={path}
+                            icon={icon}
+                            title={title}
+                        />
                     ))}
                     <ListItem onClick={logoutHandle}>
                         <ListItemIcon>
@@ -206,7 +218,7 @@ export default function AdminPanel({ setAuthInfo }) {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <div className={classes.contentBlock}>
+                <Container maxWidth={false} className={classes.container}>
                     <Switch>
                         <Route path="/admin/speciality" component={Speciality} />
                         <Route path="/admin/group" component={Groups} />
@@ -214,19 +226,14 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/admins" component={AdminsTable} />
                         <Route path="/admin/students/:id" component={StudentsPage} />
                         <Route exact path="/admin/subjects" component={Subjects} />
-                        <Route exact path="/admin/subjects/tests" component={Tests}></Route>
-                        <Route path="/admin/subjects/timetable" component={Timetable}></Route>
-                        <Route
-                            path="/admin/subjects/tests/test-detail"
-                            component={TestDetails}
-                        ></Route>
-                        <Route path="/admin/subjects/tests/questions" component={Questions}></Route>
+                        <Route exact path="/admin/subjects/tests" component={Tests} />
+                        <Route path="/admin/subjects/timetable" component={Timetable} />
+                        <Route path="/admin/subjects/tests/test-detail" component={TestDetails} />
+                        <Route path="/admin/protocol" component={Protocols} />
+                        <Route path="/admin/subjects/tests/questions" component={Questions} />
                         <Route path="*" component={NotFoundPage} />
                     </Switch>
-                    <Switch>
-                        <Route path="/admin/protocol" component={Protocols} />
-                    </Switch>
-                </div>
+                </Container>
             </main>
         </div>
     );

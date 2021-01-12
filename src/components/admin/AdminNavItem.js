@@ -7,10 +7,10 @@ import { NavLink } from 'react-router-dom';
 
 import '../../App.css';
 
-export const MainListItems = ({ path, icon, title }) => {
+export const MainListItems = ({ path, icon, title, handleDrawerClose }) => {
     return (
-        <NavLink to={path} style={{ color: 'black' }} exact activeClassName="active">
-            <ListItem>
+        <NavLink to={path} exact activeClassName="active">
+            <ListItem onClick={() => handleDrawerClose()}>
                 <ListItemIcon>{icon()}</ListItemIcon>
                 <ListItemText primary={title} />
             </ListItem>
