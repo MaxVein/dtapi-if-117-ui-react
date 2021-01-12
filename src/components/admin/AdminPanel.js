@@ -218,8 +218,7 @@ export default function AdminPanel({ setAuthInfo }) {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <div className={classes.contentBlock}>
-
+                <Container maxWidth={false} className={classes.container}>
                     <Switch>
                         <Route path="/admin/speciality" component={Speciality} />
                         <Route path="/admin/group" component={Groups} />
@@ -234,7 +233,7 @@ export default function AdminPanel({ setAuthInfo }) {
                         <Route path="/admin/subjects/tests/questions" component={Questions} />
                         <Route path="*" component={NotFoundPage} />
                     </Switch>
-                </div>
+                </Container>
             </main>
         </div>
     );
