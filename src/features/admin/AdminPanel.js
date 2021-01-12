@@ -24,18 +24,18 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import { logOut, isLogged } from '../../common/utils';
 
-import AdminsTable from './admins';
-import Speciality from './speciality';
-import DashboardCards from './dashboard';
-import Subjects from './subjects';
-import Tests from './subjects/tests';
-import Timetable from './subjects/timetable';
-import NotFoundPage from '../NotFoundPage';
-import Groups from './groups';
-import Protocols from './protocols';
-import StudentsPage from '../../features/Students';
-import TestDetails from './subjects/tests/test-details';
-import Questions from './subjects/tests/questions';
+import AdminsTable from '../../components/admin/admins';
+import Speciality from '../../components/admin/speciality';
+import DashboardCards from './dashboard/index';
+import Subjects from '../../components/admin/subjects';
+import Tests from '../../components/admin/subjects/tests';
+import Timetable from '../../components/admin/subjects/timetable';
+import NotFoundPage from '../../components/NotFoundPage';
+import Groups from '../../components/admin/groups';
+import Protocols from '../../components/admin/protocols';
+import StudentsPage from '../Students';
+import TestDetails from '../../components/admin/subjects/tests/test-details';
+import Questions from '../../components/admin/subjects/tests/questions';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';

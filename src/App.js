@@ -5,7 +5,7 @@ import { isLogged } from './common/utils';
 import Login from './components/login';
 import LoginRoute from './common/guards/LoginRoute';
 import { useEffect, useState } from 'react';
-import AdminPanel from './components/admin/AdminPanel';
+import AdminPanel from './features/admin/AdminPanel';
 function App() {
     const [authInfo, setAuthInfo] = useState({});
 

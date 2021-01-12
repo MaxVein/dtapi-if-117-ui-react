@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import DashboardCard from './DashboardCard';
-import './Dashboard.css';
-import { getNumberOfRecords } from './DashboardService';
-import { createCardsArray } from './DashboardService';
+import styles from './Dashboard.module.css';
+import { getNumberOfRecords, createCardsArray } from './DashboardService';
 
 function DashboardGrid() {
     const [loaded, setLoad] = useState(false);
@@ -22,13 +21,13 @@ function DashboardGrid() {
     }, []);
 
     return loaded ? (
-        <div className="cards-grid">
+        <div className={styles.cardsGrid}>
             {cards.map((item, index) => (
                 <DashboardCard card={item} key={index} />
             ))}
         </div>
     ) : (
-        <div className="loader">
+        <div className={styles.loader}>
             <CircularProgress />
         </div>
     );
