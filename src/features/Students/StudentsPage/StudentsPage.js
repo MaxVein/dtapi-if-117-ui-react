@@ -14,23 +14,29 @@ import HowToRegIcon from '@material-ui/icons/HowToReg';
 
 const StudentsPage = ({ match, location }) => {
     const [students, setStudents] = useState([]);
+    const [groupInfo] = useState({
+        id: match.params.id,
+        name:
+            location.query !== undefined
+                ? location.query.group_name
+                : localStorage.getItem('group_name'),
+    });
     const [open, setOpen] = useState({ open: false, isUpdate: false });
     const [loading, setLoading] = useState(true);
     const [snackBar, setSnackBar] = useState({ open: false, message: '' });
     const [error, setError] = useState({ error: false, message: '', type: '' });
     const history = useHistory();
 
-    if (location.query !== undefined) {
-        localStorage.setItem('group_name', location.query.group_name);
-    }
+    useEffect(() => {
+        if (location.query !== undefined) {
+            localStorage.setItem('group_name', location.query.group_name);
+        }
+    }, [location.query]);
 
     useEffect(() => {
         (async function getStudentsByGroup() {
             try {
-                const students = await StudentsServiceAPI.fetchStudentsByGroup(
-                    match.params.id,
-                    true,
-                );
+                const students = await StudentsServiceAPI.fetchStudentsByGroup(groupInfo.id, true);
                 if (students.data.length) {
                     setSnackBar({ open: true, message: 'Студентів завантажено' });
                     setStudents(students.data);
@@ -48,7 +54,7 @@ const StudentsPage = ({ match, location }) => {
             }
         })();
         return () => setStudents([]);
-    }, [history, match.params.id]);
+    }, [history, groupInfo]);
 
     const errorHandler = (message) => {
         setError({
@@ -63,7 +69,7 @@ const StudentsPage = ({ match, location }) => {
             <div className={classes.Header}>
                 <h1>
                     <HowToRegIcon className={classes.Icon} />
-                    Студенти групи {localStorage.getItem('group_name')}
+                    Студенти групи {groupInfo.name}
                 </h1>
                 <Button
                     className={classes.Button}
@@ -100,7 +106,7 @@ const StudentsPage = ({ match, location }) => {
                     open={open.open}
                     setOpen={setOpen}
                     isUpdate={open.isUpdate}
-                    groupID={match.params.id}
+                    groupID={groupInfo.id}
                     setError={setError}
                     setStudents={setStudents}
                     setSnackBar={setSnackBar}

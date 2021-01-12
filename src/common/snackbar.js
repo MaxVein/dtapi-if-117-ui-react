@@ -2,19 +2,20 @@ import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
-export default function SnackbarHandler({ message = '', type }) {
-    const [open, setOpen] = React.useState(true);
-    const handleClose = (event, reason) => {
+export const messages = [];
+
+export default function SnackbarHandler({ snack, setSnack }) {
+    const closeSnack = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-        setOpen(false);
+        setSnack({ open: false });
     };
 
     return (
-        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-            <Alert elevation={6} variant="filled" onClose={handleClose} severity={type}>
-                {message}
+        <Snackbar open={snack.open} autoHideDuration={3000} onClose={closeSnack}>
+            <Alert elevation={4} variant="filled" onClose={closeSnack} severity={snack.type}>
+                {snack.message}
             </Alert>
         </Snackbar>
     );

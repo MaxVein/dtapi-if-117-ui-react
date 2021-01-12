@@ -4,10 +4,13 @@
   align-items: center;
   margin-bottom: 1rem;
 }
-.entity-title {
+.entity-header__title {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+.entity-header__button{
+  padding: 10px 16px !important;
 }
 .form {
   display: flex;
@@ -25,4 +28,12 @@
 }
 .MuiDialogTitle-root {
   padding-bottom: 0.4rem !important;
+}
+@media screen and (max-width:450px){
+.entity-header {
+  flex-flow: column wrap;
+}
+.entity-header__title {
+  margin-bottom: .5rem;
+}
 }

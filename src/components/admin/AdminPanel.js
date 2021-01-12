@@ -33,6 +33,7 @@ import Tests from './subjects/tests';
 import Timetable from './subjects/timetable';
 import NotFoundPage from '../NotFoundPage';
 import Groups from './groups';
+import Protocols from './protocols';
 import StudentsPage from '../../features/Students';
 import TestDetails from './subjects/tests/test-details';
 import Questions from './subjects/tests/questions';
@@ -221,6 +222,9 @@ export default function AdminPanel({ setAuthInfo }) {
                         ></Route>
                         <Route path="/admin/subjects/tests/questions" component={Questions}></Route>
                         <Route path="*" component={NotFoundPage} />
+                    </Switch>
+                    <Switch>
+                        <Route path="/admin/protocol" component={Protocols} />
                     </Switch>
                 </div>
             </main>

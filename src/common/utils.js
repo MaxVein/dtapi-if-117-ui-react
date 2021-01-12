@@ -10,8 +10,8 @@ export const deleteEntity = (entity, id) => {
 export const login = (body) => {
     return axios.post(`${environment.BASEURL}login/index`, body);
 };
-export const getEntityData = (entity, source) => {
-    return axios.get(`${environment.BASEURL}${entity}/getRecords/`, {
+export const getEntityData = (entity, source, id = '') => {
+    return axios.get(`${environment.BASEURL}${entity}/getRecords/${id}`, {
         cancelToken: source.token,
     });
 };
