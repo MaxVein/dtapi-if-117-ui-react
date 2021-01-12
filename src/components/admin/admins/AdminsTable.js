@@ -11,6 +11,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import { Typography } from '@material-ui/core';
 
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AddCircle from '@material-ui/icons/AddCircle';
@@ -34,7 +35,7 @@ const columns = [
     {
         id: 'operations',
         label: 'Операції',
-        minWidth: '25%',
+        minWidth: '10%',
         align: 'center',
     },
 ];
@@ -71,10 +72,15 @@ export default function AdminsTable() {
         <AdminsContext.Provider value={{ dataSource, setDataSource, snack, setSnack }}>
             <React.Fragment>
                 <div className="entity-header">
-                    <h1 className="entity-header__title">
-                        <SupervisedUserCircle />
+                    <Typography
+                        component="h2"
+                        variant="h4"
+                        color="textPrimary"
+                        className="entity-header__title"
+                    >
+                        <SupervisedUserCircle fontSize="large" />
                         Адміни
-                    </h1>
+                    </Typography>
                     <Button
                         onClick={openModal}
                         disableElevation
@@ -86,9 +92,9 @@ export default function AdminsTable() {
                         Додати Адміна
                     </Button>
                 </div>
-                <Paper>
+                <Paper elevation={6}>
                     <TableContainer className="entity-table-container">
-                        <Table className="entity-table">
+                        <Table stickyHeader className="entity-table">
                             <TableHead>
                                 <TableRow>
                                     {columns.map((column) => (

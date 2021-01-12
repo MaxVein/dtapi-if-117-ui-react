@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,7 +9,6 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Container from '@material-ui/core/Container';
 
 import { navList } from '../../common/navUtils';
 
@@ -17,7 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { MainListItems } from './AdminNavItem';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Block, ExitToApp, HomeOutlined } from '@material-ui/icons';
+import { Block, ExitToApp, HomeOutlined, Palette } from '@material-ui/icons';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -38,6 +37,11 @@ import StudentsPage from '../../features/Students';
 import TestDetails from './subjects/tests/test-details';
 import Questions from './subjects/tests/questions';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import { themes, ThemeToggle } from './themes';
+import { Paper } from '@material-ui/core';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 8px',
+        padding: '0 1rem',
         ...theme.mixins.toolbar,
     },
     appBar: {
@@ -121,11 +125,28 @@ const useStyles = makeStyles((theme) => ({
         height: 'fit-content',
         padding: theme.spacing(3),
     },
+    themePreviewCircle: {
+        display: 'inline-block',
+        width: '.6rem',
+        height: '.6rem',
+        marginRight: '.5rem',
+        borderRadius: '50%',
+    },
+    ListItemExit: {
+        fontSize: '1rem',
+        '&:hover': {
+            fontWeight: 500,
+        },
+    },
 }));
 
 export default function AdminPanel({ setAuthInfo }) {
-    const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const savedTheme = localStorage.getItem('themeName');
+    const [theme, setTheme] = React.useState(createMuiTheme(ThemeToggle(savedTheme)));
+    const classes = useStyles();
 
     const logoutHandle = async () => {
         await logOut();
@@ -140,94 +161,176 @@ export default function AdminPanel({ setAuthInfo }) {
         setOpen(false);
     };
 
+    const handleClickListItem = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleMenuItemClick = (event, theme, index) => {
+        setSelectedIndex(index);
+        setTheme(createMuiTheme(theme.value));
+        localStorage.setItem('themeName', theme.name);
+        setAnchorEl(null);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <AppBar
-                position="absolute"
-                className={clsx(classes.appBar, open && classes.appBarShift)}
-            >
-                <Toolbar className={classes.toolbar}>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography
-                        component="h1"
-                        variant="h6"
-                        color="inherit"
-                        noWrap
-                        className={classes.title}
-                    >
-                        <Link style={{ color: 'white' }} to="/">
-                            D-TESTER
-                        </Link>
-                    </Typography>
-                    <IconButton color="inherit" onClick={logoutHandle}>
-                        <ExitToApp />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                classes={{
-                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-                }}
-                open={open}
-            >
-                <div className={classes.toolbarIcon}>
-                    <Link to="/">
-                        <IconButton>
-                            <HomeOutlined />
+        <ThemeProvider theme={theme}>
+            <Paper elevation={0} className={classes.root}>
+                <CssBaseline />
+                <AppBar
+                    position="absolute"
+                    className={clsx(classes.appBar, open && classes.appBarShift)}
+                >
+                    <Toolbar className={classes.toolbar}>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                        >
+                            <MenuIcon />
                         </IconButton>
-                    </Link>
-                    <IconButton onClick={handleDrawerClose}>
-                        <ChevronLeftIcon />
-                    </IconButton>
-                </div>
-                <Divider />
-                <List className="navBar">
-                    {navList.map(({ path, icon, title }, index) => (
-                        <MainListItems key={index + title} path={path} icon={icon} title={title} />
-                    ))}
-                    <ListItem onClick={logoutHandle}>
-                        <ListItemIcon>
+                        <Typography
+                            component="h1"
+                            variant="h6"
+                            color="inherit"
+                            noWrap
+                            className={classes.title}
+                        >
+                            <Link style={{ color: 'white' }} to="/">
+                                D-TESTER
+                            </Link>
+                        </Typography>
+                        <List component="nav" aria-label="Device settings">
+                            <ListItem
+                                aria-haspopup="true"
+                                aria-controls="lock-menu"
+                                onClick={handleClickListItem}
+                            >
+                                <IconButton style={{ color: 'white' }}>
+                                    <Palette />
+                                </IconButton>
+                            </ListItem>
+                        </List>
+                        <Menu
+                            id="lock-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            {themes.map((theme, index) => (
+                                <MenuItem
+                                    key={index}
+                                    selected={index === selectedIndex}
+                                    onClick={(event) => handleMenuItemClick(event, theme, index)}
+                                >
+                                    <span
+                                        style={{
+                                            backgroundColor: theme.mainColor,
+                                        }}
+                                        className={classes.themePreviewCircle}
+                                    />
+                                    {theme.name}
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                        <IconButton color="inherit" onClick={logoutHandle}>
                             <ExitToApp />
-                        </ListItemIcon>
-                        <ListItemText primary="Вихід" />
-                    </ListItem>
-                </List>
-                <Divider />
-            </Drawer>
-            <main className={classes.content}>
-                <div className={classes.appBarSpacer} />
-                <div className={classes.contentBlock}>
-                    <Switch>
-                        <Route path="/admin/speciality" component={Speciality} />
-                        <Route path="/admin/group" component={Groups} />
-                        <Route path="/admin/dashboard" component={DashboardCards} />
-                        <Route path="/admin/admins" component={AdminsTable} />
-                        <Route path="/admin/students/:id" component={StudentsPage} />
-                        <Route exact path="/admin/subjects" component={Subjects} />
-                        <Route exact path="/admin/subjects/tests" component={Tests}></Route>
-                        <Route path="/admin/subjects/timetable" component={Timetable}></Route>
-                        <Route
-                            path="/admin/subjects/tests/test-detail"
-                            component={TestDetails}
-                        ></Route>
-                        <Route path="/admin/subjects/tests/questions" component={Questions}></Route>
-                        <Route path="*" component={NotFoundPage} />
-                    </Switch>
-                    <Switch>
-                        <Route path="/admin/protocol" component={Protocols} />
-                    </Switch>
-                </div>
-            </main>
-        </div>
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    variant="permanent"
+                    classes={{
+                        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                    }}
+                    open={open}
+                >
+                    <div className={classes.toolbarIcon}>
+                        <Link to="/">
+                            <Typography
+                                style={{
+                                    color:
+                                        theme.palette.type === 'dark'
+                                            ? theme.palette.primary.light
+                                            : theme.palette.primary.main,
+                                }}
+                                component="h3"
+                                variant="h4"
+                            >
+                                D-TESTER
+                            </Typography>
+                        </Link>
+                        <IconButton onClick={handleDrawerClose}>
+                            <ChevronLeftIcon />
+                        </IconButton>
+                    </div>
+                    <Divider />
+                    <List className="navBar">
+                        {navList.map(({ path, icon, title }, index) => (
+                            <MainListItems
+                                key={index + title}
+                                path={path}
+                                icon={icon}
+                                title={title}
+                            />
+                        ))}
+                        <ListItem className={classes.ListItemExit} onClick={logoutHandle}>
+                            <ListItemIcon>
+                                <ExitToApp
+                                    style={{
+                                        color:
+                                            theme.palette.type === 'dark'
+                                                ? theme.palette.primary.light
+                                                : theme.palette.primary.main,
+                                    }}
+                                />
+                            </ListItemIcon>
+                            <ListItemText
+                                style={{
+                                    color:
+                                        theme.palette.type === 'dark'
+                                            ? theme.palette.primary.light
+                                            : theme.palette.primary.main,
+                                }}
+                                disableTypography
+                                primary="Вихід"
+                            />
+                        </ListItem>
+                    </List>
+                    <Divider />
+                </Drawer>
+                <main className={classes.content}>
+                    <div className={classes.appBarSpacer} />
+                    <div className={classes.contentBlock}>
+                        <Switch>
+                            <Route path="/admin/speciality" component={Speciality} />
+                            <Route path="/admin/group" component={Groups} />
+                            <Route path="/admin/dashboard" component={DashboardCards} />
+                            <Route path="/admin/admins" component={AdminsTable} />
+                            <Route path="/admin/students/:id" component={StudentsPage} />
+                            <Route exact path="/admin/subjects" component={Subjects} />
+                            <Route exact path="/admin/subjects/tests" component={Tests}></Route>
+                            <Route path="/admin/subjects/timetable" component={Timetable}></Route>
+                            <Route
+                                path="/admin/subjects/tests/test-detail"
+                                component={TestDetails}
+                            ></Route>
+                            <Route
+                                path="/admin/subjects/tests/questions"
+                                component={Questions}
+                            ></Route>
+                            <Route path="*" component={NotFoundPage} />
+                        </Switch>
+                        <Switch>
+                            <Route path="/admin/protocol" component={Protocols} />
+                        </Switch>
+                    </div>
+                </main>
+            </Paper>
+        </ThemeProvider>
     );
 }

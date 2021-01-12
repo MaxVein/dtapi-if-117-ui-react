@@ -13,12 +13,12 @@
   z-index: 10;
 }
 .card:hover {
-  box-shadow: 0px 0px 7px rgba(44, 44, 44, 0.473);
+  box-shadow: 0px 0px 7px rgba(20, 20, 20, 0.5);
 }
 .card:hover .card_hover {
   opacity: 1;
   visibility: visible;
-  transition: all 0.3s ease;
+  transition: all 0.2s linear;
 }
 .card_hover {
   position: absolute;
@@ -35,8 +35,8 @@
   height: 2.5rem;
   border-bottom-right-radius: 1rem;
 
-  background-color: #3f51b5;
   color: white;
+  background-color: #3f51b5;
 
   opacity: 0;
   visibility: hidden;
@@ -85,7 +85,6 @@
   font-size: 1rem;
   font-weight: 600;
 
-  background-color: #3f51b5;
   border-radius: 50%;
 }
 .card-button {

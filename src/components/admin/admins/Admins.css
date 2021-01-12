@@ -2,12 +2,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+.entity-table-container{
+  max-height: 75vh !important;
 }
 .entity-header__title {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-weight: 500!important;
 }
 .entity-header__button{
   padding: 10px 16px !important;
