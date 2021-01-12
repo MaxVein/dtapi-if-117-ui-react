@@ -24,7 +24,10 @@ const SpecialityAddDialig = ({
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Заповни поле'),
-    code: Yup.string().required('Заповни поле').max(5, 'Максимум 5 чисел'),
+    code: Yup.string()
+      .required('Заповни поле')
+      .max(5, 'Максимум 5 чисел')
+      .matches('^[0-9]*$', 'Поле повинно містити тільки числа'),
   })
   const handleClose = () => {
     speciality ? setEdit(false) : setOpen(false)

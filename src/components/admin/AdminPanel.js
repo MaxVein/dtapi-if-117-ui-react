@@ -204,7 +204,7 @@ export default function AdminPanel({ setAuthInfo }) {
         <div className={classes.appBarSpacer} />
         <Container maxWidth={false} className={classes.container}>
           <Switch>
-            <Route path="/admin/speciality" component={Speciality} />
+            <Route patsh="/admin/speciality" component={Speciality} />
           </Switch>
         </Container>
       </main>

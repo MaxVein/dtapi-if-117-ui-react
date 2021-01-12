@@ -5,7 +5,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination'
 
 import TableHead from '@material-ui/core/TableHead'
-import { Button } from '@material-ui/core'
+import { Button, Snackbar } from '@material-ui/core'
 
 import TableRow from '@material-ui/core/TableRow'
 import SpecialityViewList from './SpecialityViewList'
@@ -21,15 +21,30 @@ const SpecialityView = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [open, setOpen] = useState(false)
 
+  const [snakOpen, setSnakOpen] = useState(false)
   const headerName = ['ID', 'Спеціальність', 'Код', 'Дія']
+
+  function snackBar(open) {
+    return (
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        message="Something went wrong!"
+        onClose={() => setSnakOpen(false)}
+      />
+    )
+  }
 
   useEffect(() => {
     const source = axios.CancelToken.source()
     async function fetchData() {
-      const specialityDate = await getEntityData('Speciality', source)
-      setSpecialityDate(specialityDate.data)
+      try {
+        const specialityDate = await getEntityData('Speciality', source)
+        setSpecialityDate(specialityDate.data)
+      } catch {
+        setSnakOpen(true)
+      }
     }
-
     fetchData()
     return () => {
       source.cancel()
@@ -55,6 +70,7 @@ const SpecialityView = () => {
   }
   const dialogOpenHandler = () => {
     setOpen(true)
+    setSnakOpen(true)
   }
 
   return (
@@ -105,7 +121,9 @@ const SpecialityView = () => {
         setOpen={setOpen}
         open={open}
       />
+      {snackBar(snakOpen)}
     </div>
   )
 }
+
 export default SpecialityView
