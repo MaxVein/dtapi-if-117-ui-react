@@ -78,8 +78,8 @@ export default function Subjects() {
         if (subject.create) {
             createEntities('Subject', subject.data)
                 .then((res) => {
-                    const newSubjectData = [...res.data, ...subjectData];
-                    setSubjectData(newSubjectData);
+                    // const newSubjectData = [...res.data, ...subjectData];
+                    setSubjectData((prevVal) => [...res.data, ...prevVal]);
                     setOpenForm(false);
                     setOpenSnackbar(true);
                     setMessageToSnackbar('Предмет додано');
@@ -89,7 +89,6 @@ export default function Subjects() {
                     setMessageToSnackbar('Схоже предмет з такою назвою уже існує');
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subject]);
     //Delete
     useEffect(() => {

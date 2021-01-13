@@ -221,10 +221,8 @@ export default function AdminPanel({ setAuthInfo }) {
                             component={TestDetails}
                         ></Route>
                         <Route path="/admin/subjects/tests/questions" component={Questions}></Route>
-                        <Route path="*" component={NotFoundPage} />
-                    </Switch>
-                    <Switch>
                         <Route path="/admin/protocol" component={Protocols} />
+                        <Route path="*" component={NotFoundPage} />
                     </Switch>
                 </div>
             </main>
