@@ -3,9 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { StudentsServiceAPI } from '../services/StudentsService';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import StudentsCreateUpdateModal from '../StudentsCreateUpdateModal/StudentsCreateUpdateModal';
-import Loader from '../../../components/Loader/Loader';
-import SnackBar from '../../../components/SnackBar/SnackBar';
-import Alert from '../../../components/Alert/Alert';
+import Loader from '../../../common/components/Loader/Loader';
+import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
+import Alert from '../../../common/components/Alert/Alert.js';
 import classes from './StudentsPage.module.css';
 
 import { Button } from '@material-ui/core';
@@ -14,6 +14,7 @@ import HowToRegIcon from '@material-ui/icons/HowToReg';
 
 const StudentsPage = ({ match, location }) => {
     const [students, setStudents] = useState([]);
+    const [snack, setSnack] = React.useState({ open: false, message: '', type: 'success' });
     const [groupInfo] = useState({
         id: match.params.id,
         name:
@@ -38,11 +39,15 @@ const StudentsPage = ({ match, location }) => {
             try {
                 const students = await StudentsServiceAPI.fetchStudentsByGroup(groupInfo.id, true);
                 if (students.data.length) {
-                    setSnackBar({ open: true, message: 'Студентів завантажено' });
+                    setSnack({
+                        open: true,
+                        message: 'Студентів завантажено',
+                        type: 'success',
+                    });
                     setStudents(students.data);
                     setLoading(false);
                 } else {
-                    setSnackBar({ open: true, message: 'Студенти відсутні' });
+                    setSnack({ open: true, message: 'Студенти відсутні', type: 'warning' });
                     setStudents([]);
                     setLoading(false);
                 }
@@ -92,15 +97,7 @@ const StudentsPage = ({ match, location }) => {
                     errorHandler={errorHandler}
                 />
             )}
-            <SnackBar show={snackBar.open} message={snackBar.message} hide={setSnackBar} />
-            {error.error ? (
-                <Alert
-                    show={error.error}
-                    message={error.message}
-                    type={error.type}
-                    hide={setError}
-                />
-            ) : null}
+            <SnackbarHandler snack={snack} setSnack={setSnack} />
             {open.open ? (
                 <StudentsCreateUpdateModal
                     open={open.open}
