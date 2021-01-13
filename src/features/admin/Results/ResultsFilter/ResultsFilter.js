@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ResultsServiceAPI } from '../services/ResultsService';
+import { ResultsServiceApi } from '../services/ResultsService';
 import PropTypes from 'prop-types';
 import classes from './ResultsFilter.module.css';
 
@@ -27,6 +27,15 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
     const [group, setGroup] = useState('');
     const [test, setTest] = useState('');
 
+    useEffect(() => {
+        (async function facultyList() {
+            await getFacultyList();
+        })();
+        (async function testsList() {
+            await getTestsList();
+        })();
+    }, []);
+
     const messageHandler = useCallback(
         (message, type) => {
             setSnackBar({
@@ -38,58 +47,56 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
         [setSnackBar],
     );
 
-    useEffect(() => {
-        (async function getFacultyList() {
-            try {
-                const faculties = await ResultsServiceAPI.fetchFaculties();
-                if (faculties.data.length) {
-                    setFaculties(faculties.data);
-                    setDisabled({ faculties: false, groups: true, tests: true });
-                } else {
-                    setLoading({ filter: false, table: false });
-                    messageHandler('Факультети відсутні', 'warning');
-                }
-            } catch (e) {
-                setLoading({ filter: false, table: false });
-                errorHandler(
-                    'Сталася помилка під час отримання списку факультетів! Спробуйте знову',
-                );
-            }
-        })();
-        (async function getTestsList() {
-            try {
-                const tests = await ResultsServiceAPI.fetchTests();
-                if (tests.data.length) {
-                    setTests({ allTests: tests.data, groupTests: [] });
-                    setLoading({ filter: false, table: false });
-                } else {
-                    setLoading({ filter: false, table: false });
-                    messageHandler('Тести відсутні', 'warning');
-                }
-            } catch (e) {
-                setLoading({ filter: false, table: false });
-                errorHandler('Сталася помилка під час отримання списку тестів! Спробуйте знову');
-            }
-        })();
-    }, [messageHandler]);
+    const getFacultyList = async () => {
+        const faculties = await ResultsServiceApi.fetchFaculties();
+        if (faculties.length) {
+            setFaculties(faculties);
+            setDisabled({ faculties: false, groups: true, tests: true });
+        } else if (!faculties.length) {
+            setFaculties([]);
+            messageHandler('Факультети відсутні', 'warning');
+            setLoading({ filter: false, table: false });
+        } else if (faculties.error) {
+            setLoading({ filter: false, table: false });
+            errorHandler('Сталася помилка під час отримання списку факультетів! Спробуйте знову');
+        }
+    };
 
-    const getGroupsList = async (id) => {
+    const getTestsList = async () => {
+        const tests = await ResultsServiceApi.fetchTests();
+        if (tests.length) {
+            setTests({ allTests: tests, groupTests: [] });
+            setLoading({ filter: false, table: false });
+        } else if (!tests.length) {
+            setTests({ allTests: [], groupTests: [] });
+            messageHandler('Тести відсутні', 'warning');
+            setLoading({ filter: false, table: false });
+        } else if (tests.error) {
+            setLoading({ filter: false, table: false });
+            errorHandler('Сталася помилка під час отримання списку тестів! Спробуйте знову');
+        }
+    };
+
+    const groupsList = async (id) => {
         if (id) {
-            try {
-                const groups = await ResultsServiceAPI.fetchGroupsByFaculty(id);
-                if (groups.data.length) {
-                    setGroups(groups.data);
-                    setDisabled({ faculties: false, groups: false, tests: true });
-                } else {
-                    setGroup('');
-                    setDisabled({ faculties: false, groups: true, tests: true });
-                    messageHandler('Групи відсутні', 'warning');
-                }
-            } catch (e) {
-                errorHandler('Сталася помилка під час отримання списку груп! Спробуйте знову');
-            }
+            await getGroupList(id);
         } else {
             messageHandler('Сталася помилка при отриманні даних! Спробуйте знову', 'error');
+        }
+    };
+
+    const getGroupList = async (id) => {
+        const groups = await ResultsServiceApi.fetchGroupsByFaculty(id);
+        if (groups.length) {
+            setGroups(groups);
+            setDisabled({ faculties: false, groups: false, tests: true });
+        } else if (!groups.length) {
+            setGroup('');
+            setGroups([]);
+            setDisabled({ faculties: false, groups: true, tests: true });
+            messageHandler('Групи відсутні', 'warning');
+        } else if (groups.error) {
+            errorHandler('Сталася помилка під час отримання списку груп! Спробуйте знову');
         }
     };
 
@@ -97,31 +104,37 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
         if (id) {
             messageHandler('Групу вибрано', 'success');
             setIds({ groupId: id, testId: null });
-            try {
-                const response = await ResultsServiceAPI.fetchResultTestIdsByGroup(id);
-                if (response.data.length) {
-                    setTests((prevState) => {
-                        prevState.groupTests = prevState.allTests.filter((t) =>
-                            response.data.some((i) => i.test_id === t.test_id),
-                        );
-                        return {
-                            allTests: [...prevState.allTests],
-                            groupTests: [...prevState.groupTests],
-                        };
-                    });
-                    setDisabled({ faculties: false, groups: false, tests: false });
-                } else {
-                    setTest('');
-                    setDisabled({ faculties: false, groups: false, tests: true });
-                    messageHandler('Немає доступних тестів у вибраної групи', 'warning');
-                }
-            } catch (e) {
-                errorHandler(
-                    'Сталася помилка під час отримання списку тестів групи! Спробуйте знову',
-                );
-            }
+            await getGroupTests(id);
         } else {
             messageHandler('Сталася помилка при отриманні даних! Спробуйте знову', 'error');
+        }
+    };
+
+    const getGroupTests = async (id) => {
+        const response = await ResultsServiceApi.fetchResultTestIdsByGroup(id);
+        if (response.length) {
+            setTests((prevState) => {
+                prevState.groupTests = prevState.allTests.filter((t) =>
+                    response.some((i) => i.test_id === t.test_id),
+                );
+                return {
+                    allTests: [...prevState.allTests],
+                    groupTests: [...prevState.groupTests],
+                };
+            });
+            setDisabled({ faculties: false, groups: false, tests: false });
+        } else if (!response.length) {
+            setTest('');
+            setTests((prevState) => {
+                return {
+                    allTests: [...prevState.allTests],
+                    groupTests: [],
+                };
+            });
+            setDisabled({ faculties: false, groups: false, tests: true });
+            messageHandler('Немає доступних тестів у вибраної групи', 'warning');
+        } else if (response.error) {
+            errorHandler('Сталася помилка під час отримання списку тестів групи! Спробуйте знову');
         }
     };
 
@@ -156,7 +169,7 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
                                         onChange={async (event) => {
                                             setFaculty(event.target.value);
                                             messageHandler('Факультет вибрано', 'success');
-                                            await getGroupsList(+event.target.value);
+                                            await groupsList(+event.target.value);
                                         }}
                                         disabled={disabled.faculties}
                                     >
@@ -218,6 +231,7 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
                                                     testId: +event.target.value,
                                                 };
                                             });
+                                            messageHandler('Тест вибрано', 'success');
                                         }}
                                         disabled={disabled.tests}
                                     >

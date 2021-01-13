@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { ResultsServiceAPI } from '../services/ResultsService';
+import { ResultsServiceApi } from '../services/ResultsService';
 import ResultsFilter from '../ResultsFilter/ResultsFilter';
 import ResultsTable from '../ResultsTable/ResultsTable';
-import SnackBar from '../../../common/snackbar';
-import Alert from '../../../components/Alert/Alert';
+import SnackBar from '../../../../common/components/Snackbar/snackbar';
+import Alert from '../../../../common/components/Alert/Alert';
 import classes from './ResultsPage.module.css';
 
 import { CircularProgress } from '@material-ui/core';
@@ -28,18 +28,16 @@ const ResultsPage = () => {
     );
 
     const getTestInfoByGroup = async (testId, groupId) => {
-        try {
-            const response = await ResultsServiceAPI.fetchGroupTestResults(testId, groupId);
-            if (response.length) {
-                setResults(response);
-                setSnackBar({ open: true, message: 'Результати завантажено', type: 'success' });
-                setLoading({ filter: false, table: false });
-            } else {
-                setResults([]);
-                setSnackBar({ open: true, message: 'Результати відсутні', type: 'warning' });
-                setLoading({ filter: false, table: false });
-            }
-        } catch (e) {
+        const response = await ResultsServiceApi.fetchGroupTestResults(testId, groupId);
+        if (response.length) {
+            setResults(response);
+            setSnackBar({ open: true, message: 'Результати завантажено', type: 'success' });
+            setLoading({ filter: false, table: false });
+        } else if (!response.length) {
+            setResults([]);
+            setSnackBar({ open: true, message: 'Результати відсутні', type: 'warning' });
+            setLoading({ filter: false, table: false });
+        } else if (response.error) {
             setLoading({ filter: false, table: false });
             errorHandler(
                 'Сталася помилка при отриманні та формуванні результатів тестування! Спробуйте знову',

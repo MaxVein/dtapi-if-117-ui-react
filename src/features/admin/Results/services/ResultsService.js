@@ -10,19 +10,39 @@ class ResultsService {
     }
 
     async fetchFaculties() {
-        return await axios.get(`${this.url}Faculty/getRecords`);
-    }
-
-    async fetchGroupsByFaculty(id) {
-        return await axios.get(`${this.url}group/getGroupsByFaculty/${id}`);
+        try {
+            const faculties = await axios.get(`${this.url}Faculty/getRecords`);
+            return faculties.data;
+        } catch (e) {
+            return { error: e.response.data };
+        }
     }
 
     async fetchTests() {
-        return await axios.get(`${this.url}test/getRecords`);
+        try {
+            const tests = await axios.get(`${this.url}test/getRecords`);
+            return tests.data;
+        } catch (e) {
+            return { error: e.response.data };
+        }
+    }
+
+    async fetchGroupsByFaculty(id) {
+        try {
+            const groups = await axios.get(`${this.url}group/getGroupsByFaculty/${id}`);
+            return groups.data;
+        } catch (e) {
+            return { error: e.response.data };
+        }
     }
 
     async fetchResultTestIdsByGroup(id) {
-        return await axios.get(`${this.url}Result/getResultTestIdsByGroup/${id}`);
+        try {
+            const response = await axios.get(`${this.url}Result/getResultTestIdsByGroup/${id}`);
+            return response.data;
+        } catch (e) {
+            return { error: e.response.data };
+        }
     }
 
     async fetchStudentsByGroup(id, notPhotos = true) {
@@ -60,19 +80,23 @@ class ResultsService {
     }
 
     async fetchGroupTestResults(testId, groupId) {
-        const students = await this.fetchStudentsByGroup(groupId, true);
-        const results = await this.fetchResultsByTestGroupDate(testId, groupId);
-        const data = results.data.map((item) => {
-            const duration = this.getTestDateAndTime(
-                item.session_date,
-                item.start_time,
-                item.end_time,
-            );
-            const info = students.data.filter((data) => data.user_id === item.student_id);
-            return Object.assign({}, item, ...info, { duration });
-        });
-        return data;
+        try {
+            const students = await this.fetchStudentsByGroup(groupId, true);
+            const results = await this.fetchResultsByTestGroupDate(testId, groupId);
+            const data = results.data.map((item) => {
+                const duration = this.getTestDateAndTime(
+                    item.session_date,
+                    item.start_time,
+                    item.end_time,
+                );
+                const info = students.data.filter((data) => data.user_id === item.student_id);
+                return Object.assign({}, item, ...info, { duration });
+            });
+            return data;
+        } catch (e) {
+            return { error: e.response.data };
+        }
     }
 }
 
-export const ResultsServiceAPI = new ResultsService(environment.BASEURL);
+export const ResultsServiceApi = new ResultsService(environment.BASEURL);
