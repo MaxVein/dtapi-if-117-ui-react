@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { environment } from '../../../environments/environment';
-// import SnackbarHandler from "../../../common/snackbar";
+import { environment } from '../../../environments/environment.js';
 
 export async function getNumberOfRecords() {
     const FacultiesNumber = await axios

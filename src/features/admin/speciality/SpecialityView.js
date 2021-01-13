@@ -6,6 +6,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import TableHead from '@material-ui/core/TableHead';
 import { Button } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 import TableRow from '@material-ui/core/TableRow';
 import SpecialityViewList from './SpecialityViewList';
@@ -59,7 +60,9 @@ const SpecialityView = () => {
     return (
         <div>
             <div style={styles.btn}>
-                <h2>Спеціальності</h2>
+                <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
+                    Спеціальності
+                </Typography>
                 <Button onClick={dialogOpenHandler} variant="contained" color="primary">
                     Добавити спеціальність
                 </Button>

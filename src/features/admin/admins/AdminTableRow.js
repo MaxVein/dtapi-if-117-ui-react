@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import './Admins.css';
 import AdminCreationForm from './AdminsCreationForm';
 import AdminsDeleteForm from './AdminsDeleteForm';
 

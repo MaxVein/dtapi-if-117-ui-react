@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import TableHead from '@material-ui/core/TableHead';
+import { Typography } from '@material-ui/core';
 
 import { findIndex } from 'lodash';
 
@@ -158,7 +159,9 @@ export default function Subjects() {
     return (
         <div className="subjects-container">
             <div className="subject-btn">
-                <div className="subject-title">Предмети</div>
+                <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
+                    Предмети
+                </Typography>
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
                     Додати предмет
                 </Button>

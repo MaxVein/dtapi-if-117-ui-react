@@ -4,7 +4,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button } from '@material-ui/core';
 
-import './Admins.css';
+import styles from './Admins.module.css';
 import { deleteAdmin } from './AdminsService';
 import AdminsContext from './AdminsContext';
 
