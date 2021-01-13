@@ -8,7 +8,7 @@ import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import ConfirmDelete from '../confirm';
+import ConfirmDelete from '../subjects/confirm';
 
 export default function TableList({ test, setDeleteEntity, handleEditTest, subjectName }) {
     let { url } = useRouteMatch();

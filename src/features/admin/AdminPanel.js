@@ -30,13 +30,13 @@ import AdminsTable from './admins/index';
 import Speciality from './speciality/index';
 import DashboardCards from './dashboard/index';
 import Subjects from './subjects/index';
-import Tests from './subjects/tests/index';
-import Timetable from './subjects/timetable/index';
+import Tests from './tests';
+import Timetable from './timetable/index';
 import Groups from './groups/index';
 import Protocols from './protocols/index';
 import StudentsPage from '../Students/index';
-import TestDetails from './subjects/tests/test-details/index';
-import Questions from './subjects/tests/questions/index';
+import TestDetails from './test-details';
+import Questions from './questions';
 
 const drawerWidth = 240;
 

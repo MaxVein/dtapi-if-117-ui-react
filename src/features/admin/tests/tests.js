@@ -22,11 +22,10 @@ import {
     updateEntities,
     createEntities,
     deleteEntities,
-    getRecords,
-} from '../apiService';
-import OpenSnackbar from '../snackbar';
+} from '../subjects/apiService';
+import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
 import TableList from './tableList';
-import TablePaginationActions from '../tablePagination';
+import TablePaginationActions from '../subjects/tablePagination';
 import FormDialog from './dialog';
 import SelectTest from './selectTest';
 
@@ -34,9 +33,8 @@ export default function Tests() {
     const location = useLocation();
     const { id, name } = location.state;
     const [testData, setTestData] = useState([]);
+    const [snack, setSnack] = useState({ open: false });
     const [deleteEntity, setDeleteEntity] = useState({ delete: false, id: '' });
-    const [messageToSnackbar, setMessageToSnackbar] = useState('');
-    const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openForm, setOpenForm] = useState(false);
     const [editTest, setEditTest] = useState({
         edit: false,
@@ -52,29 +50,29 @@ export default function Tests() {
     });
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
+    //Read
     useEffect(() => {
         getTestRecords(id).then((res) => {
             setTestData(res.data);
         });
     }, [id]);
 
-    const useStyles2 = makeStyles({
+    // Table
+    const useStyles = makeStyles({
         table: {
             minWidth: 400,
         },
     });
-    const classes = useStyles2();
+    const classes = useStyles();
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, testData.length - page * rowsPerPage);
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
     //create
     const handleClickCreate = () => {
         setOpenForm(true);
@@ -84,19 +82,21 @@ export default function Tests() {
         if (test.create) {
             createEntities('test', test.data)
                 .then((res) => {
-                    const newTestData = [...res.data, ...testData];
-                    setTestData(newTestData);
+                    setTestData((prevVal) => [...res.data, ...prevVal]);
                     setOpenForm(false);
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Тест додано');
+                    setSnack({ open: true, type: 'success', message: 'Тест додано' });
                 })
                 .catch(() => {
                     setOpenSnackbar(true);
-                    setMessageToSnackbar('Схоже тест з такою назвою уже існує');
+                    setSnack({
+                        open: true,
+                        type: 'erorr',
+                        message: 'Схоже тест з такою назвою уже існує',
+                    });
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [test]);
+
     //edit
     const handleEditTest = (item) => {
         setOpenForm(true);
@@ -104,49 +104,51 @@ export default function Tests() {
     };
     useEffect(() => {
         if (editTest.equal && !editTest.first) {
-            setOpenSnackbar(true);
-            setMessageToSnackbar('Внесіть зміни у форму');
+            setSnack({ open: true, type: 'warning', message: 'Внесіть зміни у форму' });
         } else if (editTest.edit && !editTest.equal) {
             updateEntities('test', editTest.data.test_id, editTest.data)
                 .then((res) => {
                     setOpenForm(false);
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Тест оновлено');
-                    const updateIndex = findIndex(testData, (o) => {
-                        return o.test_id === res.data[0].test_id;
+                    setTestData((prevVal) => {
+                        const updateIndex = findIndex(prevVal, (o) => {
+                            return o.subject_id === res.data[0].subject_id;
+                        });
+                        prevVal[updateIndex] = res.data[0];
                     });
-                    let newTestData = [...testData];
-                    newTestData[updateIndex] = res.data[0];
-                    setTestData(newTestData);
+                    setSnack({ open: true, type: 'success', message: 'Тест оновлено' });
                 })
                 .catch(() => {
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Виникли проблеми на сервері спробуйте пізніше');
+                    setSnack({
+                        open: true,
+                        type: 'error',
+                        message: 'Виникли проблеми на сервері спробуйте пізніше',
+                    });
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editTest]);
+
     // delete
     useEffect(() => {
         if (deleteEntity.delete) {
             deleteEntities('test', deleteEntity.id)
                 .then((res) => {
                     if (res.data.response === 'ok') {
-                        const newTestData = testData.filter(
-                            (elem) => elem.test_id !== deleteEntity.id,
-                        );
-                        setTestData(newTestData);
-                        setOpenSnackbar(true);
-                        setMessageToSnackbar('Тест видалено');
+                        setTestData((prevVal) => {
+                            return prevVal.filter((elem) => elem.subject_id !== deleteEntity.id);
+                        });
+                        setSnack({ open: true, type: 'success', message: 'Тест видалено' });
                     }
                 })
                 .catch(() => {
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Виникли проблеми на сервері спробуйте пізніше');
+                    setSnack({
+                        open: true,
+                        type: 'error',
+                        message: 'Виникли проблеми на сервері спробуйте пізніше',
+                    });
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [deleteEntity]);
+
     //Sorting
     const handleSorting = (key) => {
         let newTestData = [...testData];
@@ -179,7 +181,7 @@ export default function Tests() {
                 <div className="test-title">
                     Тести з предмета:
                     <b>
-                        <em>{name}</em>
+                        <em> {name}</em>
                     </b>
                 </div>
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
@@ -279,11 +281,7 @@ export default function Tests() {
                     </TableFooter>
                 </Table>
             </TableContainer>
-            <OpenSnackbar
-                messageToSnackbar={messageToSnackbar}
-                openSnackbar={openSnackbar}
-                setOpenSnackbar={setOpenSnackbar}
-            />
+            <SnackbarHandler snack={snack} setSnack={setSnack} />
         </div>
     );
 }

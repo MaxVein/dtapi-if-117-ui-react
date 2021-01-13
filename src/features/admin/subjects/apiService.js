@@ -4,6 +4,9 @@ import { environment } from '../../../environments/environment';
 export function getTestRecords(id) {
     return axios.get(`${environment.BASEURL}/test/getTestsBySubject/${id}`);
 }
+export function getTimetableRecords(id) {
+    return axios.get(`${environment.BASEURL}/timeTable/getTimeTablesForSubject/${id}`);
+}
 export function getRecords(entity) {
     return axios.get(`${environment.BASEURL + entity}/getRecords`);
 }

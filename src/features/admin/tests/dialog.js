@@ -10,7 +10,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import { objectsAreSame } from '../apiService';
+import { objectsAreSame } from '../subjects/apiService';
 
 export default function FormDialog({
     editTest,
