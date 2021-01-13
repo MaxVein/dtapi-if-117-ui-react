@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ResultsServiceApi } from '../services/ResultsService';
+import ResultsContext from '../ResultsPage/ResultsContext';
 import PropTypes from 'prop-types';
 import classes from './ResultsFilter.module.css';
 
@@ -17,7 +18,8 @@ import SchoolIcon from '@material-ui/icons/School';
 import GroupIcon from '@material-ui/icons/Group';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 
-const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, errorHandler }) => {
+const ResultsFilter = ({ getTestInfoByGroup }) => {
+    const { loading, setLoading, setSnackBar, errorHandler } = useContext(ResultsContext);
     const [faculties, setFaculties] = useState([]);
     const [groups, setGroups] = useState([]);
     const [tests, setTests] = useState({ allTests: [], groupTests: [] });
@@ -55,9 +57,9 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
         } else if (!faculties.length) {
             setFaculties([]);
             messageHandler('Факультети відсутні', 'warning');
-            setLoading({ filter: false, table: false });
+            setLoading({ filter: false, table: false, detailsModal: true });
         } else if (faculties.error) {
-            setLoading({ filter: false, table: false });
+            setLoading({ filter: false, table: false, detailsModal: true });
             errorHandler('Сталася помилка під час отримання списку факультетів! Спробуйте знову');
         }
     };
@@ -66,13 +68,13 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
         const tests = await ResultsServiceApi.fetchTests();
         if (tests.length) {
             setTests({ allTests: tests, groupTests: [] });
-            setLoading({ filter: false, table: false });
+            setLoading({ filter: false, table: false, detailsModal: true });
         } else if (!tests.length) {
             setTests({ allTests: [], groupTests: [] });
             messageHandler('Тести відсутні', 'warning');
-            setLoading({ filter: false, table: false });
+            setLoading({ filter: false, table: false, detailsModal: true });
         } else if (tests.error) {
-            setLoading({ filter: false, table: false });
+            setLoading({ filter: false, table: false, detailsModal: true });
             errorHandler('Сталася помилка під час отримання списку тестів! Спробуйте знову');
         }
     };
@@ -252,7 +254,7 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
                                 type="submit"
                                 disabled={test === ''}
                                 onClick={() => {
-                                    setLoading({ filter: false, table: true });
+                                    setLoading({ filter: false, table: true, detailsModal: true });
                                     getTestInfoByGroup(ids.testId, ids.groupId);
                                 }}
                             >
@@ -269,9 +271,5 @@ const ResultsFilter = ({ getTestInfoByGroup, loading, setLoading, setSnackBar, e
 export default ResultsFilter;
 
 ResultsFilter.propTypes = {
-    loading: PropTypes.object,
-    setLoading: PropTypes.func,
-    setSnackBar: PropTypes.func,
-    errorHandler: PropTypes.func,
     getTestInfoByGroup: PropTypes.func,
 };

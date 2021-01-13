@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import ResultsContext from '../ResultsPage/ResultsContext';
+import ResultsDetailsModal from '../ResultsDetailsModal/ResultsDetailsModal';
 import PropTypes from 'prop-types';
 import classes from './ResultsTable.module.css';
 
@@ -18,6 +20,7 @@ import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import ReportIcon from '@material-ui/icons/Report';
 
 const ResultsTable = ({ results }) => {
+    const { loading, setLoading, setSnackBar, errorHandler } = useContext(ResultsContext);
     const [dataSource, setDataSource] = useState([]);
     const displayedColumns = [
         'No.',
@@ -30,6 +33,10 @@ const ResultsTable = ({ results }) => {
     ];
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(9);
+    const [open, setOpen] = useState({
+        open: false,
+        data: {},
+    });
 
     useEffect(() => {
         setDataSource(results);
@@ -65,7 +72,16 @@ const ResultsTable = ({ results }) => {
                                         <TableCell>
                                             <div className={classes.Actions}>
                                                 <Tooltip title="Переглянути деталі тестування">
-                                                    <Button color="primary" variant="contained">
+                                                    <Button
+                                                        color="primary"
+                                                        variant="contained"
+                                                        onClick={() =>
+                                                            setOpen({
+                                                                open: true,
+                                                                data: item,
+                                                            })
+                                                        }
+                                                    >
                                                         <ViewHeadlineIcon
                                                             className={classes.ActionIcon}
                                                         />
@@ -98,6 +114,17 @@ const ResultsTable = ({ results }) => {
                     <h1>Результати відсутні</h1>
                 </div>
             )}
+            {open.open ? (
+                <ResultsDetailsModal
+                    open={open.open}
+                    setOpen={setOpen}
+                    results={open.data}
+                    loading={loading}
+                    setLoading={setLoading}
+                    setSnackBar={setSnackBar}
+                    errorHandler={errorHandler}
+                />
+            ) : null}
         </div>
     );
 };

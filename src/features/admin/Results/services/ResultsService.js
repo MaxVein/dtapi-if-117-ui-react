@@ -97,6 +97,27 @@ class ResultsService {
             return { error: e.response.data };
         }
     }
+
+    async fetchAllQuestions(ids) {
+        try {
+            const response = await axios.post(`${this.url}EntityManager/getEntityValues`, {
+                entity: 'Question',
+                ids,
+            });
+            return response.data;
+        } catch (e) {
+            return { error: e.response.data };
+        }
+    }
+
+    async fetchAnswersByQuestionId(id) {
+        try {
+            const answers = await axios.get(`${this.url}answer/getAnswersByQuestion/${id}`);
+            return answers.data;
+        } catch (e) {
+            return { error: e.response.data };
+        }
+    }
 }
 
 export const ResultsServiceApi = new ResultsService(environment.BASEURL);
