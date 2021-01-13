@@ -141,7 +141,7 @@ const Groups = () => {
             }}
         >
             <div className="header">
-                <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
                     Групи і студенти
                 </Typography>
                 <Button color="primary" onClick={dialogOpenHandler}>

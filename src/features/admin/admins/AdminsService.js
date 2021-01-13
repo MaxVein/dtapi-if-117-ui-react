@@ -2,6 +2,23 @@ import axios from 'axios';
 import { environment } from '../../../environments/environment';
 export const source = axios.CancelToken.source();
 
+export const columns = [
+    { id: 'id', label: 'ID', minWidth: '25%' },
+    { id: 'username', label: "Ім'я", minWidth: '25%' },
+    {
+        id: 'email',
+        label: 'Email',
+        minWidth: '25%',
+        align: 'left',
+    },
+    {
+        id: 'operations',
+        label: 'Операції',
+        minWidth: '10%',
+        align: 'center',
+    },
+];
+
 export function createData(id, username, email) {
     return { id, username, email };
 }
