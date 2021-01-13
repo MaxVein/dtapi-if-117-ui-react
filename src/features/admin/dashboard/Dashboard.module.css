@@ -1,0 +1,173 @@
+.cardsGrid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  column-gap: 2%;
+  row-gap: 4%;
+}
+.card {
+  overflow: visible !important;
+  position: relative;
+  z-index: 10;
+}
+.card:hover {
+  box-shadow: 0px 0px 7px rgba(20, 20, 20, 0.5);
+}
+.card:hover .cardHover {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.2s linear;
+}
+.cardHover {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.5rem;
+
+  width: 6rem;
+  height: 2.5rem;
+  border-bottom-right-radius: 1rem;
+
+  color: white;
+  background-color: #3f51b5;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: all 0.3s linear;
+}
+.cardLink {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  width: 100%;
+  height: 100%;
+}
+.cardImage {
+  height: 240px;
+}
+.cardTitle {
+  position: relative;
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 1rem;
+  line-height: normal;
+}
+.cardCount {
+  position: absolute;
+  right: -1rem;
+  top: -1rem;
+  z-index: 120;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 3rem;
+  height: 3rem;
+
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+
+  border-radius: 50%;
+}
+.cardButton {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #3f51b5;
+}
+.loader {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1585px) {
+}
+@media screen and (max-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    column-gap: 3%;
+    row-gap: 3%;
+  }
+  .cardImage {
+    height: 180px;
+  }
+}
+@media screen and (max-width: 900px) {
+  .cardsGrid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    column-gap: 3%;
+    row-gap: 3%;
+  }
+  .cardImage {
+    height: 180px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .cardsGrid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4%;
+    row-gap: 2%;
+  }
+  .cardTitle {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.7rem;
+  }
+  .cardImage {
+    height: 130px;
+  }
+  .cardCount {
+    right: -0.8rem;
+    top: -0.8rem;
+
+    width: 2rem;
+    height: 2rem;
+
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .cardHover {
+    width: 4.5rem;
+    height: 2rem;
+    border-bottom-right-radius: 0.8rem;
+  }
+  .cardHover h3 {
+    font-size: 0.8rem;
+  }
+}
+@media screen and (max-width: 450px) {
+  .cardsGrid {
+    column-gap: 5%;
+    row-gap: 3%;
+  }
+}
+@media screen and (max-width: 360px) {
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    row-gap: 1%;
+  }
+}
