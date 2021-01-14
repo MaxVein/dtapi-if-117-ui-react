@@ -23,7 +23,7 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
     const [faculties, setFaculties] = useState([]);
     const [groups, setGroups] = useState([]);
     const [tests, setTests] = useState({ allTests: [], groupTests: [] });
-    const [ids, setIds] = useState({ groupId: null, testId: null });
+    const [ids, setIds] = useState({ groupId: null, testId: null, subjectId: null });
     const [disabled, setDisabled] = useState({ faculties: true, groups: true, tests: true });
     const [faculty, setFaculty] = useState('');
     const [group, setGroup] = useState('');
@@ -105,8 +105,10 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
     const getGroup = async (id) => {
         if (id) {
             messageHandler('Групу вибрано', 'success');
-            setIds({ groupId: id, testId: null });
+            setIds({ groupId: id, testId: null, subjectId: null });
             await getGroupTests(id);
+            const arr = groups.filter((g) => g.group_id === id.toString());
+            localStorage.setItem('group_name', JSON.stringify(arr[0].group_name));
         } else {
             messageHandler('Сталася помилка при отриманні даних! Спробуйте знову', 'error');
         }
@@ -227,13 +229,21 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                         className={classes.Select}
                                         onChange={(event) => {
                                             setTest(event.target.value);
+                                            const arr = tests.groupTests.filter(
+                                                (t) => t.test_id === event.target.value.toString(),
+                                            );
                                             setIds((prevState) => {
                                                 return {
                                                     groupId: prevState.groupId,
                                                     testId: +event.target.value,
+                                                    subjectId: arr[0].subject_id,
                                                 };
                                             });
                                             messageHandler('Тест вибрано', 'success');
+                                            localStorage.setItem(
+                                                'test_name',
+                                                JSON.stringify(arr[0].test_name),
+                                            );
                                         }}
                                         disabled={disabled.tests}
                                     >
@@ -255,7 +265,7 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                 disabled={test === ''}
                                 onClick={() => {
                                     setLoading({ filter: false, table: true, detailsModal: true });
-                                    getTestInfoByGroup(ids.testId, ids.groupId);
+                                    getTestInfoByGroup(ids.testId, ids.groupId, ids.subjectId);
                                 }}
                             >
                                 Отримати результати тесту

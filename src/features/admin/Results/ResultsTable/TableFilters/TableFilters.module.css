@@ -1,4 +1,4 @@
-.Filter {
+.TableFilters {
     margin: 30px auto;
     display: flex;
     height: auto;
@@ -10,20 +10,15 @@
     padding: 5% 5%;
 }
 
-.Faculties {
+.Results {
     padding-top: 10px;
     width: 100% !important;
     display: flex;
     justify-content: center;
 }
 
-.Groups {
-    width: 100% !important;
-    display: flex;
-    justify-content: center;
-}
-
-.Tests {
+.Date {
+    padding-top: 10px;
     width: 100% !important;
     display: flex;
     justify-content: center;
@@ -41,6 +36,11 @@
     margin: -3px 5px auto auto;
 }
 
+.SelectorIconTwo {
+    vertical-align: middle;
+    font-size: 20px;
+}
+
 .FormControl {
     padding-bottom: 30px !important;
 }
@@ -54,21 +54,4 @@
 }
 
 .Select {
-}
-
-.Actions {
-    padding: 10px 12px 0 10px;
-}
-
-.Button {
-    width: 100%;
-    align-items: center;
-    padding: 10px 0 !important;
-    box-shadow: none;
-}
-
-.Spinner {
-    position: relative;
-    left: 45% !important;
-    margin: 150px auto;
 }

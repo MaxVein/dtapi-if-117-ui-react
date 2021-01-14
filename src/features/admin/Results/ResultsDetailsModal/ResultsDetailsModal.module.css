@@ -47,7 +47,7 @@
 
 .True {
     background-color: #69f0ae;
-    color: black;
+    color: black !important;
 }
 
 .False {

@@ -3,6 +3,7 @@ import { ResultsServiceApi } from '../services/ResultsService';
 import ResultsContext from './ResultsContext';
 import ResultsFilter from '../ResultsFilter/ResultsFilter';
 import ResultsTable from '../ResultsTable/ResultsTable';
+import TableFilters from '../ResultsTable/TableFilters/TableFilters';
 import SnackBar from '../../../../common/components/Snackbar/snackbar';
 import Alert from '../../../../common/components/Alert/Alert';
 import classes from './ResultsPage.module.css';
@@ -28,8 +29,8 @@ const ResultsPage = () => {
         [setError],
     );
 
-    const getTestInfoByGroup = async (testId, groupId) => {
-        const response = await ResultsServiceApi.fetchGroupTestResults(testId, groupId);
+    const getTestInfoByGroup = async (testId, groupId, subjectId) => {
+        const response = await ResultsServiceApi.fetchGroupTestResults(testId, groupId, subjectId);
         if (response.length) {
             setResults(response);
             setSnackBar({ open: true, message: 'Результати завантажено', type: 'success' });
@@ -58,6 +59,9 @@ const ResultsPage = () => {
                 <div className={classes.Content}>
                     <div className={classes.Panel}>
                         <ResultsFilter getTestInfoByGroup={getTestInfoByGroup} />
+                        {results.length ? (
+                            <TableFilters results={results} setResults={setResults} />
+                        ) : null}
                     </div>
                     <div className={classes.Table}>
                         {loading.table ? (

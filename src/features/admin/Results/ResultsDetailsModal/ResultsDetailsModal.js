@@ -38,7 +38,7 @@ const ResultsDetailsModal = ({
         ],
     });
     const [dataSource, setDataSource] = useState([]);
-    const displayedColumns = ['Ідентифікатор', 'Текст запитання', 'Відповідь', 'Детальніше'];
+    const displayedColumns = ['No.', 'Ідентифікатор', 'Текст запитання', 'Відповідь', 'Детальніше'];
 
     useEffect(() => {
         (async function allQuestions(ids) {
@@ -108,6 +108,13 @@ const ResultsDetailsModal = ({
                                 <TableBody>
                                     {dataSource.map((item, index) => (
                                         <TableRow key={index}>
+                                            <TableCell
+                                                className={
+                                                    +item.true ? classes.True : classes.False
+                                                }
+                                            >
+                                                {index + 1}
+                                            </TableCell>
                                             <TableCell
                                                 className={
                                                     +item.true ? classes.True : classes.False

@@ -79,10 +79,16 @@ class ResultsService {
         return this.transformToTime(duration);
     }
 
-    async fetchGroupTestResults(testId, groupId) {
+    async fetchSubjectById(id) {
+        return await axios.get(`${this.url}subject/getRecords/${id}`);
+    }
+
+    async fetchGroupTestResults(testId, groupId, subjectId) {
         try {
             const students = await this.fetchStudentsByGroup(groupId, true);
             const results = await this.fetchResultsByTestGroupDate(testId, groupId);
+            const subject = await this.fetchSubjectById(subjectId);
+            localStorage.setItem('subject_name', JSON.stringify(subject.data[0].subject_name));
             const data = results.data.map((item) => {
                 const duration = this.getTestDateAndTime(
                     item.session_date,
@@ -108,6 +114,36 @@ class ResultsService {
         } catch (e) {
             return { error: e.response.data };
         }
+    }
+
+    getMaxStudentsResults(dataSource) {
+        const filtered = [];
+        for (const item of dataSource) {
+            const index = filtered.findIndex((elem) => elem.student_id === item.student_id);
+            if (index < 0) {
+                filtered.push(item);
+            } else {
+                if (+filtered[index].result < +item.result) {
+                    filtered[index] = item;
+                }
+            }
+        }
+        return filtered;
+    }
+
+    getMinStudentsResults(dataSource) {
+        const filtered = [];
+        for (const item of dataSource) {
+            const index = filtered.findIndex((elem) => elem.student_id === item.student_id);
+            if (index < 0) {
+                filtered.push(item);
+            } else {
+                if (+item.result < +filtered[index].result) {
+                    filtered[index] = item;
+                }
+            }
+        }
+        return filtered;
     }
 
     async fetchAnswersByQuestionId(id) {

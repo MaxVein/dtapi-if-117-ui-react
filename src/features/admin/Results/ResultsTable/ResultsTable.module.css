@@ -1,7 +1,23 @@
 .Table {
+    margin: 30px auto;
     width: 100%;
     height: auto;
     overflow: hidden;
+}
+
+.Info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.Chip {
+    font-size: 16px !important;
+    padding: 15px !important;
+}
+
+.TableContainer {
+    margin: 35px auto;
 }
 
 .Empty {

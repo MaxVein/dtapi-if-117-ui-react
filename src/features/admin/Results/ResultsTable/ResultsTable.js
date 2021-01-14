@@ -6,6 +6,7 @@ import classes from './ResultsTable.module.css';
 
 import {
     Button,
+    Chip,
     Paper,
     Table,
     TableBody,
@@ -15,11 +16,17 @@ import {
     TablePagination,
     TableRow,
     Tooltip,
+    Icon,
 } from '@material-ui/core';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import ReportIcon from '@material-ui/icons/Report';
 
 const ResultsTable = ({ results }) => {
+    const [chips, setChips] = useState([
+        { name: JSON.parse(localStorage.getItem('group_name')), icon: 'group' },
+        { name: JSON.parse(localStorage.getItem('subject_name')), icon: 'playlist_add_check' },
+        { name: JSON.parse(localStorage.getItem('test_name')), icon: 'subject' },
+    ]);
     const { loading, setLoading, setSnackBar, errorHandler } = useContext(ResultsContext);
     const [dataSource, setDataSource] = useState([]);
     const displayedColumns = [
@@ -32,7 +39,7 @@ const ResultsTable = ({ results }) => {
         'Детальніше',
     ];
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(9);
+    const [rowsPerPage, setRowsPerPage] = useState(8);
     const [open, setOpen] = useState({
         open: false,
         data: {},
@@ -44,8 +51,21 @@ const ResultsTable = ({ results }) => {
 
     return (
         <div className={classes.Table}>
+            {chips.length ? (
+                <div className={classes.Info}>
+                    {chips.map((chip, index) => (
+                        <Chip
+                            key={index}
+                            className={classes.Chip}
+                            color="primary"
+                            icon={<Icon>{chip.icon}</Icon>}
+                            label={chip.name}
+                        />
+                    ))}
+                </div>
+            ) : null}
             {results.length > 0 ? (
-                <TableContainer component={Paper}>
+                <TableContainer className={classes.TableContainer} component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
