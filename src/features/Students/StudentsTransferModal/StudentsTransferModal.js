@@ -14,6 +14,7 @@ import {
     Paper,
 } from '@material-ui/core';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 const StudentsTransferModal = ({
     open,
@@ -23,6 +24,8 @@ const StudentsTransferModal = ({
     setSnackBar,
     setError,
 }) => {
+    const { t } = UseLanguage();
+
     const [studentData, setStudentData] = useState(student);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -97,7 +100,7 @@ const StudentsTransferModal = ({
                         <DialogTitle disableTypography={true} className={classes.Title}>
                             <h3>
                                 <CompareArrowsIcon className={classes.TitleIcon} />
-                                Переведення студента
+                                {t('students.transfer.title')}
                             </h3>
                         </DialogTitle>
                         <DialogContent className={classes.Content}>
@@ -119,7 +122,7 @@ const StudentsTransferModal = ({
                                 }}
                                 type="reset"
                             >
-                                Скасувати
+                                {t('students.transfer.cancel')}
                             </Button>
                             <Button
                                 className={classes.Button}
@@ -127,7 +130,7 @@ const StudentsTransferModal = ({
                                 disabled={!submitted}
                                 onClick={submit}
                             >
-                                Перевести
+                                {t('students.transfer.transferButton')}
                             </Button>
                         </DialogActions>
                     </div>

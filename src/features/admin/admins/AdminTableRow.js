@@ -57,7 +57,7 @@ export default function AdminsTableRow({ admin }) {
                 </TableCell>
             </TableRow>
             <AdminCreationForm admin={admin} open={edit} setOpen={setEditOpen} mode={'Update'} />
-            <AdminsDeleteForm id={admin.id} open={del} setOpen={setDelOpen} mode={'Delete'} />
+            <AdminsDeleteForm admin={admin} open={del} setOpen={setDelOpen} mode={'Delete'} />
         </React.Fragment>
     );
 }

@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 import styles from './Dashboard.module.css';
 
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 function DashboardCard({ card }) {
+    const { t } = UseLanguage();
     const classes = useStyles();
 
     return (
@@ -34,7 +36,7 @@ function DashboardCard({ card }) {
             />
             <h2 className={styles.cardTitle}>{card.title}</h2>
             <Typography className={clsx(classes.cardHoverBG, styles.cardHover)} component="h3">
-                Перейти
+                {t('menuTitles.cardLink')}
             </Typography>
         </Card>
     );

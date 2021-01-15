@@ -3,6 +3,7 @@ import { StudentsServiceAPI } from '../services/StudentsService';
 import StudentInfo from './StudentInfo/StudentInfo';
 import PropTypes from 'prop-types';
 import classes from './StudentsViewModal.module.css';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 import {
     Dialog,
@@ -16,6 +17,8 @@ import {
 import InfoIcon from '@material-ui/icons/Info';
 
 const StudentsViewModal = ({ open, setOpen, groupID, studentID, setError, setSnackBar }) => {
+    const { t } = UseLanguage();
+
     const [student, setStudent] = useState({});
     const [loading, setLoading] = useState(true);
 
@@ -66,7 +69,7 @@ const StudentsViewModal = ({ open, setOpen, groupID, studentID, setError, setSna
                         <DialogTitle disableTypography={true} className={classes.Title}>
                             <h3>
                                 <InfoIcon className={classes.TitleIcon} />
-                                Інформація про студента
+                                {t('students.details.title')}
                             </h3>
                         </DialogTitle>
                         <DialogContent className={classes.Content}>
@@ -82,7 +85,7 @@ const StudentsViewModal = ({ open, setOpen, groupID, studentID, setError, setSna
                                 }}
                                 type="reset"
                             >
-                                Закрити
+                                {t('students.details.close')}
                             </Button>
                         </DialogActions>
                     </div>

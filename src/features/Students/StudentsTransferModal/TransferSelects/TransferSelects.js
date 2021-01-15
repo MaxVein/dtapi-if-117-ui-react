@@ -6,6 +6,7 @@ import classes from './TransferSelects.module.css';
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 import GroupIcon from '@material-ui/icons/Group';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 const TransferSelects = ({
     setSubmitted,
@@ -14,6 +15,8 @@ const TransferSelects = ({
     setSnackBar,
     errorHandler,
 }) => {
+    const { t } = UseLanguage();
+
     const [faculties, setFaculties] = useState([]);
     const [groups, setGroups] = useState([]);
     const [faculty, setFaculty] = useState('');
@@ -84,10 +87,10 @@ const TransferSelects = ({
                     <FormControl fullWidth={true} className={classes.FormControl}>
                         <InputLabel classes={{ shrink: 'right: unset;' }} className={classes.Label}>
                             <SchoolIcon className={classes.SelectorIcon} />
-                            Виберіть Факультет/Інститут
+                            {t('students.transfer.chooseFaculty')}
                         </InputLabel>
                         <Select
-                            placeholder="Факультет/Інститут"
+                            placeholder={t('students.transfer.chooseFaculty')}
                             required
                             value={faculty}
                             className={classes.Select}
@@ -112,10 +115,10 @@ const TransferSelects = ({
                     <FormControl fullWidth={true} className={classes.FormControl}>
                         <InputLabel className={classes.Label}>
                             <GroupIcon className={classes.SelectorIcon} />
-                            Виберіть Групу
+                            {t('students.transfer.chooseGroup')}
                         </InputLabel>
                         <Select
-                            placeholder="Група"
+                            placeholder={t('students.transfer.chooseGroup')}
                             required
                             value={group}
                             className={classes.Select}

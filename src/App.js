@@ -6,6 +6,7 @@ import Login from './features/login';
 import LoginRoute from './common/guards/LoginRoute';
 import { useEffect, useState } from 'react';
 import AdminPanel from './features/admin/AdminPanel';
+import { LanguagesProvider } from './lang/LanguagesContext';
 
 function App() {
     const [authInfo, setAuthInfo] = useState({});
@@ -20,7 +21,7 @@ function App() {
     }, []);
 
     return (
-        <div>
+        <LanguagesProvider>
             <Switch>
                 <Redirect path="/" to="/login" exact />
                 <Route path="/student" component={() => <h1>Hello Student</h1>} />
@@ -41,7 +42,7 @@ function App() {
 
                 <Route path="*" component={() => <h1>404</h1>} />
             </Switch>
-        </div>
+        </LanguagesProvider>
     );
 }
 

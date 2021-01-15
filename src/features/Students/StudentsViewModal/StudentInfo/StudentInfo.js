@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import classes from './StudentInfo.module.css';
 
 import { Avatar, Divider } from '@material-ui/core';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 const StudentInfo = ({ student }) => {
+    const { t } = UseLanguage();
+
     return (
         <div className={classes.Container}>
             <div className={classes.Photo}>
@@ -13,7 +16,7 @@ const StudentInfo = ({ student }) => {
             <div className={classes.Info}>
                 <div className={classes.Data}>
                     <div className={classes.Title}>
-                        <h3>ПІБ</h3>
+                        <h3>{t('students.details.fullName')}</h3>
                     </div>
                     <div className={classes.Content}>
                         <h4>
@@ -27,7 +30,7 @@ const StudentInfo = ({ student }) => {
 
                 <div className={classes.Data}>
                     <div className={classes.Title}>
-                        <h3>Факультет/Інститут</h3>
+                        <h3>{t('students.details.faculty')}</h3>
                     </div>
                     <div className={classes.Content}>
                         <h4>{student.faculty_name}</h4>
@@ -37,7 +40,7 @@ const StudentInfo = ({ student }) => {
 
                 <div className={classes.Data}>
                     <div className={classes.Title}>
-                        <h3>Спеціальність</h3>
+                        <h3>{t('students.details.speaciality')}</h3>
                     </div>
                     <div className={classes.Content}>
                         <h4>
@@ -49,7 +52,7 @@ const StudentInfo = ({ student }) => {
 
                 <div className={classes.Data}>
                     <div className={classes.Title}>
-                        <h3>Група</h3>
+                        <h3>{t('students.details.group')}</h3>
                     </div>
                     <div className={classes.Content}>
                         <h4>{student.group_name}</h4>
@@ -59,7 +62,7 @@ const StudentInfo = ({ student }) => {
 
                 <div className={classes.Data}>
                     <div className={classes.Title}>
-                        <h3>Номер залікової книжки</h3>
+                        <h3>{t('students.details.code')}</h3>
                     </div>
                     <div className={classes.Content}>
                         <h4>{student.gradebook_id}</h4>
@@ -69,7 +72,7 @@ const StudentInfo = ({ student }) => {
 
                 <div className={classes.Data}>
                     <div className={classes.Title}>
-                        <h3>Електронна пошта</h3>
+                        <h3>{t('students.details.email')}</h3>
                     </div>
                     <div className={classes.Content}>
                         <h4>{student.email}</h4>
@@ -79,7 +82,7 @@ const StudentInfo = ({ student }) => {
 
                 <div className={classes.Data}>
                     <div className={classes.Title}>
-                        <h3>Унікальне ім'я користувача в системі</h3>
+                        <h3>{t('students.details.login')}</h3>
                     </div>
                     <div className={classes.Content}>
                         <h4>{student.username}</h4>

@@ -7,6 +7,7 @@ import classes from './StudentsCreateUpdateModal.module.css';
 import { Dialog, DialogContent, DialogTitle, Paper, CircularProgress } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 const StudentsCreateUpdateModal = ({
     open,
@@ -19,6 +20,8 @@ const StudentsCreateUpdateModal = ({
     setError,
     setSnackBar,
 }) => {
+    const { t } = UseLanguage();
+
     const [studentData, setStudentData] = useState(
         isUpdate && student ? { ...student } : { group_id: groupID },
     );
@@ -153,7 +156,9 @@ const StudentsCreateUpdateModal = ({
                                 ) : (
                                     <PersonAddIcon className={classes.TitleIcon} />
                                 )}
-                                {isUpdate ? 'Редагувати дані студента' : 'Додати нового студента'}
+                                {isUpdate
+                                    ? t('students.modal.updateTitle')
+                                    : t('students.modal.addTitle')}
                             </h1>
                         </DialogTitle>
                         <DialogContent className={classes.DialogContent}>

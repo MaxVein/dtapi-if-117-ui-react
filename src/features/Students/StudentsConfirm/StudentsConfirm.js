@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classes from './StudentsConfirm.module.css';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 import {
     Button,
@@ -15,6 +16,8 @@ import {
 import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 
 const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
+    const { t } = UseLanguage();
+
     const cancel = () => {
         hide({ open: false });
         setSnackBar({ open: true, message: 'Скасовано' });
@@ -29,11 +32,15 @@ const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
         <Paper className={classes.Dialog} elevation={0} variant={'outlined'}>
             <Dialog open={show} className={classes.Dialog} fullWidth={false} maxWidth={false}>
                 <div className={classes.StudentsConfirm}>
-                    <DialogTitle className={classes.Title}>Підтвердіть дію</DialogTitle>
+                    <DialogTitle className={classes.Title}>
+                        {t('students.modal.deleteTitle')}
+                    </DialogTitle>
                     <DialogContent className={classes.Content}>
                         <PersonAddDisabledIcon className={classes.Icon} />
                         <DialogContentText className={classes.Message}>
-                            {`Видалити студента ${student.student_surname} ${student.student_name}?`}
+                            {`${t('students.modal.deleteSubTitle')} ${student.student_surname} ${
+                                student.student_name
+                            }?`}
                         </DialogContentText>
                     </DialogContent>
                     <Divider className={classes.Divider} />
@@ -44,10 +51,10 @@ const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
                             onClick={() => cancel()}
                             type="reset"
                         >
-                            Скасувати
+                            {t('students.modal.cancelButton')}
                         </Button>
                         <Button className={classes.Button} onClick={() => confirm()} type="submit">
-                            Підтвердити
+                            {t('students.modal.submitAddButton')}
                         </Button>
                     </DialogActions>
                 </div>

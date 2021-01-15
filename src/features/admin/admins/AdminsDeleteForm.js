@@ -7,9 +7,11 @@ import { Button } from '@material-ui/core';
 import styles from './Admins.module.css';
 import { deleteAdmin } from './AdminsService';
 import AdminsContext from './AdminsContext';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
-function AdminsDeleteForm({ mode, open, setOpen, id }) {
-    const { dataSource, setDataSource, snack, setSnack } = useContext(AdminsContext);
+function AdminsDeleteForm({ mode, open, setOpen, admin }) {
+    const { t } = UseLanguage();
+    const { dataSource, setDataSource, setSnack } = useContext(AdminsContext);
 
     const closeModal = () => {
         setOpen(false);
@@ -18,7 +20,7 @@ function AdminsDeleteForm({ mode, open, setOpen, id }) {
         deleteAdmin(id)
             .then((res) => {
                 if (res.response === 'ok') {
-                    setDataSource(dataSource.filter((admin) => admin.id !== id));
+                    setDataSource(dataSource.filter((tableAdmin) => tableAdmin.id !== admin.id));
                     closeModal();
                     setSnack({ open: true, message: 'Адміна успішно видалено', type: 'success' });
                 }
@@ -34,10 +36,12 @@ function AdminsDeleteForm({ mode, open, setOpen, id }) {
     return (
         <React.Fragment>
             <Dialog open={open} onClose={closeModal} aria-labelledby="alert-dialog-title">
-                <DialogTitle id="alert-dialog-title">Видалити адміна?</DialogTitle>
-                <DialogActions>
+                <DialogTitle id="alert-dialog-title">
+                    {t('admins.modal.deleteTitle')}: {admin.username}?
+                </DialogTitle>
+                <DialogActions className={styles.deleteModal}>
                     <Button onClick={closeModal} color="primary">
-                        Скасувати
+                        {t('admins.modal.cancelButton')}
                     </Button>
                     <Button
                         variant="contained"
@@ -45,7 +49,7 @@ function AdminsDeleteForm({ mode, open, setOpen, id }) {
                         color="primary"
                         autoFocus
                     >
-                        Видалити
+                        {t('admins.modal.submitDeleteButton')}
                     </Button>
                 </DialogActions>
             </Dialog>
