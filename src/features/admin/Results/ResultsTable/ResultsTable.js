@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import ResultsContext from '../ResultsPage/ResultsContext';
 import ResultsDetailsModal from '../ResultsDetailsModal/ResultsDetailsModal';
+import TableSearch from './TableSearch/TableSearch';
 import PropTypes from 'prop-types';
 import classes from './ResultsTable.module.css';
 
@@ -44,10 +45,34 @@ const ResultsTable = ({ results }) => {
         open: false,
         data: {},
     });
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         setDataSource(results);
     }, [results]);
+
+    useEffect(() => {
+        const filteredData = getFilteredData(results);
+        setDataSource(filteredData);
+    }, [search]);
+
+    const getFilteredData = (data) => {
+        if (!search) {
+            return data;
+        }
+
+        return data.filter((item) => {
+            return (
+                item['student_surname'].toLowerCase().includes(search.toLowerCase()) ||
+                item['student_name'].toLowerCase().includes(search.toLowerCase()) ||
+                item['student_fname'].toLowerCase().includes(search.toLowerCase())
+            );
+        });
+    };
+
+    const searchHandler = (search) => {
+        setSearch(search);
+    };
 
     return (
         <div className={classes.Table}>
@@ -65,69 +90,72 @@ const ResultsTable = ({ results }) => {
                 </div>
             ) : null}
             {results.length > 0 ? (
-                <TableContainer className={classes.TableContainer} component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                {displayedColumns.map((column, index) => (
-                                    <TableCell key={column + index}>{column}</TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {dataSource
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((item, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>{index + 1}</TableCell>
-                                        <TableCell>
-                                            {item.student_surname}&nbsp;
-                                            {item.student_name}&nbsp;
-                                            {item.student_fname}
-                                        </TableCell>
-                                        <TableCell>{item.result}</TableCell>
-                                        <TableCell>{item.session_date}</TableCell>
-                                        <TableCell>{item.start_time}</TableCell>
-                                        <TableCell>{item.duration}</TableCell>
-                                        <TableCell>
-                                            <div className={classes.Actions}>
-                                                <Tooltip title="Переглянути деталі тестування">
-                                                    <Button
-                                                        color="primary"
-                                                        variant="contained"
-                                                        onClick={() =>
-                                                            setOpen({
-                                                                open: true,
-                                                                data: item,
-                                                            })
-                                                        }
-                                                    >
-                                                        <ViewHeadlineIcon
-                                                            className={classes.ActionIcon}
-                                                        />
-                                                    </Button>
-                                                </Tooltip>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                        </TableBody>
-                    </Table>
-                    <TablePagination
-                        component="div"
-                        labelRowsPerPage="Рядків у таблиці"
-                        className={classes.TablePaginator}
-                        rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
-                        count={dataSource.length}
-                        page={page}
-                        onChangePage={(event, newPage) => setPage(newPage)}
-                        rowsPerPage={rowsPerPage}
-                        onChangeRowsPerPage={(event) => {
-                            setRowsPerPage(+event.target.value);
-                            setPage(0);
-                        }}
-                    />
-                </TableContainer>
+                <>
+                    <TableSearch onSearch={searchHandler} />
+                    <TableContainer className={classes.TableContainer} component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    {displayedColumns.map((column, index) => (
+                                        <TableCell key={column + index}>{column}</TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {dataSource
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((item, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>
+                                                {item.student_surname}&nbsp;
+                                                {item.student_name}&nbsp;
+                                                {item.student_fname}
+                                            </TableCell>
+                                            <TableCell>{item.result}</TableCell>
+                                            <TableCell>{item.session_date}</TableCell>
+                                            <TableCell>{item.start_time}</TableCell>
+                                            <TableCell>{item.duration}</TableCell>
+                                            <TableCell>
+                                                <div className={classes.Actions}>
+                                                    <Tooltip title="Переглянути деталі тестування">
+                                                        <Button
+                                                            color="primary"
+                                                            variant="contained"
+                                                            onClick={() =>
+                                                                setOpen({
+                                                                    open: true,
+                                                                    data: item,
+                                                                })
+                                                            }
+                                                        >
+                                                            <ViewHeadlineIcon
+                                                                className={classes.ActionIcon}
+                                                            />
+                                                        </Button>
+                                                    </Tooltip>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                            </TableBody>
+                        </Table>
+                        <TablePagination
+                            component="div"
+                            labelRowsPerPage="Рядків у таблиці"
+                            className={classes.TablePaginator}
+                            rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
+                            count={dataSource.length}
+                            page={page}
+                            onChangePage={(event, newPage) => setPage(newPage)}
+                            rowsPerPage={rowsPerPage}
+                            onChangeRowsPerPage={(event) => {
+                                setRowsPerPage(+event.target.value);
+                                setPage(0);
+                            }}
+                        />
+                    </TableContainer>
+                </>
             ) : (
                 <div className={classes.Empty}>
                     <ReportIcon className={classes.EmptyIcon} />
