@@ -23,7 +23,7 @@ import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import ReportIcon from '@material-ui/icons/Report';
 
 const ResultsTable = ({ results }) => {
-    const [chips, setChips] = useState([
+    const [chips] = useState([
         { name: JSON.parse(localStorage.getItem('group_name')), icon: 'group' },
         { name: JSON.parse(localStorage.getItem('subject_name')), icon: 'playlist_add_check' },
         { name: JSON.parse(localStorage.getItem('test_name')), icon: 'subject' },
@@ -40,7 +40,7 @@ const ResultsTable = ({ results }) => {
         'Детальніше',
     ];
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(8);
+    const [rowsPerPage, setRowsPerPage] = useState(7);
     const [open, setOpen] = useState({
         open: false,
         data: {},

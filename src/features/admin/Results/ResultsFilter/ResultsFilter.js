@@ -57,9 +57,19 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
         } else if (!faculties.length) {
             setFaculties([]);
             messageHandler('Факультети відсутні', 'warning');
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
         } else if (faculties.error) {
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
             errorHandler('Сталася помилка під час отримання списку факультетів! Спробуйте знову');
         }
     };
@@ -68,13 +78,28 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
         const tests = await ResultsServiceApi.fetchTests();
         if (tests.length) {
             setTests({ allTests: tests, groupTests: [] });
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
         } else if (!tests.length) {
             setTests({ allTests: [], groupTests: [] });
             messageHandler('Тести відсутні', 'warning');
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
         } else if (tests.error) {
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
             errorHandler('Сталася помилка під час отримання списку тестів! Спробуйте знову');
         }
     };
@@ -264,7 +289,12 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                 type="submit"
                                 disabled={test === ''}
                                 onClick={() => {
-                                    setLoading({ filter: false, table: true, detailsModal: true });
+                                    setLoading({
+                                        filter: false,
+                                        table: true,
+                                        detailsModal: true,
+                                        detailsByQuestionModal: true,
+                                    });
                                     getTestInfoByGroup(ids.testId, ids.groupId, ids.subjectId);
                                 }}
                             >

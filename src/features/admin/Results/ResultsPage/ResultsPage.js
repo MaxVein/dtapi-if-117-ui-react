@@ -14,7 +14,12 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 
 const ResultsPage = () => {
     const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState({ filter: true, table: false, detailsModal: true });
+    const [loading, setLoading] = useState({
+        filter: true,
+        table: false,
+        detailsModal: true,
+        detailsByQuestionModal: true,
+    });
     const [snackBar, setSnackBar] = useState({ open: false, message: '', type: 'success' });
     const [error, setError] = useState({ error: false, message: '', type: '' });
 
@@ -34,13 +39,28 @@ const ResultsPage = () => {
         if (response.length) {
             setResults(response);
             setSnackBar({ open: true, message: 'Результати завантажено', type: 'success' });
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
         } else if (!response.length) {
             setResults([]);
             setSnackBar({ open: true, message: 'Результати відсутні', type: 'warning' });
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
         } else if (response.error) {
-            setLoading({ filter: false, table: false, detailsModal: true });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
+            });
             errorHandler(
                 'Сталася помилка при отриманні та формуванні результатів тестування! Спробуйте знову',
             );
@@ -77,7 +97,10 @@ const ResultsPage = () => {
                                     <ResultsTable results={results} />
                                 ) : (
                                     <div className={classes.Intro}>
-                                        <BarChartIcon className={classes.IntroIcon} />
+                                        <BarChartIcon
+                                            color="primary"
+                                            className={classes.IntroIcon}
+                                        />
                                         <h1>
                                             Оберіть групу, результати <br /> якої бажаєте побачити
                                         </h1>

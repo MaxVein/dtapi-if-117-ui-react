@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ResultsServiceApi } from '../services/ResultsService';
+import ResultsDetailsByQuestionModal from '../ResultsDetailsByQuestionModal/ResultsDetailsByQuestionModal';
 import PropTypes from 'prop-types';
 import classes from './ResultsDetailsModal.module.css';
 
@@ -39,6 +40,11 @@ const ResultsDetailsModal = ({
     });
     const [dataSource, setDataSource] = useState([]);
     const displayedColumns = ['No.', 'Ідентифікатор', 'Текст запитання', 'Відповідь', 'Детальніше'];
+    const [openDetails, setOpenDetails] = useState({
+        open: false,
+        data: {},
+        q_num: '',
+    });
 
     useEffect(() => {
         (async function allQuestions(ids) {
@@ -64,9 +70,19 @@ const ResultsDetailsModal = ({
         } else if (!questions.length) {
             setDataSource([]);
             messageHandler('Деталі про тестування відсутні', 'warning');
-            setLoading({ filter: false, table: false, detailsModal: false });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: false,
+                detailsByQuestionModal: true,
+            });
         } else if (questions.error) {
-            setLoading({ filter: false, table: false, detailsModal: false });
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: false,
+                detailsByQuestionModal: true,
+            });
             errorHandler('Сталася помилка під час отримання деталей тестування! Спробуйте знову');
         }
     };
@@ -80,7 +96,12 @@ const ResultsDetailsModal = ({
             return Object.assign({}, item, ...studentInfo, ...answerData);
         });
         setDataSource(arr);
-        setLoading({ filter: false, table: false, detailsModal: false });
+        setLoading({
+            filter: false,
+            table: false,
+            detailsModal: false,
+            detailsByQuestionModal: true,
+        });
         messageHandler('Деталі про тестування завантажено', 'success');
     };
 
@@ -143,7 +164,19 @@ const ResultsDetailsModal = ({
                                             >
                                                 <div className={classes.Actions}>
                                                     <Tooltip title="Переглянути деталі питання">
-                                                        <Button color="primary" variant="contained">
+                                                        <Button
+                                                            color="primary"
+                                                            variant="contained"
+                                                            onClick={() =>
+                                                                setOpenDetails({
+                                                                    open: true,
+                                                                    data: item,
+                                                                    q_num: Number(
+                                                                        index + 1,
+                                                                    ).toString(),
+                                                                })
+                                                            }
+                                                        >
                                                             <ViewHeadlineIcon
                                                                 className={classes.ActionIcon}
                                                             />
@@ -163,12 +196,29 @@ const ResultsDetailsModal = ({
                             onClick={() => {
                                 setOpen({ open: false });
                                 messageHandler('Закрито', 'info');
-                                setLoading({ filter: false, table: false, detailsModal: true });
+                                setLoading({
+                                    filter: false,
+                                    table: false,
+                                    detailsModal: true,
+                                    detailsByQuestionModal: true,
+                                });
                             }}
                             type="reset"
                         >
                             Закрити
                         </Button>
+                        {openDetails.open ? (
+                            <ResultsDetailsByQuestionModal
+                                open={openDetails.open}
+                                q_num={openDetails.q_num}
+                                setOpen={setOpenDetails}
+                                question={openDetails.data}
+                                loading={loading}
+                                setLoading={setLoading}
+                                messageHandler={messageHandler}
+                                errorHandler={errorHandler}
+                            />
+                        ) : null}
                     </div>
                 )}
             </Dialog>
