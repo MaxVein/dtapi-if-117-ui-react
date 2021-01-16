@@ -8,21 +8,17 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import TablePagination from '@material-ui/core/TablePagination';
 
 import TableHeadComponent from './tableHead';
 import TableList from './tableList';
-import TablePagination from './tablePagination';
+import TablePaginationActions from './tablePagination';
+import classes from './table.module.css';
 
 export default function TableComponent({ entity, handleEditEntity, setDeleteEntity, titleRow }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const useStyles = makeStyles({
-        table: {
-            minWidth: 400,
-        },
-    });
-    const classes = useStyles();
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, entity.length - page * rowsPerPage);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -40,15 +36,17 @@ export default function TableComponent({ entity, handleEditEntity, setDeleteEnti
                         : entity
                     ).map((elem) => (
                         <TableList
-                            key={elem.id}
-                            elem={elem}
+                            key={elem.timetable_id}
+                            entity={elem}
                             handleEditEntity={handleEditEntity}
                             setDeleteEntity={setDeleteEntity}
                         />
                     ))}
-                    {emptyRows > 0 && (
-                        <TableRow style={{ height: 53 * emptyRows }}>
-                            <TableCell colSpan={6} />
+                    {entity.length === 0 && (
+                        <TableRow>
+                            <TableCell className={classes.noInputData} colSpan={6}>
+                                Немає розкладу для заданого предмету.
+                            </TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -56,7 +54,7 @@ export default function TableComponent({ entity, handleEditEntity, setDeleteEnti
                     <TableRow>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={4}
+                            colSpan={7}
                             count={entity.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
