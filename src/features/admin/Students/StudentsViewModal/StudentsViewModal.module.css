@@ -2,18 +2,16 @@
     overflow: hidden;
 }
 
-.TransferDialog {
-    width: 500px !important;
+.ViewDialog {
+    width: 680px !important;
     height: 100% !important;
-    padding: 5px 5px;
-    overflow: hidden;
 }
 
 .Title h3 {
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 30px;
     text-align: center;
-    font-size: 22px;
+    font-size: 25px;
     font-weight: 500;
 }
 
@@ -24,30 +22,24 @@
 }
 
 .Content  {
-    margin-top: -10px;
+    padding-top: 25px;
 }
 
 .Actions {
-    width: 100% !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
 }
 
 .Button {
-    width: calc(50% - 10px);
     margin: 5px 5px !important;
     padding: 8px 25px 8px 25px !important;
-    box-shadow: none !important;
-    outline: none;
-}
-
-.Button:first-of-type {
     background: #e1e1e1;
     color: black;
-    margin-right: 10px;
+    box-shadow: none !important;
+    outline: none;
 }
 
 .Spinner {
     position: relative;
     left: 1.7%;
-    margin: 99px 210px;
+    margin: 305px 300px;
 }

@@ -1,0 +1,192 @@
+.Dialog {
+
+}
+
+.ResultsDetailsByQuestionDialog {
+    width: 1000px !important;
+    height: 800px !important;
+}
+
+.Title h3 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.TitleIcon {
+    vertical-align: middle;
+    font-size: 30px;
+    margin: -3.5px 10px auto auto;
+}
+
+.Content  {
+    padding-top: 10px;
+}
+
+.Cards {
+    display: flex;
+    flex-direction: column;
+}
+
+.QuestionCard {
+    padding: 8px 8px;
+    margin-bottom: 20px;
+}
+
+.QuestionCardContent h3 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.Question {
+    margin-top: 15px;
+}
+
+.Question h3 {
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 30px;
+    padding: 15px 30px !important;
+    background-color: #f4f4f4;
+    color: black;
+}
+
+.DetailsCard {
+    padding: 8px 8px;
+    margin-bottom: 20px;
+}
+
+.DetailsCardContent h3 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.DetailsCardChips {
+    margin-top: 30px;
+}
+
+.DetailsCardChips span {
+    padding: 12px 30px;
+    border-radius: 30px;
+    background-color: #f4f4f4;
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.DetailsCardChips span:first-of-type {
+    margin-right: 20px;
+    margin-left: 5px;
+}
+
+.AnswerCard {
+    padding: 8px 8px;
+    margin-bottom: 20px;
+}
+
+.AnswerCardContent h3 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.Answer {
+    margin-top: 15px;
+    margin-left: 5px;
+}
+
+.Answer h3 {
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 30px;
+    padding: 15px 30px !important;
+    background-color: #f4f4f4;
+    color: black;
+}
+
+.AnswersCard {
+    padding: 8px 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.AnswersCard h3 {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.AnswersCardContent {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+
+.SAnswerCard {
+    padding: 20px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.SAnswerCard h3 {
+    font-size: 18px;
+    font-weight: 500;
+    height: 50px;
+}
+
+.SAnswerCardContent span {
+    text-align: center;
+    padding: 10px 25px;
+    border-radius: 30px;
+    background-color: #f4f4f4;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.True {
+    background-color: #69f0ae !important;
+    color: black !important;
+}
+
+.False {
+    background-color: #dc3545 !important ;
+    color: white !important;
+}
+
+.CardIcon {
+    vertical-align: middle;
+    font-size: 30px;
+    margin: -3.5px 10px auto auto;
+}
+
+.Actions {
+    justify-content: center;
+    width: 100% !important;
+}
+
+.Button {
+    width: 100% !important;
+    padding: 12px 0 !important;
+    box-shadow: none !important;
+    outline: none;
+    font-size: 16px !important;
+    border-radius: 0 !important;
+}
+
+.Button:hover {
+    opacity: 0.85;
+    transition: all 0.3s ease;
+}
+
+.Spinner {
+    position: relative;
+    left: 1.7%;
+    margin: 360px 470px;
+}
