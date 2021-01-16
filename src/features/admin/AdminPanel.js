@@ -311,6 +311,7 @@ export default function AdminPanel({ setAuthInfo }) {
                             <Route exact path="/admin/subjects" component={Subjects} />
                             <Route exact path="/admin/subjects/tests" component={Tests}></Route>
                             <Route path="/admin/subjects/timetable" component={Timetable}></Route>
+                            <Route path="/admin/protocol" component={Protocols} />
                             <Route
                                 path="/admin/subjects/tests/test-detail"
                                 component={TestDetails}
@@ -320,9 +321,6 @@ export default function AdminPanel({ setAuthInfo }) {
                                 component={Questions}
                             ></Route>
                             <Route path="*" component={NotFoundPage} />
-                        </Switch>
-                        <Switch>
-                            <Route path="/admin/protocol" component={Protocols} />
                         </Switch>
                     </div>
                 </main>

@@ -19,10 +19,7 @@ const GroupFilter = ({
     isFacFilter,
     allGroupsData,
     setIsFacFilter,
-    openSnack,
-    setOpenSnack,
-    snackMes,
-    setSnackMes,
+    setSnack,
 }) => {
     const initialValues = {
         field: '',
@@ -39,15 +36,21 @@ const GroupFilter = ({
         if (isFacFilter) {
             const newData = allGroupsData.filter((item) => item.faculty_name === fData.field);
             setGroupsData(newData);
-            setSnackMes('Відфільтровано по факультетам');
-            setOpenSnack(true);
+            setSnack({
+                open: true,
+                message: 'Відфільтровано по факультетам',
+                type: 'success',
+            });
             setFilter(false);
             setIsFacFilter(false);
         } else {
             const newData = allGroupsData.filter((item) => item.speciality_name === fData.field);
             setGroupsData(newData);
-            setSnackMes('Відфільтровано по спеціальностям');
-            setOpenSnack(true);
+            setSnack({
+                open: true,
+                message: 'Відфільтровано по спеціальностям',
+                type: 'success',
+            });
             setFilter(false);
         }
     };
