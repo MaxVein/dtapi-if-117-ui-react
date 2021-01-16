@@ -6,6 +6,7 @@ import StudentsTransferModal from '../StudentsTransferModal/StudentsTransferModa
 import StudentsConfirm from '../StudentsConfirm/StudentsConfirm';
 import PropTypes from 'prop-types';
 import classes from './StudentsTable.module.css';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 import {
     Button,
@@ -26,8 +27,15 @@ import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
+    const { t } = UseLanguage();
+
     const [dataSource, setDataSource] = useState([]);
-    const displayedColumns = ['No.', 'Номер залікової книжки', 'ПІБ', 'Дії'];
+    const displayedColumns = [
+        t('students.table.id'),
+        t('students.table.code'),
+        t('students.table.fullName'),
+        t('students.table.actions'),
+    ];
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [open, setOpen] = useState({
@@ -160,7 +168,7 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
                     </Table>
                     <TablePagination
                         component="div"
-                        labelRowsPerPage="Рядків у таблиці"
+                        labelRowsPerPage={t('labelRowsPerPage')}
                         className={classes.TablePaginator}
                         rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
                         count={dataSource.length}

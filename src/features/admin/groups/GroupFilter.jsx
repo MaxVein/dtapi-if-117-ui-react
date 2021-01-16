@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { v4 as uuidv4 } from 'uuid';
 import { Formik } from 'formik';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 import * as Yup from 'yup';
 
@@ -24,6 +25,8 @@ const GroupFilter = ({
     snackMes,
     setSnackMes,
 }) => {
+    const { t } = UseLanguage();
+
     const initialValues = {
         field: '',
     };
@@ -53,7 +56,7 @@ const GroupFilter = ({
     };
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Виберіть критерій для фільтрування</DialogTitle>
+            <DialogTitle id="form-dialog-title">{t('groups.modal.filters.title')}</DialogTitle>
             <DialogContent>
                 <Formik
                     initialValues={initialValues}
@@ -89,11 +92,11 @@ const GroupFilter = ({
                             >
                                 {isFacFilter ? (
                                     <MenuItem value="" disabled>
-                                        Виберіть факультет
+                                        {t('groups.modal.chooseFacultyButton')}
                                     </MenuItem>
                                 ) : (
                                     <MenuItem value="" disabled>
-                                        Виберіть спеціальність
+                                        {t('groups.modal.chooseSpecialityButton')}
                                     </MenuItem>
                                 )}
                                 {data.map((item) => {
@@ -106,10 +109,10 @@ const GroupFilter = ({
                             </Select>
                             <div style={{ margin: '1rem', textAlign: 'center' }}>
                                 <Button onClick={handleClose} color="primary">
-                                    Відмінити
+                                    {t('groups.modal.cancelButton')}
                                 </Button>
                                 <Button disabled={!isValid} type="submit" color="primary">
-                                    Застосувати
+                                    {t('groups.modal.filters.applyButton')}
                                 </Button>
                             </div>
                         </form>

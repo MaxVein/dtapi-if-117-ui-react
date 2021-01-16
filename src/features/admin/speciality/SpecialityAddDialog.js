@@ -6,6 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Formik } from 'formik';
 import { addEntity, updateEntity } from '../../../common/utils';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 import * as Yup from 'yup';
 
@@ -17,6 +18,8 @@ const SpecialityAddDialig = ({
     setSpecialityDate,
     specialityDates,
 }) => {
+    const { t } = UseLanguage();
+
     const initialValues = {
         name: speciality ? speciality.speciality_name : '',
         code: speciality ? speciality.speciality_code : '',
@@ -55,7 +58,9 @@ const SpecialityAddDialig = ({
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">
-                {speciality ? 'Редагувати спеціальність' : 'Додати спеціальність'}
+                {speciality
+                    ? t('specialities.modal.updateTitle')
+                    : t('specialities.modal.addTitle')}
             </DialogTitle>
             <DialogContent>
                 <Formik
@@ -84,7 +89,7 @@ const SpecialityAddDialig = ({
                                 autoFocus
                                 margin="dense"
                                 id="name"
-                                label="Name"
+                                label={t('specialities.modal.name')}
                                 type="text"
                                 fullWidth
                                 helperText={touched.name ? errors.name : ''}
@@ -98,7 +103,7 @@ const SpecialityAddDialig = ({
                                 onBlur={handleBlur}
                                 margin="dense"
                                 id="code"
-                                label="Code"
+                                label={t('specialities.modal.code')}
                                 type="text"
                                 fullWidth
                                 helperText={touched.code ? errors.code : ''}
@@ -106,10 +111,12 @@ const SpecialityAddDialig = ({
                             />
                             <div style={{ margin: '1rem', textAlign: 'center' }}>
                                 <Button onClick={handleClose} color="primary">
-                                    Відмінити
+                                    {t('specialities.modal.cancelButton')}
                                 </Button>
                                 <Button disabled={!isValid} type="submit" color="primary">
-                                    {speciality ? 'Редагувати' : 'Додати'}
+                                    {speciality
+                                        ? t('specialities.modal.submitUpdateButton')
+                                        : t('specialities.modal.submitAddButton')}
                                 </Button>
                             </div>
                         </form>

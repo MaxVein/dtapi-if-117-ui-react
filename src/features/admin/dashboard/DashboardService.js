@@ -46,11 +46,11 @@ export function createCardData(title, path, component, hasCount, count = 0, imag
     };
 }
 
-export function createCardsArray(counts) {
+export function createCardsArray(counts, translator) {
     if (counts !== undefined) {
         const cards = [
             createCardData(
-                'Факультети',
+                translator('menuTitles.faculties'),
                 '/admin/faculties',
                 'Faculty',
                 true,
@@ -58,7 +58,7 @@ export function createCardsArray(counts) {
                 'https://www.sandhills.edu/wp-content/uploads/2019/03/classroom.jpg',
             ),
             createCardData(
-                'Групи',
+                translator('menuTitles.groups'),
                 '/admin/group',
                 'Groups',
                 true,
@@ -66,7 +66,7 @@ export function createCardsArray(counts) {
                 'https://skilledwork.org/wp-content/uploads/2014/01/1105572-medium.jpg',
             ),
             createCardData(
-                'Спеціальності',
+                translator('menuTitles.specialities'),
                 '/admin/speciality',
                 'Speciality',
                 true,
@@ -74,7 +74,7 @@ export function createCardsArray(counts) {
                 'https://prontomarketing.pi.bypronto.com/3/wp-content/uploads/sites/3/2020/08/Managed-Services-Provider-e1596510425847.jpg',
             ),
             createCardData(
-                'Предмети',
+                translator('menuTitles.subjects'),
                 '/admin/subjects',
                 'Subject',
                 true,
@@ -82,7 +82,7 @@ export function createCardsArray(counts) {
                 'https://nhsportpress.com/wp-content/uploads/2019/11/district-tech.jpeg',
             ),
             createCardData(
-                'Студенти',
+                translator('menuTitles.students'),
                 '/admin/group',
                 'Groups',
                 true,
@@ -90,7 +90,7 @@ export function createCardsArray(counts) {
                 'https://www.orangeschool.com.ua/wp-content/uploads/2019/07/%D0%BA%D1%83%D1%80%D1%81%D1%8B-%D0%B0%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%BE%D0%B3%D0%BE.jpg',
             ),
             createCardData(
-                'Адміни',
+                translator('menuTitles.admins'),
                 '/admin/admins',
                 'Admins',
                 true,
@@ -98,7 +98,7 @@ export function createCardsArray(counts) {
                 'https://teleme.io/assets/feature_updates/tg_group_admins.jpg',
             ),
             createCardData(
-                'Результати',
+                translator('menuTitles.results'),
                 'results',
                 'Results',
                 false,
@@ -106,7 +106,7 @@ export function createCardsArray(counts) {
                 'https://images.hrtechnologist.com/images/uploads/content_images/how_hr_business_partners_can_translate_data_into_business_result_5e66237452fdc.png',
             ),
             createCardData(
-                'Протокол',
+                translator('menuTitles.protocol'),
                 'protocol',
                 'Protocol',
                 false,

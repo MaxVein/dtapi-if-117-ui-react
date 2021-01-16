@@ -14,6 +14,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { UseLanguage } from '../../../../../lang/LanguagesContext';
 
 const CreateUpdateForm = ({
     isUpdate,
@@ -23,6 +24,8 @@ const CreateUpdateForm = ({
     setStudentData,
     setSubmit,
 }) => {
+    const { t } = UseLanguage();
+
     const initialValues = {
         lastname: updateData && isUpdate ? updateData.student_surname : '',
         firstname: updateData && isUpdate ? updateData.student_name : '',
@@ -228,7 +231,7 @@ const CreateUpdateForm = ({
                         value={form.values.lastname}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="Прізвище"
+                        label={t('students.modal.lastName')}
                         type="text"
                         id="lastname"
                         placeholder="Шевченко"
@@ -253,7 +256,7 @@ const CreateUpdateForm = ({
                         value={form.values.firstname}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="Ім'я"
+                        label={t('students.modal.name')}
                         type="text"
                         id="firstname"
                         placeholder="Андрій/Катерина"
@@ -278,7 +281,7 @@ const CreateUpdateForm = ({
                         value={form.values.fathername}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="По-батькові"
+                        label={t('students.modal.afterName')}
                         type="text"
                         id="fathername"
                         placeholder="Миколайович/Миколаївна"
@@ -303,8 +306,7 @@ const CreateUpdateForm = ({
                         value={form.values.gradebookID}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="Номер залікової
-                        книжки"
+                        label={t('students.modal.сode')}
                         type="text"
                         placeholder="07-AS-IP"
                         id="gradebookID"
@@ -329,8 +331,7 @@ const CreateUpdateForm = ({
                         value={form.values.username}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="Системне ім'я
-                        користувача"
+                        label={t('students.modal.login')}
                         type="text"
                         id="username"
                         placeholder="andrew_sheva7"
@@ -355,7 +356,7 @@ const CreateUpdateForm = ({
                         value={form.values.email}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="Електронна пошта"
+                        label={t('students.modal.email')}
                         type="email"
                         id="email"
                         placeholder="Ex. pat@example.com"
@@ -378,7 +379,7 @@ const CreateUpdateForm = ({
                         value={form.values.password}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="Пароль"
+                        label={t('students.modal.password')}
                         type={showPassword.password ? 'text' : 'password'}
                         id="password"
                         placeholder="Пароль має містити лише літери, цифри та поширені розділові знаки"
@@ -431,8 +432,7 @@ const CreateUpdateForm = ({
                         value={form.values.password_confirm}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label="Підтвердіть
-                        пароль"
+                        label={t('students.modal.passwordConfirm')}
                         type={showPassword.password_confirm ? 'text' : 'password'}
                         id="password_confirm"
                         placeholder="Введіть повторно пароль, який був введений у попередньому полі"
@@ -500,10 +500,14 @@ const CreateUpdateForm = ({
                                 onClick={fileInput}
                                 startIcon={<CloudUploadIcon />}
                             >
-                                {isUpdate && updateData && image === '' ? 'Завантажити фото' : null}
-                                {isUpdate && updateData && image !== '' ? 'Оновити фото' : null}
-                                {!isUpdate && image === '' ? 'Завантажити фото' : null}
-                                {!isUpdate && image !== '' ? 'Оновити фото' : null}
+                                {isUpdate && updateData && image === ''
+                                    ? t('students.modal.uploadPhoto')
+                                    : null}
+                                {isUpdate && updateData && image !== ''
+                                    ? t('students.modal.updatePhoto')
+                                    : null}
+                                {!isUpdate && image === '' ? t('students.modal.uploadPhoto') : null}
+                                {!isUpdate && image !== '' ? t('students.modal.updatePhoto') : null}
                             </Button>
                         </Tooltip>
                         <input
@@ -524,7 +528,7 @@ const CreateUpdateForm = ({
                         }}
                         type="reset"
                     >
-                        Скасувати
+                        {t('students.modal.cancelButton')}
                     </Button>
                     <Button
                         className={classes.FormActionsBtn}
@@ -535,7 +539,7 @@ const CreateUpdateForm = ({
                                 : !(form.isValid && form.dirty) || form.isSubmitting
                         }
                     >
-                        {isUpdate ? 'Редагувати дані' : 'Додати студента'}
+                        {isUpdate ? t('students.modal.updateTitle') : t('students.modal.addTitle')}
                     </Button>
                 </div>
             </form>

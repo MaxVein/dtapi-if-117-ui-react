@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { deleteEntity } from '../../../common/utils';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 const ConfirmDelete = ({
     open,
@@ -23,6 +24,8 @@ const ConfirmDelete = ({
     snackMes,
     setSnackMes,
 }) => {
+    const { t } = UseLanguage();
+
     const handleClose = () => {
         setShowDelDialog(false);
     };
@@ -44,13 +47,13 @@ const ConfirmDelete = ({
     };
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
-            <DialogTitle id="responsive-dialog-title">{'Підтвердіть видалення?'}</DialogTitle>
+            <DialogTitle id="responsive-dialog-title">{t('groups.modal.deleteTitle')}</DialogTitle>
             <DialogContent>
-                <DialogContentText>Ви впевнені, що хочети видалити дану групу?</DialogContentText>
+                <DialogContentText>{t('groups.modal.deleteSubTitle')}</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button autoFocus onClick={handleClose} color="primary">
-                    Відмінити
+                    {t('groups.modal.cancelButton')}
                 </Button>
                 <Button
                     onClick={() => {
@@ -60,7 +63,7 @@ const ConfirmDelete = ({
                     color="primary"
                     autoFocus
                 >
-                    Видалити
+                    {t('groups.modal.submitDeleteButton')}
                 </Button>
             </DialogActions>
         </Dialog>

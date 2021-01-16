@@ -11,8 +11,11 @@ import classes from './StudentsPage.module.css';
 import { Button } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 const StudentsPage = ({ match, location }) => {
+    const { t } = UseLanguage();
+
     const [students, setStudents] = useState([]);
     const [snack, setSnack] = React.useState({ open: false, message: '', type: 'success' });
     const [groupInfo] = useState({
@@ -74,7 +77,7 @@ const StudentsPage = ({ match, location }) => {
             <div className={classes.Header}>
                 <h1>
                     <HowToRegIcon className={classes.Icon} />
-                    Студенти групи {groupInfo.name}
+                    {t('students.title')} {groupInfo.name}
                 </h1>
                 <Button
                     className={classes.Button}
@@ -84,7 +87,7 @@ const StudentsPage = ({ match, location }) => {
                     variant="contained"
                     onClick={() => setOpen({ open: true, isUpdate: false })}
                 >
-                    Додати студента
+                    {t('students.addButton')}
                 </Button>
             </div>
             {loading ? (
