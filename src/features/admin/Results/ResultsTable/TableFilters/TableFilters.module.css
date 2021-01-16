@@ -1,0 +1,57 @@
+.TableFilters {
+    margin: 30px auto;
+    display: flex;
+    height: auto;
+    flex-direction: column !important;
+    width: 100% !important;
+}
+
+.CardContent {
+    padding: 5% 5%;
+}
+
+.Results {
+    padding-top: 10px;
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+}
+
+.Date {
+    padding-top: 10px;
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+}
+
+.Selector {
+    font-size: 16px;
+    width: 100% !important;
+    padding-left: 10px;
+}
+
+.SelectorIcon {
+    vertical-align: middle;
+    font-size: 20px;
+    margin: -3px 5px auto auto;
+}
+
+.SelectorIconTwo {
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.FormControl {
+    padding-bottom: 30px !important;
+}
+
+.Label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    right: 22px;
+    bottom: 0;
+}
+
+.Select {
+}

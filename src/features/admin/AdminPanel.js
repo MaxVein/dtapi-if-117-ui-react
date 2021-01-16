@@ -12,7 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { MainListItems } from './AdminNavItem';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Block, ExitToApp, HomeOutlined, Palette } from '@material-ui/icons';
+import { ExitToApp, Palette } from '@material-ui/icons';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -34,9 +34,10 @@ import Tests from './subjects/tests/index';
 import Timetable from './subjects/timetable/index';
 import Groups from './groups/index';
 import Protocols from './protocols/index';
-import StudentsPage from '../Students/index';
 import TestDetails from './subjects/tests/test-details/index';
 import Questions from './subjects/tests/questions/index';
+import Students from './Students';
+import Results from './Results';
 
 const drawerWidth = 240;
 
@@ -307,7 +308,8 @@ export default function AdminPanel({ setAuthInfo }) {
                             <Route path="/admin/group" component={Groups} />
                             <Route path="/admin/dashboard" component={DashboardCards} />
                             <Route path="/admin/admins" component={AdminsTable} />
-                            <Route path="/admin/students/:id" component={StudentsPage} />
+                            <Route path="/admin/students/:id" component={Students} />
+                            <Route path="/admin/results" component={Results} />
                             <Route exact path="/admin/subjects" component={Subjects} />
                             <Route exact path="/admin/subjects/tests" component={Tests}></Route>
                             <Route path="/admin/subjects/timetable" component={Timetable}></Route>

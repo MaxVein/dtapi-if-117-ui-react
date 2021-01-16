@@ -3,9 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { StudentsServiceAPI } from '../services/StudentsService';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import StudentsCreateUpdateModal from '../StudentsCreateUpdateModal/StudentsCreateUpdateModal';
-import Loader from '../../../common/components/Loader/Loader';
-import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
-import Alert from '../../../common/components/Alert/Alert.js';
+import Loader from '../../../../common/components/Loader/Loader';
+import SnackbarHandler from '../../../../common/components/Snackbar/snackbar';
+import Alert from '../../../../common/components/Alert/Alert.js';
 import classes from './StudentsPage.module.css';
 
 import { Button } from '@material-ui/core';
