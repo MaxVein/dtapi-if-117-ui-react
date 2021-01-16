@@ -20,7 +20,11 @@ import ProtocolsRow from './ProtocolsRow';
 import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
 import styles from '../groups/Groups.module.css';
 
+import { UseLanguage } from '../../../lang/LanguagesContext';
+
 const Protocols = () => {
+    const { t } = UseLanguage();
+
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -106,7 +110,14 @@ const Protocols = () => {
         }
     };
 
-    const fieldsName = ['ID користувача', 'Студент', 'Тест', 'IP-адреса', 'Дата', 'Час'];
+    const fieldsName = [
+        t('protocol.table.id'),
+        t('protocol.table.student'),
+        t('protocol.table.test'),
+        t('protocol.table.ip'),
+        t('protocol.table.date'),
+        t('protocol.table.time'),
+    ];
     return loading ? (
         <div className={styles.loader}>
             <CircularProgress />
@@ -121,7 +132,7 @@ const Protocols = () => {
                     className={styles.entityHeaderTitle}
                 >
                     <List fontSize="large" />
-                    Протокол
+                    {t('protocol.title')}
                 </Typography>
             </div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -154,7 +165,7 @@ const Protocols = () => {
                             'aria-label': 'change date',
                         }}
                     />
-                    <Button onClick={showProtocolsData}>Вивести дані</Button>
+                    <Button onClick={showProtocolsData}> {t('protocol.showButton')}</Button>
                 </Grid>
             </MuiPickersUtilsProvider>
 
@@ -179,6 +190,7 @@ const Protocols = () => {
                 </Table>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 50]}
+                    labelRowsPerPage={t('labelRowsPerPage')}
                     component="div"
                     count={protocolsDataToShow.length}
                     rowsPerPage={rowsPerPage}

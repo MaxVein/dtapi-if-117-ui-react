@@ -19,10 +19,12 @@ import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
 import GroupRow from './GroupRow';
 import GroupAddDialog from './GroupAddDialog';
 import GroupFilter from './GroupFilter';
-
 import styles from './Groups.module.css';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 const Groups = () => {
+    const { t } = UseLanguage();
+
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -196,7 +198,13 @@ const Groups = () => {
         setOpenSnack(false);
     };
 
-    const fieldsName = ['№', 'Шифр групи', 'Спеціальність', 'Факультет', 'Дії'];
+    const fieldsName = [
+        t('groups.table.id'),
+        t('groups.table.groupCode'),
+        t('groups.table.speciality'),
+        t('groups.table.faculty'),
+        t('groups.table.actions'),
+    ];
     return loading ? (
         <div className={styles.loader}>
             <CircularProgress />
@@ -211,7 +219,7 @@ const Groups = () => {
                     className={styles.entityHeaderTitle}
                 >
                     <Group fontSize="large" />
-                    Групи і студенти
+                    {t('groups.title')}
                 </Typography>
                 <Button
                     onClick={dialogOpenHandler}
@@ -221,18 +229,18 @@ const Groups = () => {
                     className={styles.entityHeaderButton}
                 >
                     <AddCircle />
-                    Додати групу
+                    {t('groups.addButton')}
                 </Button>
             </div>
             <div>
                 <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterBySpec}>
-                    Перелік груп по cпеціальності
+                    {t('groups.filters.speciality')}
                 </Button>
                 <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterByFaculty}>
-                    Перелік груп по факультету
+                    {t('groups.filters.faculty')}
                 </Button>
                 <Button variant="outlined" startIcon={<SearchIcon />} onClick={setAllGroupData}>
-                    Перелік всіх груп
+                    {t('groups.filters.allGroup')}
                 </Button>
             </div>
             <div style={{ boxShadow: '0.5rem 1rem 2rem gray' }}>
@@ -265,6 +273,7 @@ const Groups = () => {
                 </Table>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 50]}
+                    labelRowsPerPage={t('labelRowsPerPage')}
                     component="div"
                     count={groupsData.length}
                     rowsPerPage={rowsPerPage}

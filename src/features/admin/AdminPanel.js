@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import clsx from 'clsx';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { MainListItems } from './AdminNavItem';
+import {
+    CssBaseline,
+    Divider,
+    IconButton,
+    Typography,
+    Drawer,
+    AppBar,
+    Toolbar,
+    Button,
+    Paper,
+    Menu,
+    MenuItem,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon,
+} from '@material-ui/core';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Block, ExitToApp, HomeOutlined, Palette } from '@material-ui/icons';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+
+import MenuIcon from '@material-ui/icons/Menu';
+import { ChevronLeft, ExitToApp, HomeOutlined, Palette } from '@material-ui/icons';
+
 import { themes, ThemeToggle } from './themes';
-import { Paper } from '@material-ui/core';
 import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import { logOut, isLogged } from '../../common/utils';
@@ -34,9 +37,12 @@ import Tests from './subjects/tests/index';
 import Timetable from './subjects/timetable/index';
 import Groups from './groups/index';
 import Protocols from './protocols/index';
-import StudentsPage from '../Students/index';
 import TestDetails from './subjects/tests/test-details/index';
 import Questions from './subjects/tests/questions/index';
+import { MainListItems } from './AdminNavItem';
+import { UseLanguage } from '../../lang/LanguagesContext';
+import Students from './Students';
+import Results from './Results';
 
 const drawerWidth = 240;
 
@@ -134,42 +140,66 @@ const useStyles = makeStyles((theme) => ({
             fontWeight: 500,
         },
     },
+    ListItem: {
+        padding: 0,
+    },
 }));
 
 export default function AdminPanel({ setAuthInfo }) {
-    const [open, setOpen] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const { langlist, changeLanguage, t, language } = UseLanguage();
+
+    const [anchorThemeEl, setAnchorThemeEl] = React.useState(null);
+    const [selectedThemeIndex, setSelectedThemeIndex] = React.useState(0);
+    const [anchorLangEl, setAnchorLangEl] = React.useState(null);
+    const [selectedLangIndex, setSelectedLangIndex] = React.useState(0);
     const savedTheme = localStorage.getItem('themeName');
     const [theme, setTheme] = React.useState(createMuiTheme(ThemeToggle(savedTheme)));
+
+    const [open, setOpen] = React.useState(true);
+
+    const [navListItems, setNavListItems] = React.useState(navList(t));
     const classes = useStyles();
+
+    useLayoutEffect(() => {
+        setNavListItems(navList(t));
+    }, [language]);
 
     const logoutHandle = async () => {
         await logOut();
         const isAuth = await isLogged();
         setAuthInfo(isAuth);
     };
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
-    const handleClickListItem = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleClickThemeList = (event) => {
+        setAnchorThemeEl(event.currentTarget);
     };
-    const handleMenuItemClick = (event, theme, index) => {
-        setSelectedIndex(index);
+    const handleClickLangList = (event) => {
+        setAnchorLangEl(event.currentTarget);
+    };
+    const handleThemesItemClick = (event, theme, index) => {
+        setSelectedThemeIndex(index);
         setTheme(createMuiTheme(theme.value));
         localStorage.setItem('themeName', theme.name);
-        setAnchorEl(null);
+        setAnchorThemeEl(null);
+    };
+    const handleLangsItemClick = (event, lang, index) => {
+        setSelectedLangIndex(index);
+        changeLanguage(lang.name);
+        localStorage.setItem('langName', lang.name);
+        setAnchorLangEl(null);
+    };
+    const handleThemeMenuClose = () => {
+        setAnchorThemeEl(null);
+    };
+    const handleLangsMenuClose = () => {
+        setAnchorLangEl(null);
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
     return (
         <ThemeProvider theme={theme}>
             <Paper elevation={0} className={classes.root}>
@@ -199,11 +229,12 @@ export default function AdminPanel({ setAuthInfo }) {
                                 D-TESTER
                             </Link>
                         </Typography>
-                        <List component="nav" aria-label="Device settings">
+                        <List component="nav" aria-label="Theme settings">
                             <ListItem
                                 aria-haspopup="true"
                                 aria-controls="lock-menu"
-                                onClick={handleClickListItem}
+                                onClick={handleClickThemeList}
+                                className={classes.ListItem}
                             >
                                 <IconButton style={{ color: 'white' }}>
                                     <Palette />
@@ -212,16 +243,16 @@ export default function AdminPanel({ setAuthInfo }) {
                         </List>
                         <Menu
                             id="lock-menu"
-                            anchorEl={anchorEl}
+                            anchorEl={anchorThemeEl}
                             keepMounted
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
+                            open={Boolean(anchorThemeEl)}
+                            onClose={handleThemeMenuClose}
                         >
                             {themes.map((theme, index) => (
                                 <MenuItem
                                     key={index}
-                                    selected={index === selectedIndex}
-                                    onClick={(event) => handleMenuItemClick(event, theme, index)}
+                                    selected={index === selectedThemeIndex}
+                                    onClick={(event) => handleThemesItemClick(event, theme, index)}
                                 >
                                     <span
                                         style={{
@@ -230,6 +261,36 @@ export default function AdminPanel({ setAuthInfo }) {
                                         className={classes.themePreviewCircle}
                                     />
                                     {theme.name}
+                                </MenuItem>
+                            ))}
+                        </Menu>
+
+                        <List component="nav" aria-label="Language settings">
+                            <ListItem
+                                aria-haspopup="true"
+                                aria-controls="lock-menu"
+                                onClick={handleClickLangList}
+                                className={classes.ListItem}
+                            >
+                                <Button>
+                                    <ListItemText style={{ color: 'white' }} primary={language} />
+                                </Button>
+                            </ListItem>
+                        </List>
+                        <Menu
+                            id="lock-menu-2"
+                            anchorEl={anchorLangEl}
+                            keepMounted
+                            open={Boolean(anchorLangEl)}
+                            onClose={handleLangsMenuClose}
+                        >
+                            {langlist.map((lang, index) => (
+                                <MenuItem
+                                    key={index}
+                                    selected={index === selectedLangIndex}
+                                    onClick={(event) => handleLangsItemClick(event, lang, index)}
+                                >
+                                    {lang.name.toUpperCase()}
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -261,12 +322,12 @@ export default function AdminPanel({ setAuthInfo }) {
                             </Typography>
                         </Link>
                         <IconButton onClick={handleDrawerClose}>
-                            <ChevronLeftIcon />
+                            <ChevronLeft />
                         </IconButton>
                     </div>
                     <Divider />
                     <List className="navBar">
-                        {navList.map(({ path, icon, title }, index) => (
+                        {navListItems.map(({ path, icon, title }, index) => (
                             <MainListItems
                                 key={index + title}
                                 path={path}
@@ -293,7 +354,7 @@ export default function AdminPanel({ setAuthInfo }) {
                                             : theme.palette.primary.main,
                                 }}
                                 disableTypography
-                                primary="Вихід"
+                                primary={t('menuTitles.exit')}
                             />
                         </ListItem>
                     </List>
@@ -307,7 +368,8 @@ export default function AdminPanel({ setAuthInfo }) {
                             <Route path="/admin/group" component={Groups} />
                             <Route path="/admin/dashboard" component={DashboardCards} />
                             <Route path="/admin/admins" component={AdminsTable} />
-                            <Route path="/admin/students/:id" component={StudentsPage} />
+                            <Route path="/admin/students/:id" component={Students} />
+                            <Route path="/admin/results" component={Results} />
                             <Route exact path="/admin/subjects" component={Subjects} />
                             <Route exact path="/admin/subjects/tests" component={Tests}></Route>
                             <Route path="/admin/subjects/timetable" component={Timetable}></Route>
@@ -320,6 +382,7 @@ export default function AdminPanel({ setAuthInfo }) {
                                 path="/admin/subjects/tests/questions"
                                 component={Questions}
                             ></Route>
+                            <Route path="/admin/protocols" component={Protocols} />
                             <Route path="*" component={NotFoundPage} />
                         </Switch>
                     </div>

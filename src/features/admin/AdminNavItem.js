@@ -50,7 +50,7 @@ export const MainListItems = ({ path, icon, title }) => {
             activeClassName={classes.active}
             className={classes.ListItem}
         >
-            <ListItemIcon>{icon()}</ListItemIcon>
+            <ListItemIcon>{icon}</ListItemIcon>
             <ListItemText
                 disableTypography
                 className={classes.itemText}

@@ -14,14 +14,22 @@ import SpecialityAddDialig from './SpecialityAddDialog';
 
 import { getEntityData } from '../../../common/utils';
 import axios from 'axios';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 const SpecialityView = () => {
+    const { t } = UseLanguage();
+
     const [specialityDates, setSpecialityDate] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [open, setOpen] = useState(false);
 
-    const headerName = ['ID', 'Спеціальність', 'Код', 'Дія'];
+    const headerName = [
+        t('specialities.table.id'),
+        t('specialities.table.name'),
+        t('specialities.table.code'),
+        t('specialities.table.actions'),
+    ];
 
     useEffect(() => {
         const source = axios.CancelToken.source();
@@ -61,10 +69,10 @@ const SpecialityView = () => {
         <div>
             <div style={styles.btn}>
                 <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
-                    Спеціальності
+                    {t('specialities.title')}
                 </Typography>
                 <Button onClick={dialogOpenHandler} variant="contained" color="primary">
-                    Добавити спеціальність
+                    {t('specialities.addButton')}
                 </Button>
             </div>
             <div style={{ boxShadow: '0.5rem 1rem 2rem gray' }}>
@@ -93,6 +101,7 @@ const SpecialityView = () => {
                 </Table>
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
+                    labelRowsPerPage={t('labelRowsPerPage')}
                     component="div"
                     count={specialityDates.length}
                     rowsPerPage={rowsPerPage}
