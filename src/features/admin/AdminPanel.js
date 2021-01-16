@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import clsx from 'clsx';
 import {
     CssBaseline,
@@ -145,7 +145,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AdminPanel({ setAuthInfo }) {
-    const { langlist, changeLanguage, t, language, setLanguage } = UseLanguage();
+    const { langlist, changeLanguage, t, language } = UseLanguage();
 
     const [anchorThemeEl, setAnchorThemeEl] = React.useState(null);
     const [selectedThemeIndex, setSelectedThemeIndex] = React.useState(0);
@@ -159,9 +159,8 @@ export default function AdminPanel({ setAuthInfo }) {
     const [navListItems, setNavListItems] = React.useState(navList(t));
     const classes = useStyles();
 
-    useEffect(() => {
-        setTimeout(() => setNavListItems((prevVal) => (prevVal = navList(t))), 300);
-        // setNavListItems((prevVal) => (prevVal = navList(t)));
+    useLayoutEffect(() => {
+        setNavListItems(navList(t));
     }, [language]);
 
     const logoutHandle = async () => {
@@ -189,8 +188,7 @@ export default function AdminPanel({ setAuthInfo }) {
     };
     const handleLangsItemClick = (event, lang, index) => {
         setSelectedLangIndex(index);
-        changeLanguage(lang.name.toLowerCase());
-        setLanguage(lang.name);
+        changeLanguage(lang.name);
         localStorage.setItem('langName', lang.name);
         setAnchorLangEl(null);
     };

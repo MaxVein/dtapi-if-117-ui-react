@@ -27,7 +27,7 @@ export function LanguagesProvider({ children }) {
     const { t, i18n } = useTranslation();
 
     const changeLanguage = (language) => {
-        i18n.changeLanguage(language);
+        i18n.changeLanguage(language).then(() => setLanguage(language));
     };
     return (
         <LanguagesContext.Provider
