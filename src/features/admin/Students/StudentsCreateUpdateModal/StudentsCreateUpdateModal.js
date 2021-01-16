@@ -7,7 +7,7 @@ import classes from './StudentsCreateUpdateModal.module.css';
 import { Dialog, DialogContent, DialogTitle, Paper, CircularProgress } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import { UseLanguage } from '../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 const StudentsCreateUpdateModal = ({
     open,

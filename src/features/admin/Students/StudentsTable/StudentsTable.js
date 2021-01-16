@@ -6,7 +6,7 @@ import StudentsTransferModal from '../StudentsTransferModal/StudentsTransferModa
 import StudentsConfirm from '../StudentsConfirm/StudentsConfirm';
 import PropTypes from 'prop-types';
 import classes from './StudentsTable.module.css';
-import { UseLanguage } from '../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 import {
     Button,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classes from './StudentsConfirm.module.css';
-import { UseLanguage } from '../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 import {
     Button,

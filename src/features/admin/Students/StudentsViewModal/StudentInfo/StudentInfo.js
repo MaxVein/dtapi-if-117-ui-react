@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classes from './StudentInfo.module.css';
 
 import { Avatar, Divider } from '@material-ui/core';
-import { UseLanguage } from '../../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../../lang/LanguagesContext';
 
 const StudentInfo = ({ student }) => {
     const { t } = UseLanguage();

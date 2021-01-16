@@ -3,7 +3,7 @@ import { StudentsServiceAPI } from '../services/StudentsService';
 import StudentInfo from './StudentInfo/StudentInfo';
 import PropTypes from 'prop-types';
 import classes from './StudentsViewModal.module.css';
-import { UseLanguage } from '../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 import {
     Dialog,

@@ -14,7 +14,7 @@ import {
     Paper,
 } from '@material-ui/core';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import { UseLanguage } from '../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 const StudentsTransferModal = ({
     open,
