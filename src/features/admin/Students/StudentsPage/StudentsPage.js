@@ -11,7 +11,7 @@ import classes from './StudentsPage.module.css';
 import { Button } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
-import { UseLanguage } from '../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 const StudentsPage = ({ match, location }) => {
     const { t } = UseLanguage();
