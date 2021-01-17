@@ -20,9 +20,13 @@ import GroupRow from './GroupRow';
 import GroupAddDialog from './GroupAddDialog';
 import GroupFilter from './GroupFilter';
 
+import { UseLanguage } from '../../../lang/LanguagesContext';
+
 import '../../../styles/app.scss';
 
 const Groups = () => {
+    const { t } = UseLanguage();
+
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -127,7 +131,13 @@ const Groups = () => {
         setOpenSnack(false);
     };
 
-    const fieldsName = ['№', 'Шифр групи', 'Спеціальність', 'Факультет', 'Дії'];
+    const fieldsName = [
+        t('groups.table.id'),
+        t('groups.table.groupCode'),
+        t('groups.table.speciality'),
+        t('groups.table.faculty'),
+        t('groups.table.actions'),
+    ];
     return loading ? (
         <div className="loader">
             <CircularProgress />
@@ -142,22 +152,22 @@ const Groups = () => {
         >
             <div className="header">
                 <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
-                    Групи і студенти
+                    {t('groups.title')}
                 </Typography>
                 <Button color="primary" onClick={dialogOpenHandler}>
-                    Додати групу
+                    {t('groups.addButton')}
                 </Button>
             </div>
 
             <div>
                 <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterBySpec}>
-                    Перелік груп по cпеціальності
+                    {t('groups.filters.speciality')}
                 </Button>
                 <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterByFaculty}>
-                    Перелік груп по факультету
+                    {t('groups.filters.faculty')}
                 </Button>
                 <Button variant="outlined" startIcon={<SearchIcon />} onClick={setAllGroupData}>
-                    Перелік всіх груп
+                    {t('groups.filters.allGroup')}
                 </Button>
             </div>
             <div style={{ boxShadow: '0.5rem 1rem 2rem gray' }}>
@@ -194,6 +204,7 @@ const Groups = () => {
                 </Table>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 50]}
+                    labelRowsPerPage={t('labelRowsPerPage')}
                     component="div"
                     count={groupsData.length}
                     rowsPerPage={rowsPerPage}

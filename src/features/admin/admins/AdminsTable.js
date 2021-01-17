@@ -14,15 +14,18 @@ import { Typography } from '@material-ui/core';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AddCircle from '@material-ui/icons/AddCircle';
 
-import { createDataSource, getAdmins, columns } from './AdminsService';
+import { createDataSource, getAdmins } from './AdminsService';
 import styles from './Admins.module.css';
 import AdminCreationForm from './AdminsCreationForm';
 import AdminsTableRow from './AdminTableRow';
 import AdminsContext from './AdminsContext';
 import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
 import Loader from '../../../common/components/Loader/Loader';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 export default function AdminsTable() {
+    const { t } = UseLanguage();
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [dataSource, setDataSource] = React.useState([]);
@@ -49,6 +52,22 @@ export default function AdminsTable() {
         setOpen(true);
     };
 
+    const columns = [
+        { id: 'id', label: t('admins.table.id'), minWidth: '25%' },
+        { id: 'username', label: t('admins.table.name'), minWidth: '25%' },
+        {
+            id: 'email',
+            label: t('admins.table.email'),
+            minWidth: '25%',
+            align: 'left',
+        },
+        {
+            id: 'operations',
+            label: t('admins.table.actions'),
+            minWidth: '10%',
+            align: 'center',
+        },
+    ];
     return (
         <AdminsContext.Provider value={{ dataSource, setDataSource, snack, setSnack }}>
             {loaded ? (
@@ -61,7 +80,7 @@ export default function AdminsTable() {
                             className={styles.entityHeaderTitle}
                         >
                             <SupervisedUserCircle fontSize="large" />
-                            Адміни
+                            {t('admins.title')}
                         </Typography>
                         <Button
                             onClick={openModal}
@@ -71,7 +90,7 @@ export default function AdminsTable() {
                             className={styles.entityHeaderButton}
                         >
                             <AddCircle />
-                            Додати Адміна
+                            {t('admins.addButton')}
                         </Button>
                     </div>
                     <Paper elevation={6}>
@@ -101,6 +120,7 @@ export default function AdminsTable() {
                         </TableContainer>
                         <TablePagination
                             rowsPerPageOptions={[10, 25, 100]}
+                            labelRowsPerPage={t('labelRowsPerPage')}
                             component="div"
                             count={dataSource.length}
                             rowsPerPage={rowsPerPage}

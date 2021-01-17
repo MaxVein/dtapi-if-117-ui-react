@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from './Admins.module.css';
 import { addAdmin, checkAdminName, updateAdmin } from './AdminsService';
 import AdminsContext from './AdminsContext';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 const useStyles = makeStyles({
     DialogContent: {
@@ -54,7 +55,9 @@ const editValidationSchema = Yup.object().shape({
 });
 
 function AdminCreationForm({ open, setOpen, mode, admin }) {
+    const { t } = UseLanguage();
     const { dataSource, setDataSource, setSnack } = useContext(AdminsContext);
+
     const classes = useStyles();
     const closeModal = () => {
         setOpen(false);
@@ -168,7 +171,7 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
         <React.Fragment>
             <Dialog open={open} onClose={closeModal} aria-labelledby="simple-dialog-title">
                 <DialogTitle className={styles.entityTitle}>
-                    {mode === 'Add' ? 'Додати' : 'Редагувати'} адміна
+                    {mode === 'Add' ? t('admins.modal.addTitle') : t('admins.modal.updateTitle')}{' '}
                 </DialogTitle>
                 <Formik
                     initialValues={intialFormValues}
@@ -190,7 +193,7 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
                                     autoFocus
                                     margin="dense"
                                     id="username"
-                                    label="Ім'я"
+                                    label={t('admins.modal.name')}
                                     fullWidth
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -201,7 +204,7 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
                                 <TextField
                                     margin="dense"
                                     id="email"
-                                    label="Email"
+                                    label={t('admins.modal.email')}
                                     type="email"
                                     fullWidth
                                     onChange={handleChange}
@@ -214,7 +217,7 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
                                     fullWidth
                                     margin="dense"
                                     type="password"
-                                    label="Пароль"
+                                    label={t('admins.modal.password')}
                                     name="password"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -226,7 +229,7 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
                                     fullWidth
                                     margin="dense"
                                     type="password"
-                                    label="Підтвердіть пароль"
+                                    label={t('admins.modal.passwordConfirm')}
                                     name="password_confirm"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -240,7 +243,9 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
                                 />
                             </DialogContent>
                             <DialogActions className={classes.DialogActions}>
-                                <Button onClick={closeModal}>Скасувати</Button>
+                                <Button onClick={closeModal}>
+                                    {t('admins.modal.cancelButton')}
+                                </Button>
                                 <Button
                                     type="submit"
                                     disabled={!isValid}
@@ -248,7 +253,9 @@ function AdminCreationForm({ open, setOpen, mode, admin }) {
                                     variant="contained"
                                     color="primary"
                                 >
-                                    {mode === 'Add' ? 'Підтвердити' : 'Зберегти'}
+                                    {mode === 'Add'
+                                        ? t('admins.modal.submitAddButton')
+                                        : t('admins.modal.submitUpdateButton')}
                                 </Button>
                             </DialogActions>
                         </form>

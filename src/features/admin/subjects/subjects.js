@@ -27,9 +27,12 @@ import {
 import FormDialog from './dialog';
 import SearchComponent from './searchComponent';
 import TablePaginationActions from './tablePagination';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 export default function Subjects() {
-    const [initialSubjectData, setInitialSubjectData] = useState([]);
+    const { t } = UseLanguage();
+
+    const [initialSubjectData, setInitialSetSubjectData] = useState([]);
     const [subjectData, setSubjectData] = useState([]);
     const [subject, setSubject] = useState({ create: false, data: {} });
     const [snack, setSnack] = useState({ open: false });
@@ -160,10 +163,10 @@ export default function Subjects() {
         <div className="subjects-container">
             <div className="subject-btn">
                 <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
-                    Предмети
+                    {t('subjects.title')}
                 </Typography>
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
-                    Додати предмет
+                    {t('subjects.addButton')}
                 </Button>
             </div>
             {openForm && (
@@ -180,10 +183,10 @@ export default function Subjects() {
                 <Table className={classes.table} aria-label="subjects table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="left">ID</TableCell>
-                            <TableCell align="left">Назва</TableCell>
-                            <TableCell align="left">Опис</TableCell>
-                            <TableCell align="left">Дії</TableCell>
+                            <TableCell align="left">{t('subjects.table.id')}</TableCell>
+                            <TableCell align="left">{t('subjects.table.name')}</TableCell>
+                            <TableCell align="left">{t('subjects.table.description')}</TableCell>
+                            <TableCell align="left">{t('subjects.table.actions')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -215,10 +218,7 @@ export default function Subjects() {
                                 count={subjectData.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
-                                SelectProps={{
-                                    inputProps: { 'aria-label': 'рядків на сторінці' },
-                                    native: true,
-                                }}
+                                labelRowsPerPage={t('labelRowsPerPage')}
                                 onChangePage={handleChangePage}
                                 onChangeRowsPerPage={handleChangeRowsPerPage}
                                 ActionsComponent={TablePaginationActions}
