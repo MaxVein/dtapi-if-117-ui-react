@@ -1,0 +1,74 @@
+.Filter {
+    margin: 30px auto;
+    display: flex;
+    height: auto;
+    flex-direction: column !important;
+    width: 100% !important;
+}
+
+.CardContent {
+    padding: 5% 5%;
+}
+
+.Faculties {
+    padding-top: 10px;
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+}
+
+.Groups {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+}
+
+.Tests {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+}
+
+.Selector {
+    font-size: 16px;
+    width: 100% !important;
+    padding-left: 10px;
+}
+
+.SelectorIcon {
+    vertical-align: middle;
+    font-size: 20px;
+    margin: -3px 5px auto auto;
+}
+
+.FormControl {
+    padding-bottom: 30px !important;
+}
+
+.Label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    right: 22px;
+    bottom: 0;
+}
+
+.Select {
+}
+
+.Actions {
+    padding: 10px 12px 0 10px;
+}
+
+.Button {
+    width: 100%;
+    align-items: center;
+    padding: 10px 0 !important;
+    box-shadow: none;
+}
+
+.Spinner {
+    position: relative;
+    left: 45% !important;
+    margin: 150px auto;
+}

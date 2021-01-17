@@ -6,6 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 export default function FormDialog({
     editSubject,
@@ -14,8 +15,14 @@ export default function FormDialog({
     setOpenForm,
     setEditSubject,
 }) {
-    let dialogTitle = editSubject.edit ? 'Редагувати предмет' : 'Додати предмет';
-    let submitBtnTitle = editSubject.edit ? 'Редагувати' : 'Створити';
+    const { t } = UseLanguage();
+
+    let dialogTitle = editSubject.edit
+        ? t('subjects.modal.updateTitle')
+        : t('subjects.modal.addTitle');
+    let submitBtnTitle = editSubject.edit
+        ? t('subjects.modal.submitUpdateButton')
+        : t('subjects.modal.submitAddButton');
     const handleClose = () => {
         formik.resetForm();
         setOpenForm(false);
@@ -71,7 +78,7 @@ export default function FormDialog({
                         <TextField
                             id="subject_name"
                             name="subject_name"
-                            label="Назва предмету"
+                            label={t('subjects.modal.name')}
                             value={formik.values.subject_name}
                             onChange={formik.handleChange}
                             error={
@@ -82,7 +89,7 @@ export default function FormDialog({
                         <TextField
                             id="subject_description"
                             name="subject_description"
-                            label="Опис"
+                            label={t('subjects.modal.description')}
                             multiline
                             rows="5"
                             value={formik.values.subject_description}
@@ -113,7 +120,7 @@ export default function FormDialog({
                                 variant="contained"
                                 onClick={() => handleClose()}
                             >
-                                Скасувати
+                                {t('subjects.modal.cancelButton')}
                             </Button>
                         </div>
                     </form>

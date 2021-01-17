@@ -9,45 +9,47 @@ import {
     List,
 } from '@material-ui/icons';
 
-export const navList = [
-    {
-        path: '/admin/dashboard',
-        icon: () => <Dashboard />,
-        title: 'Головна',
-    },
-    {
-        path: '/admin/faculties',
-        icon: () => <AccountBalance />,
-        title: 'Факультети',
-    },
-    {
-        path: '/admin/group',
-        icon: () => <Group />,
-        title: 'Групи',
-    },
-    {
-        path: '/admin/speciality',
-        icon: () => <Dns />,
-        title: 'Спеціальності',
-    },
-    {
-        path: '/admin/subjects',
-        icon: () => <CollectionsBookmark />,
-        title: 'Предмети',
-    },
-    {
-        path: '/admin/results',
-        icon: () => <InsertChartSharp />,
-        title: 'Результати',
-    },
-    {
-        path: '/admin/admins',
-        icon: () => <SupervisedUserCircle />,
-        title: 'Адміни',
-    },
-    {
-        path: '/admin/protocol',
-        icon: () => <List />,
-        title: 'Протокол',
-    },
-];
+export const navList = (t) => {
+    return [
+        {
+            path: '/admin/dashboard',
+            icon: <Dashboard />,
+            title: t('menuTitles.main'),
+        },
+        {
+            path: '/admin/faculties',
+            icon: <AccountBalance />,
+            title: t('menuTitles.faculties'),
+        },
+        {
+            path: '/admin/group',
+            icon: <Group />,
+            title: t('menuTitles.groups'),
+        },
+        {
+            path: '/admin/speciality',
+            icon: <Dns />,
+            title: t('menuTitles.specialities'),
+        },
+        {
+            path: '/admin/subjects',
+            icon: <CollectionsBookmark />,
+            title: t('menuTitles.subjects'),
+        },
+        {
+            path: '/admin/results',
+            icon: <InsertChartSharp />,
+            title: t('menuTitles.results'),
+        },
+        {
+            path: '/admin/admins',
+            icon: <SupervisedUserCircle />,
+            title: t('menuTitles.admins'),
+        },
+        {
+            path: '/admin/protocols',
+            icon: <List />,
+            title: t('menuTitles.protocol'),
+        },
+    ];
+};

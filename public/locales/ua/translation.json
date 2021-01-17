@@ -1,0 +1,180 @@
+{
+      "menuTitles": {
+          "main":"Головна",
+          "faculties":"Факультети",
+          "groups":"Групи",
+          "specialities":"Спеціальності",
+          "subjects":"Предмети",
+          "students":"Студенти",
+          "results":"Результати",
+          "admins":"Адміни",
+          "protocol":"Протокол",
+          "exit":"Вихід",
+          "cardLink":"Перейти"
+      },
+      "faculties":{
+          "title":"Факультети"
+      },
+      "groups":{
+          "title":"Групи і студенти",
+           "addButton":"Додати групу",
+          "filters":{
+              "speciality":"Перелік груп по cпеціальності",
+              "faculty":"Перелік груп по факультету",
+              "allGroup":"Перелік всіх груп",
+              "addButton":"Додати групу"
+          },
+          "table":{
+              "id":"№",
+              "groupCode":"Шифр групи",
+              "speciality":"Спецільність",
+              "faculty":"Факультет",
+              "actions":"Дії"
+          },
+          "modal":{
+              "addTitle":"Додати групу",
+              "updateTitle":"Редагувати групу",
+              "deleteTitle":"Підтвердіть видалення",
+              "deleteSubTitle":"Ви впевнені, що хочети видалити дану групу?",
+              "submitAddButton":"Підтвердити",
+              "submitUpdateButton":"Зберегти",
+              "submitDeleteButton":"Видалити",
+              "cancelButton":"Скасувати",
+              "name":"Назва групу",
+              "chooseFacultyButton":"Виберіть Факультет",
+              "chooseSpecialityButton":"Виберіть Спеціальність",
+              "filters":{
+                  "title":"Виберіть критерій для фільтрування",
+                  "applyButton":"Застосувати"
+              }
+          }
+      },
+      "specialities":{
+        "title":"Спеціальності",
+        "addButton":"Додати спеціальність",
+        "table":{
+            "id":"ID",
+            "name":"Спеціальність",
+            "code":"Код",
+            "actions":"Дії"
+        },
+          "modal":{
+              "addTitle":"Додати спеціальність",
+              "updateTitle":"Редагувати спеціальність",
+              "submitAddButton":"Підтвердити",
+              "submitUpdateButton":"Зберегти",
+              "cancelButton":"Скасувати",
+              "name":"Назва спеціальності",
+              "code":"Код"
+          }
+      },
+      "subjects":{
+          "title":"Предмети",
+          "addButton":"Додати предмет",
+          "search":"Пошук",
+          "table":{
+              "id":"ID",
+              "name":"Назва предмету",
+              "description":"Опис",
+              "actions":"Дії"
+          },
+          "modal":{
+              "addTitle":"Додати предмет",
+              "updateTitle":"Редагувати предмет",
+              "deleteTitle":"Ви впевнені що бажаєте видалити предмет?",
+              "submitAddButton":"Підтвердити",
+              "submitUpdateButton":"Зберегти",
+              "submitDeleteButton":"Видалити",
+              "cancelButton":"Скасувати",
+              "name":"Назва предмету",
+              "description":"Опис"
+          }
+      },
+      "results":{
+          "title":"Результати"
+      },
+      "admins":{
+          "title":"Адміни",
+          "addButton":"Додати адміна",
+          "table":{
+              "id":"ID",
+              "name":"Назва адміна",
+              "email":"Електронна пошта",
+              "actions":"Дії"
+          },
+           "modal":{
+              "addTitle":"Додати адміна",
+              "updateTitle":"Редагувати адміна",
+              "deleteTitle":"Видалити адміна",
+              "submitAddButton":"Підтвердити",
+              "submitUpdateButton":"Зберегти",
+              "submitDeleteButton":"Видалити",
+              "cancelButton":"Скасувати",
+              "name":"Ім'я",
+              "email":"Електронна пошта",
+              "password":"Пароль",
+              "passwordConfirm":"Підтвердити Пароль"
+          }
+      },
+      "protocol":{
+          "title":"Протокол",
+          "showButton" : "Вивести дані",
+          "table":{
+              "id":"ID користувача",
+              "student":"Студент",
+              "test": "Тест",
+              "ip":"IP-Адреса",
+              "date":"Дата",
+              "time":"Час"
+          }
+      },
+      "students":{
+          "title":"Студенти групи",
+          "addButton":"Додати студента",
+          "table":{
+              "id":"No.",
+              "code":"Номер залікової книжки",
+              "fullName":"ПІБ",
+              "actions":"Дії"
+          },
+           "modal":{
+              "addTitle":"Додати студента",
+              "updateTitle":"Редагувати студента",
+              "deleteTitle":"Підтвердіть дію",
+              "deleteSubTitle":"Видалити студента",
+              "submitAddButton":"Підтвердити",
+              "submitUpdateButton":"Зберегти",
+              "submitDeleteButton":"Видалити",
+              "cancelButton":"Скасувати",
+              "lastName":"Прізвище",
+              "name":"Ім'я",
+              "afterName":"По батькові",
+              "сode":"Номер залікової книжки",
+              "login":"Системне ім'я користувача",
+              "email":"Електронна пошта",
+              "password":"Пароль",
+              "passwordConfirm":"Підтвердити Пароль",
+              "uploadPhoto":"Завантажити фото",
+              "updatePhoto":"Оновити фото"
+          },
+          "details":{
+              "title":"Інформація про студента",
+              "fullName":"ПІБ",
+              "faculty":"Факультет/Інститут",
+              "speaciality":"Спеціальність",
+              "group":"Група",
+              "code":"Номер залікової книжки",
+              "email":"Електронна пошта",
+              "login":"Унікальне ім'я користувача в системі",
+              "close":"Закрити"
+          },
+          "transfer":{
+              "title":"Переведення студента",
+              "chooseFaculty":"Виберіть Факультет/Інститут",
+              "chooseGroup":"Виберіть групу",
+              "cancel":"Закрити",
+              "transferButton":"Перевести"
+          }
+      },
+      "labelRowsPerPage":"Рядків у таблиці:"
+}

@@ -23,7 +23,9 @@
   align-items: center;
   max-width: 300px;
 }
-
+.deleteModal{
+  justify-content:center !important;
+}
 .MuiDialogTitle-root {
   padding-bottom: 0.4rem !important;
 }

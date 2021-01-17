@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Formik } from 'formik';
 import { addEntity, updateEntity } from '../../../common/utils';
 import InputLabel from '@material-ui/core/InputLabel';
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 import * as Yup from 'yup';
 
@@ -30,6 +31,8 @@ const GroupAddDialog = ({
     snackMes,
     setSnackMes,
 }) => {
+    const { t } = UseLanguage();
+
     const initialValues = {
         group_name: group ? group.group_name : '',
         faculty_name: group ? group.faculty_name : '',
@@ -121,7 +124,7 @@ const GroupAddDialog = ({
         <div>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">
-                    {group ? 'Редагувати групу' : 'Додати групу'}
+                    {group ? t('groups.modal.updateTitle') : t('groups.modal.addTitle')}
                 </DialogTitle>
                 <DialogContent>
                     <Formik
@@ -150,7 +153,7 @@ const GroupAddDialog = ({
                                     autoFocus
                                     margin="dense"
                                     id="group_name"
-                                    label="Name"
+                                    label={t('groups.modal.name')}
                                     type="text"
                                     fullWidth
                                     error={touched.group_name && Boolean(errors.group_name)}
@@ -169,7 +172,7 @@ const GroupAddDialog = ({
                                     error={touched.faculty_name && Boolean(errors.faculty_name)}
                                 >
                                     <MenuItem value="" disabled>
-                                        Виберіть факультет
+                                        {t('groups.modal.chooseFacultyButton')}
                                     </MenuItem>
                                     {facultyData.map((item) => (
                                         <MenuItem key={uuidv4()} value={`${item.faculty_name}`}>
@@ -192,7 +195,7 @@ const GroupAddDialog = ({
                                     error={touched.faculty_name && Boolean(errors.faculty_name)}
                                 >
                                     <MenuItem value="" disabled>
-                                        Виберіть спеціальність
+                                        {t('groups.modal.chooseSpecialityButton')}
                                     </MenuItem>
                                     {specialityData.map((item) => (
                                         <MenuItem key={uuidv4()} value={`${item.speciality_name}`}>
@@ -202,10 +205,12 @@ const GroupAddDialog = ({
                                 </Select>
                                 <div style={{ margin: '1rem', textAlign: 'center' }}>
                                     <Button onClick={handleClose} color="primary">
-                                        Відмінити
+                                        {t('groups.modal.cancelButton')}
                                     </Button>
                                     <Button disabled={!isValid} type="submit" color="primary">
-                                        {group ? 'Редагувати' : 'Додати'}
+                                        {group
+                                            ? t('groups.modal.submitUpdateButton')
+                                            : t('groups.modal.submitAddButton')}
                                     </Button>
                                 </div>
                             </form>
