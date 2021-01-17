@@ -10,7 +10,6 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import styles from './Admins.module.css';
-import { addAdmin, checkAdminName, updateAdmin } from './AdminsService';
 import AdminsContext from './AdminsContext';
 import { UseLanguage } from '../../../lang/LanguagesContext';
 
@@ -25,145 +24,62 @@ const useStyles = makeStyles({
     },
 });
 
-const addValidationSchema = Yup.object().shape({
-    username: Yup.string()
-        .min(5, "Надто коротке ім'я!")
-        .max(50, "Надто довге ім'я!")
-        .required("Обов'язкове поле"),
-    email: Yup.string().email('Невалідний email').required("Обов'язкове поле"),
-    password: Yup.string()
-        .required("Обов'язкове поле")
-        .min(8, 'Надто короткий пароль - повинно бути мінмімум 8 символів.')
-        .matches(
-            '((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})',
-            'Повинно бути як мінмум 1 цифра та тільки латинські літери.',
-        ),
-    password_confirm: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Паролі повинні співпадати.')
-        .required('Потрібно підтвердити пароль'),
-});
-const editValidationSchema = Yup.object().shape({
-    username: Yup.string().min(5, "Надто коротке ім'я!").max(50, "Надто довге ім'я!"),
-    email: Yup.string().email('Невалідний email'),
-    password: Yup.string()
-        .min(8, 'Надто короткий пароль - повинно бути мінмімум 8 символів.')
-        .matches(
-            '((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})',
-            'Пароль повинен містити як мінмум 1 цифру та тільки латинські літери.',
-        ),
-    password_confirm: Yup.string().oneOf([Yup.ref('password'), null], 'Паролі повинні співпадати.'),
-});
-
 function AdminCreationForm({ open, setOpen, mode, admin }) {
     const { t } = UseLanguage();
-    const { dataSource, setDataSource, setSnack } = useContext(AdminsContext);
-
+    const { setAdded, setUpdated } = React.useContext(AdminsContext);
     const classes = useStyles();
-    const closeModal = () => {
-        setOpen(false);
-    };
-
     const intialFormValues = {
         username: mode === 'Add' ? '' : admin.username,
         email: mode === 'Add' ? '' : admin.email,
         password: '',
         password_confirm: '',
     };
-
-    function AddModeSubmit(values) {
-        checkAdminName(values.username)
-            .then((res) => {
-                if (res.response) {
-                    setSnack({
-                        open: true,
-                        message: "Дане ім'я вже ісує",
-                        type: 'warning',
-                    });
-                    return null;
-                }
-                addAdmin(values)
-                    .then((res) => {
-                        setDataSource(dataSource.concat(res.data));
-                        setSnack({
-                            open: true,
-                            message: 'Адміна успішно додано',
-                            type: 'success',
-                        });
-                        closeModal();
-                    })
-                    .catch((err) =>
-                        setSnack({
-                            open: true,
-                            message: `На сервері відбулась помилка - ${err}`,
-                            type: 'error',
-                        }),
-                    );
-            })
-            .catch((err) =>
-                setSnack({
-                    open: true,
-                    message: `На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я`,
-                    type: 'error',
-                }),
-            );
-    }
-    function UpdateModeSubmit(values) {
-        checkAdminName(values.username)
-            .then((res) => {
-                if (
-                    values.username === intialFormValues.username &&
-                    values.email === intialFormValues.email &&
-                    values.password === intialFormValues.password
-                ) {
-                    setSnack({
-                        open: true,
-                        message: 'Потрібно щось змінити',
-                        type: 'info',
-                    });
-                } else if (res.response === true) {
-                    setSnack({ open: true, message: "Дане ім'я вже існує", type: 'error' });
-                } else {
-                    updateAdmin(values, admin.id)
-                        .then((res) => {
-                            if (res.response === 'ok') {
-                                setDataSource(
-                                    dataSource.map((item) =>
-                                        item.id === admin.id
-                                            ? (item = { id: admin.id, ...values })
-                                            : item,
-                                    ),
-                                );
-                                setSnack({
-                                    open: true,
-                                    message: 'Адміна успішно оновлено',
-                                    type: 'success',
-                                });
-                                closeModal();
-                            }
-                        })
-                        .catch((err) =>
-                            setSnack({
-                                open: true,
-                                message: `На сервері відбулась помилка - ${err}`,
-                                type: 'error',
-                            }),
-                        );
-                }
-            })
-            .catch((err) =>
-                setSnack({
-                    open: true,
-                    message: `На сервері відбулась помилка - ${err}`,
-                    type: 'error',
-                }),
-            );
-    }
+    const addValidationSchema = Yup.object().shape({
+        username: Yup.string()
+            .min(5, t('validation.tooShortName'))
+            .max(50, t('validation.tooLongName'))
+            .required(t('validation.requiredField')),
+        email: Yup.string()
+            .email(t('validation.invalidEmail'))
+            .required(t('validation.requiredField')),
+        password: Yup.string()
+            .required(t('validation.requiredField'))
+            .min(8, t('validation.tooShortPassword'))
+            .matches('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})', t('validation.passwordPattern')),
+        password_confirm: Yup.string()
+            .oneOf([Yup.ref('password'), null], t('validation.passwordMustMatch'))
+            .required(t('validation.passwordNeedConfirmation')),
+    });
+    const editValidationSchema = Yup.object().shape({
+        username: Yup.string()
+            .min(5, t('validation.tooShortName'))
+            .max(50, t('validation.tooLongName')),
+        email: Yup.string().email(t('validation.invalidEmail')),
+        password: Yup.string()
+            .min(8, t('validation.tooShortPassword'))
+            .matches('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})', t('validation.passwordPattern')),
+        password_confirm: Yup.string().oneOf(
+            [Yup.ref('password'), null],
+            t('validation.passwordMustMatch'),
+        ),
+    });
+    const closeModal = () => {
+        setOpen(false);
+    };
 
     const submit = (values) => {
         if (mode === 'Add') {
-            AddModeSubmit(values);
+            setAdded({ status: true, data: { ...values } });
         } else if (mode === 'Update') {
-            UpdateModeSubmit(values);
+            setUpdated({
+                status: true,
+                closeModal: () => closeModal(),
+                data: {
+                    id: admin.id,
+                    values: { ...values },
+                    intialFormValues: { ...intialFormValues },
+                },
+            });
         }
     };
 
