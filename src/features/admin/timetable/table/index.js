@@ -26,6 +26,7 @@ export default function TableComponent({ entity, handleEditEntity, setDeleteEnti
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    const noData = 'Немає розкладу для заданого предмету.';
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table}>
@@ -45,7 +46,7 @@ export default function TableComponent({ entity, handleEditEntity, setDeleteEnti
                     {entity.length === 0 && (
                         <TableRow>
                             <TableCell className={classes.noInputData} colSpan={6}>
-                                Немає розкладу для заданого предмету.
+                                {noData}
                             </TableCell>
                         </TableRow>
                     )}

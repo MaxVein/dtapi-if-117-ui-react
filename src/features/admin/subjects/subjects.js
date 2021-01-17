@@ -149,12 +149,12 @@ export default function Subjects() {
     //search
     useEffect(() => {
         if (searchData !== '') {
-            const searchElems = filterArr(initialSubjectData, searchData);
-            setSubjectData(searchElems);
+            setSubjectData(() => {
+                return filterArr(initialSubjectData, searchData);
+            });
         } else {
             setSubjectData(initialSubjectData);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchData]);
     return (
         <div className="subjects-container">

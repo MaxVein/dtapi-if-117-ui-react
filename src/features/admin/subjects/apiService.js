@@ -47,6 +47,15 @@ export function concatArrays(arr1, arr2, ids) {
     return arr2;
 }
 export function compareTimetables(obj1, obj2) {
+    // converTimetablesData(obj2);
+    // let result = true;
+    // for (const propertyName in obj1) {
+    //     if (obj1[propertyName] !== obj2[propertyName]) {
+    //         result = false;
+    //         break;
+    //     }
+    // }
+    // return result;
     if (
         obj1.group_id === obj2.group_id &&
         obj1.subject_id === obj2.subject_id &&
@@ -61,8 +70,17 @@ export function compareTimetables(obj1, obj2) {
     }
 }
 export function converTimetablesData(obj) {
-    obj.start_time = obj.start_time.toLocaleTimeString();
-    obj.end_time = obj.end_time.toLocaleTimeString();
-    obj.start_date = obj.start_date.toLocaleDateString().split('.').reverse().join('-');
-    obj.end_date = obj.end_date.toLocaleDateString().split('.').reverse().join('-');
+    const returnObj = Object.assign(obj);
+    for (const propertyName in returnObj) {
+        if (propertyName.includes('_time')) {
+            returnObj[propertyName] = returnObj[propertyName].toLocaleTimeString();
+        } else if (propertyName.includes('_date')) {
+            returnObj[propertyName] = returnObj[propertyName]
+                .toLocaleDateString()
+                .split('.')
+                .reverse()
+                .join('-');
+        }
+    }
+    return returnObj;
 }

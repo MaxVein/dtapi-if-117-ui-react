@@ -31,7 +31,6 @@ export default function Timetable() {
         'Дії',
     ];
     const [openForm, setOpenForm] = useState(false);
-    const [timetableData, setTimetableData] = useState([]);
     const [renderData, setRenderData] = useState([]);
     const [editEntity, setEditEntity] = useState({});
     const [deleteEntity, setDeleteEntity] = useState({ delete: false });
@@ -39,7 +38,23 @@ export default function Timetable() {
     const [subjects, setSubjects] = useState([]);
     const [createEntity, setCreateEntity] = useState({ create: false });
     const [snack, setSnack] = useState({ open: false });
-
+    const messages = {
+        error: 'Виникли проблеми на сервері спробуйте пізніше',
+        duplicate: 'Розклад для цієї групи уже існує',
+        create: 'Розклад додано',
+        edit: 'Розклад оновлено',
+        delete: 'Розклад видалено',
+    };
+    const errorSnack = (message) => {
+        setSnack({
+            open: true,
+            type: 'error',
+            message: message,
+        });
+    };
+    const successSnack = (message) => {
+        setSnack({ open: true, type: 'success', message: message });
+    };
     useEffect(() => {
         getGroupsAndSubjects();
     }, []);
@@ -49,21 +64,33 @@ export default function Timetable() {
         }
     }, [groups]);
     const getTimetableData = () => {
-        getTimetableRecords(id).then((res) => {
-            if (res.data.response === 'no records') {
-                return;
-            } else {
-                addGroupName(res.data);
-            }
-        });
+        getTimetableRecords(id)
+            .then((res) => {
+                if (res.data.response === 'no records') {
+                    return;
+                } else {
+                    addGroupName(res.data);
+                }
+            })
+            .catch(() => {
+                errorSnack(messages.error);
+            });
     };
     const getGroupsAndSubjects = () => {
-        getRecords('Group').then((res) => {
-            setGroups(res.data);
-        });
-        getRecords('Subject').then((res) => {
-            setSubjects(res.data);
-        });
+        getRecords('Group')
+            .then((res) => {
+                setGroups(res.data);
+            })
+            .catch(() => {
+                errorSnack(messages.error);
+            });
+        getRecords('Subject')
+            .then((res) => {
+                setSubjects(res.data);
+            })
+            .catch(() => {
+                errorSnack(messages.error);
+            });
     };
     const addGroupName = (data) => {
         const groupsId = data.map((elem) => {
@@ -89,17 +116,21 @@ export default function Timetable() {
                 return elem.group_id === editEntity.data.group_id;
             });
             delete editEntity.data.group_name;
-            updateEntities('TimeTable', editEntity.id, editEntity.data).then((res) => {
-                setRenderData((prevVal) => {
-                    res.data[0].group_name = group[0].group_name;
-                    const updateIndex = findIndex(prevVal, (o) => {
-                        return o.timetable_id === res.data[0].timetable_id;
+            updateEntities('TimeTable', editEntity.id, editEntity.data)
+                .then((res) => {
+                    setRenderData((prevVal) => {
+                        res.data[0].group_name = group[0].group_name;
+                        const updateIndex = findIndex(prevVal, (o) => {
+                            return o.timetable_id === res.data[0].timetable_id;
+                        });
+                        prevVal[updateIndex] = res.data[0];
+                        return [...prevVal];
                     });
-                    prevVal[updateIndex] = res.data[0];
-                    return [...prevVal];
+                    successSnack(messages.edit);
+                })
+                .catch(() => {
+                    errorSnack(messages.error);
                 });
-                console.log(renderData);
-            });
         }
     }, [editEntity]);
     // Delete
@@ -113,14 +144,11 @@ export default function Timetable() {
                                 return elem.timetable_id !== deleteEntity.id;
                             });
                         });
+                        successSnack(messages.delete);
                     }
                 })
                 .catch(() => {
-                    setSnack({
-                        open: true,
-                        type: 'error',
-                        message: 'Не вдалось видалити спробуйте пізніше',
-                    });
+                    errorSnack(messages.error);
                 });
         }
     }, [deleteEntity]);
@@ -143,13 +171,10 @@ export default function Timetable() {
                         res.data[0].group_name = group[0].group_name;
                         return [...res.data, ...prevVal];
                     });
+                    successSnack(messages.create);
                 })
                 .catch(() => {
-                    setSnack({
-                        open: true,
-                        type: 'error',
-                        message: 'Розклад для цієї групи уже існує',
-                    });
+                    errorSnack(messages.duplicate);
                 });
         }
     }, [createEntity]);

@@ -27,6 +27,7 @@ import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
 import TableList from './tableList';
 import TablePaginationActions from '../subjects/tablePagination';
 import FormDialog from './dialog';
+import classes from './test.module.css';
 import SelectTest from './selectTest';
 
 export default function Tests() {
@@ -58,12 +59,6 @@ export default function Tests() {
     }, [id]);
 
     // Table
-    const useStyles = makeStyles({
-        table: {
-            minWidth: 400,
-        },
-    });
-    const classes = useStyles();
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, testData.length - page * rowsPerPage);
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -109,12 +104,15 @@ export default function Tests() {
             updateEntities('test', editTest.data.test_id, editTest.data)
                 .then((res) => {
                     setOpenForm(false);
+
                     setTestData((prevVal) => {
                         const updateIndex = findIndex(prevVal, (o) => {
-                            return o.subject_id === res.data[0].subject_id;
+                            return o.test_id === res.data[0].test_id;
                         });
                         prevVal[updateIndex] = res.data[0];
+                        return [...prevVal];
                     });
+
                     setSnack({ open: true, type: 'success', message: 'Тест оновлено' });
                 })
                 .catch(() => {
@@ -134,7 +132,7 @@ export default function Tests() {
                 .then((res) => {
                     if (res.data.response === 'ok') {
                         setTestData((prevVal) => {
-                            return prevVal.filter((elem) => elem.subject_id !== deleteEntity.id);
+                            return prevVal.filter((elem) => elem.test_id !== deleteEntity.id);
                         });
                         setSnack({ open: true, type: 'success', message: 'Тест видалено' });
                     }
@@ -177,7 +175,7 @@ export default function Tests() {
 
     return (
         <div>
-            <div className="subject-btn">
+            <div className={classes.titleWraper}>
                 <div className="test-title">
                     Тести з предмета:
                     <b>

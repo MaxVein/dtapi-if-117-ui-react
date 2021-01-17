@@ -2,3 +2,23 @@
     color: red;
     font-size: 12px;
 }
+
+.formDialogContainer {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.FormDialogTitle {
+    display: flex;
+    justify-content: space-between;
+}
+
+.formDateContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.formDateItem {
+    width: 50%;
+}

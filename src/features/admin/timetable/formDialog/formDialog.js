@@ -13,8 +13,9 @@ import {
     KeyboardTimePicker,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
+import Grid from '@material-ui/core/Grid';
 
-import { objectsAreSame, compareTimetables } from '../../subjects/apiService';
+import { compareTimetables } from '../../subjects/apiService';
 import classes from './formDialog.module.css';
 
 export default function FormDialog({
@@ -37,10 +38,16 @@ export default function FormDialog({
     const validationSchema = yup.object({
         group_id: yup.string().required("Це поле обов'язкове"),
         subject_id: yup.string().required("Це поле обов'язкове"),
-        start_date: yup.date(),
+        start_date: yup
+            .date()
+            .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Машину часу ще не придумали)))'),
+        start_time: yup.date(),
         end_date: yup
             .date()
             .min(yup.ref('start_date'), 'Кінцева дата не може бути меншою від початкової'),
+        end_time: yup
+            .date()
+            .min(yup.ref('start_time'), 'Кінцева дата не може бути меншою від початкової'),
     });
     const formik = useFormik({
         initialValues: {
@@ -59,7 +66,7 @@ export default function FormDialog({
                 : new Date(),
             end_time: editEntity.edit
                 ? new Date(`${editEntity.data.end_date} ${editEntity.data.end_time}`)
-                : new Date(),
+                : new Date(new Date().setHours(new Date().getHours() + 1)),
         },
         validationSchema: validationSchema,
 
@@ -87,119 +94,133 @@ export default function FormDialog({
             <Dialog open={openForm} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle className="form-title">{dialogTitle}</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={formik.handleSubmit} className="form-dialog-container">
-                        <TextField
-                            id="group_id"
-                            name="group_id"
-                            label="Група"
-                            value={formik.values.group_id}
-                            variant="outlined"
-                            select
-                            onChange={formik.handleChange}
-                            error={formik.touched.group_id && Boolean(formik.errors.group_id)}
-                            helperText={formik.touched.group_id && formik.errors.group_id}
-                        >
-                            {groups.map((elem) => {
-                                return (
-                                    <MenuItem
-                                        id={elem.group_id}
-                                        key={elem.group_id}
-                                        value={elem.group_id}
-                                    >
-                                        {elem.group_name}
-                                    </MenuItem>
-                                );
-                            })}
-                        </TextField>
-                        <TextField
-                            id="subject_id"
-                            name="subject_id"
-                            label="Предмет"
-                            value={formik.values.subject_id}
-                            variant="outlined"
-                            select
-                            onChange={formik.handleChange}
-                            error={formik.touched.subject_id && Boolean(formik.errors.subject_id)}
-                            helperText={formik.touched.subject_id && formik.errors.subject_id}
-                        >
-                            {subjects.map((elem) => {
-                                return (
-                                    <MenuItem
-                                        id={elem.subject_id}
-                                        key={elem.subject_id}
-                                        value={elem.subject_id}
-                                    >
-                                        {elem.subject_name}
-                                    </MenuItem>
-                                );
-                            })}
-                        </TextField>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                disablePast
-                                variant="outline"
-                                format="yyyy/MM/dd"
-                                margin="normal"
-                                id="start_date"
-                                label="Дата початку"
-                                value={formik.values.start_date}
-                                onChange={(value) => {
-                                    formik.setFieldValue('start_date', value);
-                                }}
+                    <form onSubmit={formik.handleSubmit} className={classes.formDialogContainer}>
+                        <div className={classes.FormDialogTitle}>
+                            <TextField
+                                id="group_id"
+                                name="group_id"
+                                label="Група"
+                                value={formik.values.group_id}
+                                select
+                                onChange={formik.handleChange}
+                                error={formik.touched.group_id && Boolean(formik.errors.group_id)}
+                                helperText={formik.touched.group_id && formik.errors.group_id}
+                            >
+                                {groups.map((elem) => {
+                                    return (
+                                        <MenuItem
+                                            id={elem.group_id}
+                                            key={elem.group_id}
+                                            value={elem.group_id}
+                                        >
+                                            {elem.group_name}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </TextField>
+                            <TextField
+                                id="subject_id"
+                                name="subject_id"
+                                label="Предмет"
+                                value={formik.values.subject_id}
+                                select
+                                onChange={formik.handleChange}
                                 error={
-                                    formik.touched.start_date && Boolean(formik.errors.start_date)
+                                    formik.touched.subject_id && Boolean(formik.errors.subject_id)
                                 }
-                                helperText={formik.touched.start_date && formik.errors.start_date}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            />
+                                helperText={formik.touched.subject_id && formik.errors.subject_id}
+                            >
+                                {subjects.map((elem) => {
+                                    return (
+                                        <MenuItem
+                                            id={elem.subject_id}
+                                            key={elem.subject_id}
+                                            value={elem.subject_id}
+                                        >
+                                            {elem.subject_name}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </TextField>
+                        </div>
+                        <div className={classes.formDateContainer}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    className={classes.formDateItem}
+                                    disablePast
+                                    variant="outline"
+                                    format="yyyy/MM/dd"
+                                    margin="normal"
+                                    id="start_date"
+                                    label="Дата початку"
+                                    value={formik.values.start_date}
+                                    onChange={(value) => {
+                                        formik.setFieldValue('start_date', value);
+                                    }}
+                                    error={
+                                        formik.touched.start_date &&
+                                        Boolean(formik.errors.start_date)
+                                    }
+                                    helperText={
+                                        formik.touched.start_date && formik.errors.start_date
+                                    }
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
 
-                            <KeyboardTimePicker
-                                clearable
-                                ampm={false}
-                                margin="normal"
-                                id="start_time"
-                                label="Час початку"
-                                value={formik.values.start_time}
-                                onChange={(value) => {
-                                    formik.setFieldValue('start_time', value);
-                                }}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
-                            />
-
-                            <KeyboardDatePicker
-                                disablePast
-                                variant="outline"
-                                format="yyyy/MM/dd"
-                                margin="normal"
-                                id="end_date"
-                                label="Дата закінчення"
-                                value={formik.values.end_date}
-                                onChange={(value) => formik.setFieldValue('end_date', value)}
-                                error={formik.touched.end_date && Boolean(formik.errors.end_date)}
-                                helperText={formik.touched.end_date && formik.errors.end_date}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            />
-                            <KeyboardTimePicker
-                                clearable
-                                ampm={false}
-                                margin="normal"
-                                id="end_time"
-                                label="Час закінчення"
-                                value={formik.values.end_time}
-                                onChange={(value) => formik.setFieldValue('end_time', value)}
-                                error={formik.touched.end_time && Boolean(formik.errors.end_time)}
-                                helperText={formik.touched.end_time && formik.errors.end_time}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
-                            />
-                        </MuiPickersUtilsProvider>
+                                <KeyboardTimePicker
+                                    className={classes.formDateItem}
+                                    clearable
+                                    ampm={false}
+                                    margin="normal"
+                                    id="start_time"
+                                    label="Час початку"
+                                    value={formik.values.start_time}
+                                    onChange={(value) => {
+                                        formik.setFieldValue('start_time', value);
+                                    }}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change time',
+                                    }}
+                                />
+                                <KeyboardDatePicker
+                                    className={classes.formDateItem}
+                                    disablePast
+                                    variant="outline"
+                                    format="yyyy/MM/dd"
+                                    margin="normal"
+                                    id="end_date"
+                                    label="Дата закінчення"
+                                    value={formik.values.end_date}
+                                    onChange={(value) => formik.setFieldValue('end_date', value)}
+                                    error={
+                                        formik.touched.end_date && Boolean(formik.errors.end_date)
+                                    }
+                                    helperText={formik.touched.end_date && formik.errors.end_date}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                                <KeyboardTimePicker
+                                    className={classes.formDateItem}
+                                    clearable
+                                    ampm={false}
+                                    margin="normal"
+                                    id="end_time"
+                                    label="Час закінчення"
+                                    value={formik.values.end_time}
+                                    onChange={(value) => formik.setFieldValue('end_time', value)}
+                                    error={
+                                        formik.touched.end_time && Boolean(formik.errors.end_time)
+                                    }
+                                    helperText={formik.touched.end_time && formik.errors.end_time}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change time',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
+                        </div>
                         <div className="form-dialog-btn-group">
                             <Button color="primary" variant="contained" type="submit">
                                 {submitBtnTitle}
