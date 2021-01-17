@@ -32,7 +32,7 @@ import { UseLanguage } from '../../../lang/LanguagesContext';
 export default function Subjects() {
     const { t } = UseLanguage();
 
-    const [initialSubjectData, setInitialSetSubjectData] = useState([]);
+    const [initialSubjectData, setInitialSubjectData] = useState([]);
     const [subjectData, setSubjectData] = useState([]);
     const [subject, setSubject] = useState({ create: false, data: {} });
     const [snack, setSnack] = useState({ open: false });
