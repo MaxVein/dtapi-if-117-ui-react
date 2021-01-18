@@ -56,7 +56,12 @@ const GroupAddDialog = ({
     };
     return (
         <div>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                id="form-dialog"
+                aria-labelledby="form-dialog-title"
+            >
                 <DialogTitle id="form-dialog-title">
                     {group ? t('groups.modal.updateTitle') : t('groups.modal.addTitle')}
                 </DialogTitle>
