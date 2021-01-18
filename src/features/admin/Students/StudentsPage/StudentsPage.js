@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { StudentsServiceAPI } from '../services/StudentsService';
+import React, { useState, useEffect, useCallback } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
+import { StudentsServiceApi } from '../services/StudentsService';
+import StudentsContext from './StudentsContext';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import StudentsCreateUpdateModal from '../StudentsCreateUpdateModal/StudentsCreateUpdateModal';
 import Loader from '../../../../common/components/Loader/Loader';
-import SnackbarHandler from '../../../../common/components/Snackbar/snackbar';
-import Alert from '../../../../common/components/Alert/Alert.js';
+import SnackBar from '../../../../common/components/Snackbar/snackbar';
+import Alert from '../../../../common/components/Alert/Alert';
 import classes from './StudentsPage.module.css';
 
 import { Button } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
-import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 const StudentsPage = ({ match, location }) => {
     const { t } = UseLanguage();
-
-    const [students, setStudents] = useState([]);
-    const [snack, setSnack] = React.useState({ open: false, message: '', type: 'success' });
     const [groupInfo] = useState({
         id: match.params.id,
         name:
@@ -25,11 +22,44 @@ const StudentsPage = ({ match, location }) => {
                 ? location.query.group_name
                 : localStorage.getItem('group_name'),
     });
-    const [open, setOpen] = useState({ open: false, isUpdate: false });
-    const [loading, setLoading] = useState(true);
-    const [snackBar, setSnackBar] = useState({ open: false, message: '' });
+    const [students, setStudents] = useState([]);
+    const [open, setOpen] = useState({
+        open: false,
+        isUpdate: false,
+        type: 'Add' | 'Update' | 'Transfer' | 'Delete' | 'View',
+        student: {},
+    });
+    const [loading, setLoading] = useState({
+        page: true,
+        create: false,
+        update: true,
+        view: true,
+        transfer: true,
+    });
+    const [snackBar, setSnackBar] = useState({ open: false, message: '', type: 'success' });
     const [error, setError] = useState({ error: false, message: '', type: '' });
-    const history = useHistory();
+
+    const errorHandler = useCallback(
+        (message, type) => {
+            setError({
+                error: true,
+                message,
+                type,
+            });
+        },
+        [error, setError],
+    );
+
+    const messageHandler = useCallback(
+        (message, type) => {
+            setSnackBar({
+                open: true,
+                message,
+                type,
+            });
+        },
+        [setSnackBar],
+    );
 
     useEffect(() => {
         if (location.query !== undefined) {
@@ -38,81 +68,116 @@ const StudentsPage = ({ match, location }) => {
     }, [location.query]);
 
     useEffect(() => {
-        (async function getStudentsByGroup() {
-            try {
-                const students = await StudentsServiceAPI.fetchStudentsByGroup(groupInfo.id, true);
-                if (students.data.length) {
-                    setSnack({
-                        open: true,
-                        message: 'Студентів завантажено',
-                        type: 'success',
-                    });
-                    setStudents(students.data);
-                    setLoading(false);
-                } else {
-                    setSnack({ open: true, message: 'Студенти відсутні', type: 'warning' });
-                    setStudents([]);
-                    setLoading(false);
-                }
-            } catch (e) {
-                errorHandler(
-                    'Сталася помилка! Не вдалося завантажити студентів даної групи! Спробуйте знову',
-                );
-                history.push('/admin/group');
-            }
-        })();
-        return () => setStudents([]);
-    }, [history, groupInfo]);
+        (async function studentsByGroup(id) {
+            await getStudentsByGroup(id);
+        })(groupInfo.id);
+    }, [groupInfo.id]);
 
-    const errorHandler = (message) => {
-        setError({
-            error: true,
-            message,
-            type: 'Помилка',
-        });
+    const getStudentsByGroup = async (id) => {
+        const students = await StudentsServiceApi.fetchStudentsByGroup(id, true);
+        if (students.length) {
+            setStudents(students);
+            setLoading((prevState) => {
+                prevState.page = false;
+                return prevState;
+            });
+            messageHandler(t('students.page.messages.uploadStudents'), 'success');
+        } else if (!students.length) {
+            setStudents([]);
+            setLoading((prevState) => {
+                prevState.page = false;
+                return prevState;
+            });
+            messageHandler(t('students.page.messages.noStudents'), 'warning');
+        } else if (students.error) {
+            setStudents([]);
+            setLoading((prevState) => {
+                prevState.page = false;
+                return prevState;
+            });
+            errorHandler(
+                t('students.page.errors.uploadStudents'),
+                t('students.page.errors.typeError'),
+            );
+        }
+    };
+
+    const create = async (student) => {
+        const create = await StudentsServiceApi.create(student);
+        if (create.id && create.response === 'ok') {
+            student.user_id = create.id.toString();
+            setStudents((prevState) => [...prevState, student]);
+            setOpen((prevState) => {
+                prevState.open = false;
+                return prevState;
+            });
+            messageHandler(t('students.createUpdate.messages.studentAdded'), 'success');
+        } else if (create.error) {
+            setOpen((prevState) => {
+                prevState.open = false;
+                return prevState;
+            });
+            messageHandler(t('students.createUpdate.messages.closeDueError'), 'error');
+            errorHandler(
+                t('students.createUpdate.errors.createStudent'),
+                t('students.createUpdate.errors.typeError'),
+            );
+        }
     };
 
     return (
-        <div className={classes.Page}>
-            <div className={classes.Header}>
-                <h1>
-                    <HowToRegIcon className={classes.Icon} />
-                    {t('students.title')} {groupInfo.name}
-                </h1>
-                <Button
-                    className={classes.Button}
-                    startIcon={<AddCircleIcon />}
-                    size="large"
-                    color="primary"
-                    variant="contained"
-                    onClick={() => setOpen({ open: true, isUpdate: false })}
-                >
-                    {t('students.addButton')}
-                </Button>
+        <StudentsContext.Provider
+            value={{
+                loading,
+                setLoading,
+                open,
+                setOpen,
+                messageHandler,
+                errorHandler,
+            }}
+        >
+            <div className={classes.Page}>
+                <div className={classes.Header}>
+                    <h1>
+                        <HowToRegIcon className={classes.Icon} />
+                        {t('students.page.title')} {groupInfo.name}
+                    </h1>
+                    <Button
+                        className={classes.Button}
+                        startIcon={<AddCircleIcon />}
+                        size="large"
+                        color="primary"
+                        variant="contained"
+                        onClick={() =>
+                            setOpen({ open: true, isUpdate: false, type: 'Add', student: {} })
+                        }
+                    >
+                        {t('students.page.addButton')}
+                    </Button>
+                </div>
+                {loading.page ? (
+                    <Loader />
+                ) : (
+                    <StudentsTable students={students} setStudents={setStudents} />
+                )}
+                {open.open && open.type === 'Add' ? (
+                    <StudentsCreateUpdateModal
+                        isUpdate={open.isUpdate}
+                        groupID={groupInfo.id}
+                        create={create}
+                    />
+                ) : null}
+                <SnackBar snack={snackBar} setSnack={setSnackBar} />
+                {error.error ? (
+                    <Alert
+                        show={error.error}
+                        message={error.message}
+                        type={error.type}
+                        hide={setError}
+                    />
+                ) : null}
             </div>
-            {loading ? (
-                <Loader />
-            ) : (
-                <StudentsTable
-                    students={students}
-                    setSnackBar={setSnackBar}
-                    setError={setError}
-                    errorHandler={errorHandler}
-                />
-            )}
-            <SnackbarHandler snack={snack} setSnack={setSnack} />
-            {open.open ? (
-                <StudentsCreateUpdateModal
-                    open={open.open}
-                    setOpen={setOpen}
-                    isUpdate={open.isUpdate}
-                    groupID={groupInfo.id}
-                    setError={setError}
-                    setStudents={setStudents}
-                    setSnackBar={setSnackBar}
-                />
-            ) : null}
-        </div>
+        </StudentsContext.Provider>
     );
 };
 
