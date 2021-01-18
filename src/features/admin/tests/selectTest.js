@@ -2,7 +2,7 @@ import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
-export default function SelectTest(handleSubjectChange, subjects) {
+export default function SelectSubject(handleSubjectChange, subjects) {
     console.log(`subjects`, subjects);
     return (
         <div>

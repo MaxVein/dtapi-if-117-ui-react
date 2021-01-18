@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,9 +10,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import TableHead from '@material-ui/core/TableHead';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { findIndex } from 'lodash';
 
@@ -23,20 +19,31 @@ import {
     createEntities,
     deleteEntities,
     getRecords,
-} from '../apiService';
-import OpenSnackbar from '../snackbar';
-import TableList from './tableList';
-import TablePaginationActions from '../tablePagination';
-import FormDialog from './dialog';
-import SelectTest from './selectTest';
+} from '../subjects/apiService';
+import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
+import TableList from './table/tableList';
+import TablePaginationActions from '../../../common/components/Table/tablePagination';
+import FormDialog from './dialog/dialog';
+import classes from './test.module.scss';
+import TableHeadComponent from './table/tableHead';
+import SelectComponent from './selectTest';
 
 export default function Tests() {
+    const titleRow = [
+        {
+            name: 'ID',
+            sortingName: 'test_id',
+        },
+        { name: 'Назва', sortingName: 'test_name' },
+        { name: 'Предмет', sortingName: 'null' },
+        { name: 'Кількість тестів', sortingName: 'tasks' },
+        { name: 'Час для проходження тесту (хв)', sortingName: 'time_for_test' },
+    ];
     const location = useLocation();
     const { id, name } = location.state;
     const [testData, setTestData] = useState([]);
+    const [snack, setSnack] = useState({ open: false });
     const [deleteEntity, setDeleteEntity] = useState({ delete: false, id: '' });
-    const [messageToSnackbar, setMessageToSnackbar] = useState('');
-    const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openForm, setOpenForm] = useState(false);
     const [editTest, setEditTest] = useState({
         edit: false,
@@ -52,29 +59,28 @@ export default function Tests() {
     });
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    //Read
 
     useEffect(() => {
-        getTestRecords(id).then((res) => {
-            setTestData(res.data);
-        });
+        getTestRecords(id)
+            .then((res) => {
+                setTestData(res.data);
+            })
+            .catch(() => {
+                setSnack({ open: true, type: 'erorr', message: 'Дані відсутні' });
+            });
     }, [id]);
 
-    const useStyles2 = makeStyles({
-        table: {
-            minWidth: 400,
-        },
-    });
-    const classes = useStyles2();
+    // Table
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, testData.length - page * rowsPerPage);
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
     //create
     const handleClickCreate = () => {
         setOpenForm(true);
@@ -84,19 +90,21 @@ export default function Tests() {
         if (test.create) {
             createEntities('test', test.data)
                 .then((res) => {
-                    const newTestData = [...res.data, ...testData];
-                    setTestData(newTestData);
+                    setTestData((prevVal) => [...res.data, ...prevVal]);
                     setOpenForm(false);
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Тест додано');
+                    setSnack({ open: true, type: 'success', message: 'Тест додано' });
                 })
                 .catch(() => {
                     setOpenSnackbar(true);
-                    setMessageToSnackbar('Схоже тест з такою назвою уже існує');
+                    setSnack({
+                        open: true,
+                        type: 'erorr',
+                        message: 'Схоже тест з такою назвою уже існує',
+                    });
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [test]);
+
     //edit
     const handleEditTest = (item) => {
         setOpenForm(true);
@@ -104,57 +112,64 @@ export default function Tests() {
     };
     useEffect(() => {
         if (editTest.equal && !editTest.first) {
-            setOpenSnackbar(true);
-            setMessageToSnackbar('Внесіть зміни у форму');
+            setSnack({ open: true, type: 'warning', message: 'Внесіть зміни у форму' });
         } else if (editTest.edit && !editTest.equal) {
             updateEntities('test', editTest.data.test_id, editTest.data)
                 .then((res) => {
                     setOpenForm(false);
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Тест оновлено');
-                    const updateIndex = findIndex(testData, (o) => {
-                        return o.test_id === res.data[0].test_id;
+
+                    setTestData((prevVal) => {
+                        const updateIndex = findIndex(prevVal, (o) => {
+                            return o.test_id === res.data[0].test_id;
+                        });
+                        prevVal[updateIndex] = res.data[0];
+                        return [...prevVal];
                     });
-                    let newTestData = [...testData];
-                    newTestData[updateIndex] = res.data[0];
-                    setTestData(newTestData);
+
+                    setSnack({ open: true, type: 'success', message: 'Тест оновлено' });
                 })
                 .catch(() => {
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Виникли проблеми на сервері спробуйте пізніше');
+                    setSnack({
+                        open: true,
+                        type: 'error',
+                        message: 'Виникли проблеми на сервері спробуйте пізніше',
+                    });
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editTest]);
+
     // delete
     useEffect(() => {
         if (deleteEntity.delete) {
             deleteEntities('test', deleteEntity.id)
                 .then((res) => {
                     if (res.data.response === 'ok') {
-                        const newTestData = testData.filter(
-                            (elem) => elem.test_id !== deleteEntity.id,
-                        );
-                        setTestData(newTestData);
-                        setOpenSnackbar(true);
-                        setMessageToSnackbar('Тест видалено');
+                        setTestData((prevVal) => {
+                            return prevVal.filter((elem) => elem.test_id !== deleteEntity.id);
+                        });
+                        setSnack({ open: true, type: 'success', message: 'Тест видалено' });
                     }
                 })
                 .catch(() => {
-                    setOpenSnackbar(true);
-                    setMessageToSnackbar('Виникли проблеми на сервері спробуйте пізніше');
+                    setSnack({
+                        open: true,
+                        type: 'error',
+                        message: 'Виникли проблеми на сервері спробуйте пізніше',
+                    });
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [deleteEntity]);
+
     //Sorting
     const handleSorting = (key) => {
         let newTestData = [...testData];
+
         newTestData.forEach((elem) => {
             elem.tasks = +elem.tasks;
             elem.time_for_test = +elem.time_for_test;
             elem.test_id = +elem.test_id;
         });
+
         if (sort[key]) {
             setSort({ [key]: !sort[key] });
             newTestData = [...testData].sort((a, b) => {
@@ -168,18 +183,14 @@ export default function Tests() {
         }
         setTestData(newTestData);
     };
-    //Select subject
-    const handleSubjectChange = (event) => {
-        console.log(`event`, event);
-    };
 
     return (
         <div>
-            <div className="subject-btn">
-                <div className="test-title">
+            <div className={classes.titleWraper}>
+                <div className={classes.testTitle}>
                     Тести з предмета:
                     <b>
-                        <em>{name}</em>
+                        <em> {name}</em>
                     </b>
                 </div>
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
@@ -196,50 +207,14 @@ export default function Tests() {
                     subject_id={id}
                 />
             )}
+
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="test table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="left" onClick={() => handleSorting('test_id')}>
-                                <div className="table-head-title">
-                                    <span className="sorting-arrows">
-                                        {sort.test_id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                    </span>
-                                    ID
-                                </div>
-                            </TableCell>
-                            <TableCell align="left" onClick={() => handleSorting('test_name')}>
-                                <div className="table-head-title">
-                                    <span className="sorting-arrows">
-                                        {sort.test_name ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                    </span>
-                                    Назва
-                                </div>
-                            </TableCell>
-                            <TableCell align="left">Предмет</TableCell>
-                            <TableCell align="left" onClick={() => handleSorting('tasks')}>
-                                <div className="table-head-title">
-                                    <span className="sorting-arrows">
-                                        {sort.tasks ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                    </span>
-                                    Кількість тестів
-                                </div>
-                            </TableCell>
-                            <TableCell align="left" onClick={() => handleSorting('time_for_test')}>
-                                <div className="table-head-title">
-                                    <span className="sorting-arrows">
-                                        {sort.time_for_test ? (
-                                            <ExpandLessIcon />
-                                        ) : (
-                                            <ExpandMoreIcon />
-                                        )}
-                                    </span>
-                                    Час для проходження тесту (хв)
-                                </div>
-                            </TableCell>
-                            <TableCell align="left">Дії</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <TableHeadComponent
+                        handleSorting={handleSorting}
+                        titleRow={titleRow}
+                        sort={sort}
+                    />
                     <TableBody>
                         {(rowsPerPage > 0
                             ? testData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -263,7 +238,7 @@ export default function Tests() {
                         <TableRow>
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={6}
+                                colSpan={titleRow.length}
                                 count={testData.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
@@ -279,11 +254,7 @@ export default function Tests() {
                     </TableFooter>
                 </Table>
             </TableContainer>
-            <OpenSnackbar
-                messageToSnackbar={messageToSnackbar}
-                openSnackbar={openSnackbar}
-                setOpenSnackbar={setOpenSnackbar}
-            />
+            <SnackbarHandler snack={snack} setSnack={setSnack} />
         </div>
     );
 }
