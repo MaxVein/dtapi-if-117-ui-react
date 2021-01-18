@@ -1,199 +1,213 @@
 {
-      "menuTitles": {
-          "main":"Main",
-          "faculties":"Faculties",
-          "groups":"Groups",
-          "specialities":"Specialitites",
-          "subjects":"Subjects",
-          "students":"Students",
-          "results":"Results",
-          "admins":"Admins",
-          "protocol":"Protocol",
-          "exit":"Exit",
-          "cardLink":"Visit"
-      },
-      "faculties":{
-          "title":"Faculties"
-      },
-      "groups":{
-          "title":"Groups and students",
-          "addButton":"Add group",
-          "filters":{
-              "speciality":"Group list ordered by speciality",
-              "faculty":"Group list ordered by faculty",
-              "allGroup":"All group list"
-          },
-          "table":{
-              "id":"№",
-              "groupCode":"Group code",
-              "speciality":"Speciality",
-              "faculty":"Faculty",
-              "actions":"Actions"
-          },
-          "modal":{
-              "addTitle":"Add group",
-              "updateTitle":"Update group",
-              "deleteTitle":"Submit group deleting",
-              "deleteSubTitle":"Do you really want to delete this group?",
-              "submitAddButton":"Submit",
-              "submitUpdateButton":"Save",
-              "submitDeleteButton":"Delete",
-              "cancelButton":"Cancel",
-              "name":"Group name",
-              "chooseFacultyButton":"Choose Faculty",
-              "chooseSpecialityButton":"Choose Speciality",
-              "filters":{
-                  "title":"Choose criteria for filtering",
-                  "applyButton":"Apply"
-              }
-          }
-      },
-      "specialities":{
-          "title":"Specialities",
-          "addButton":"Add speciality",
-          "table":{
-              "id":"ID",
-              "name":"Speciality name",
-              "code":"Code",
-              "actions":"Actions"
-          },
-          "modal":{
-              "addTitle":"Add speciality",
-              "updateTitle":"Update speciality",
-              "submitAddButton":"Submit",
-              "submitUpdateButton":"Save",
-              "cancelButton":"Cancel",
-              "name":"Subject name",
-              "code":"Code"
-          }
-      },
-      "subjects":{
-          "title":"Subjects",
-          "addButton":"Add subject",
-          "search":"Search",
-          "table":{
-              "id":"ID",
-              "name":"Subject name",
-              "description":"Description",
-              "actions":"Actions"
-          },
-          "modal":{
-              "addTitle":"Add subject",
-              "updateTitle":"Update subject",
-              "deleteTitle":"Do you really want to delete this subject?",
-              "submitAddButton":"Submit",
-              "submitUpdateButton":"Save",
-              "submitDeleteButton":"Delete",
-              "cancelButton":"Cancel",
-              "name":"Subject name",
-              "description":"Description"
-          }
-      },
-      "results":{
-          "title":"Results"
-      },
-      "admins":{
-          "title":"Admins",
-          "addButton":"Add admin",
-          "search":"Search",
-          "table":{
-              "id":"ID",
-              "name":"Admin's name",
-              "email":"Email",
-              "actions":"Actions"
-          },
-          "modal":{
-              "addTitle":"Add admin",
-              "updateTitle":"Update admin",
-              "deleteTitle":"Delete admin",
-              "submitAddButton":"Submit",
-              "submitUpdateButton":"Save",
-              "submitDeleteButton":"Delete",
-              "cancelButton":"Cancel",
-              "name":"Name",
-              "email":"Email",
-              "password":"Password",
-              "passwordConfirm":"Password Confirm"
-          },
-          "messages":{
-              "deleteSuccess":"Admin successfully deleted",
-              "addSuccess":"Admin successfully added",
-              "updateSuccess":"Admin successfully updated",
-              "nameFailed":"Name already exists",
-              "nameServerFailed":"На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
-              "serverFailed":"Server responded with error - ",
-              "changeNeeded":"You need to change something"
-          }
-      },
-      "protocol":{
-          "title":"Protocol",
-          "showButton" : "Show data",
-          "table":{
-              "id":"User ID",
-              "student":"Student",
-              "test": "Test",
-              "ip":"IP-Address",
-              "date":"Date",
-              "time":"Time"
-          }
-      },
-      "students":{
-          "title":"Students of the group",
-          "addButton":"Add students",
-          "table":{
-              "id":"No.",
-              "code":"Test book number",
-              "fullName":"Full Name",
-              "actions":"Actions"
-          },
-           "modal":{
-              "addTitle":"Add student",
-              "updateTitle":"Update student",
-              "deleteTitle":"Submit Action",
-              "deleteSubTitle":"Delete student",
-              "submitAddButton":"Submit",
-              "submitUpdateButton":"Save",
-              "submitDeleteButton":"Delete",
-              "cancelButton":"Cancel",
-              "lastName":"Last Name",
-              "name":"Name",
-              "afterName":"After Name",
-              "сode":"Test Book Number",
-              "login":"Login Name",
-              "email":"Email",
-              "password":"Password",
-              "passwordConfirm":"Confirm Password",
-              "uploadPhoto":"Add Photo",
-              "updatePhoto":"Udate Photo"
-          },
-          "details":{
-              "title":"Student's Info",
-              "fullName":"Full Name",
-              "faculty":"Faculty/Institute",
-              "speaciality":"Speciality",
-              "group":"Group",
-              "code":"Test book number",
-              "email":"Email",
-              "login":"Login Name",
-              "close":"Close"
-          },
-          "transfer":{
-              "title":"Student Transfer",
-              "chooseFaculty":"Choose Faculty/Institute",
-              "chooseGroup":"Choose Group",
-              "cancel":"Cancel",
-              "transferButton":"Transfer"
-          }
-      },
-      "labelRowsPerPage":"Rows per page:",
-     "validation":{
-        "tooShortName":"Name is too short!",
+    "menuTitles": {
+        "main": "Main",
+        "faculties": "Faculties",
+        "groups": "Groups",
+        "specialities": "Specialitites",
+        "subjects": "Subjects",
+        "students": "Students",
+        "results": "Results",
+        "admins": "Admins",
+        "protocol": "Protocol",
+        "exit": "Exit",
+        "cardLink": "Visit"
+    },
+    "faculties": {
+        "title": "Faculties"
+    },
+    "groups": {
+        "title": "Groups and students",
+        "addButton": "Add group",
+        "filters": {
+            "speciality": "Group list ordered by speciality",
+            "faculty": "Group list ordered by faculty",
+            "allGroup": "All group list"
+        },
+        "table": {
+            "id": "№",
+            "groupCode": "Group code",
+            "speciality": "Speciality",
+            "faculty": "Faculty",
+            "actions": "Actions"
+        },
+        "modal": {
+            "addTitle": "Add group",
+            "updateTitle": "Update group",
+            "deleteTitle": "Submit group deleting",
+            "deleteSubTitle": "Do you really want to delete this group?",
+            "submitAddButton": "Submit",
+            "submitUpdateButton": "Save",
+            "submitDeleteButton": "Delete",
+            "cancelButton": "Cancel",
+            "name": "Group name",
+            "chooseFacultyButton": "Choose Faculty",
+            "chooseSpecialityButton": "Choose Speciality",
+            "filters": {
+                "title": "Choose criteria for filtering",
+                "applyButton": "Apply"
+            }
+        }
+    },
+    "specialities": {
+        "title": "Specialities",
+        "addButton": "Add speciality",
+        "table": {
+            "id": "ID",
+            "name": "Speciality name",
+            "code": "Code",
+            "actions": "Actions"
+        },
+        "modal": {
+            "addTitle": "Add speciality",
+            "updateTitle": "Update speciality",
+            "submitAddButton": "Submit",
+            "submitUpdateButton": "Save",
+            "cancelButton": "Cancel",
+            "name": "Subject name",
+            "code": "Code"
+        }
+    },
+    "subjects": {
+        "title": "Subjects",
+        "addButton": "Add subject",
+        "search": "Search",
+        "table": {
+            "id": "ID",
+            "name": "Subject name",
+            "description": "Description",
+            "actions": "Actions"
+        },
+        "tableList": {
+            "tooltipTest": "Tests of subject",
+            "tooltipTimetable": "Timetable of subject",
+            "tooltipEdit": "Edit",
+            "confirmMessage": "Do you really want to delete this subject?"
+        },
+        "modal": {
+            "addTitle": "Add subject",
+            "updateTitle": "Update subject",
+            "deleteTitle": "Do you really want to delete this subject?",
+            "submitAddButton": "Submit",
+            "submitUpdateButton": "Save",
+            "submitDeleteButton": "Delete",
+            "cancelButton": "Cancel",
+            "name": "Subject name",
+            "description": "Description"
+        },
+        "messages": {
+            "error": "There is a problems on the server try later",
+            "duplicate": "It seems subject with this name already exist",
+            "create": "Subject added",
+            "edit": "Subject updated",
+            "delete": "Subject deleted",
+            "noEdit": "Please change something"
+        }
+    },
+    "results": {
+        "title": "Results"
+    },
+    "admins": {
+        "title": "Admins",
+        "addButton": "Add admin",
+        "search": "Search",
+        "table": {
+            "id": "ID",
+            "name": "Admin's name",
+            "email": "Email",
+            "actions": "Actions"
+        },
+        "modal": {
+            "addTitle": "Add admin",
+            "updateTitle": "Update admin",
+            "deleteTitle": "Delete admin",
+            "submitAddButton": "Submit",
+            "submitUpdateButton": "Save",
+            "submitDeleteButton": "Delete",
+            "cancelButton": "Cancel",
+            "name": "Name",
+            "email": "Email",
+            "password": "Password",
+            "passwordConfirm": "Password Confirm"
+        },
+        "messages": {
+            "deleteSuccess": "Admin successfully deleted",
+            "addSuccess": "Admin successfully added",
+            "updateSuccess": "Admin successfully updated",
+            "nameFailed": "Name already exists",
+            "nameServerFailed": "На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
+            "serverFailed": "Server responded with error - ",
+            "changeNeeded": "You need to change something"
+        }
+    },
+    "protocol": {
+        "title": "Protocol",
+        "showButton": "Show data",
+        "table": {
+            "id": "User ID",
+            "student": "Student",
+            "test": "Test",
+            "ip": "IP-Address",
+            "date": "Date",
+            "time": "Time"
+        }
+    },
+    "students": {
+        "title": "Students of the group",
+        "addButton": "Add students",
+        "table": {
+            "id": "No.",
+            "code": "Test book number",
+            "fullName": "Full Name",
+            "actions": "Actions"
+        },
+        "modal": {
+            "addTitle": "Add student",
+            "updateTitle": "Update student",
+            "deleteTitle": "Submit Action",
+            "deleteSubTitle": "Delete student",
+            "submitAddButton": "Submit",
+            "submitUpdateButton": "Save",
+            "submitDeleteButton": "Delete",
+            "cancelButton": "Cancel",
+            "lastName": "Last Name",
+            "name": "Name",
+            "afterName": "After Name",
+            "сode": "Test Book Number",
+            "login": "Login Name",
+            "email": "Email",
+            "password": "Password",
+            "passwordConfirm": "Confirm Password",
+            "uploadPhoto": "Add Photo",
+            "updatePhoto": "Udate Photo"
+        },
+        "details": {
+            "title": "Student's Info",
+            "fullName": "Full Name",
+            "faculty": "Faculty/Institute",
+            "speaciality": "Speciality",
+            "group": "Group",
+            "code": "Test book number",
+            "email": "Email",
+            "login": "Login Name",
+            "close": "Close"
+        },
+        "transfer": {
+            "title": "Student Transfer",
+            "chooseFaculty": "Choose Faculty/Institute",
+            "chooseGroup": "Choose Group",
+            "cancel": "Cancel",
+            "transferButton": "Transfer"
+        }
+    },
+    "labelRowsPerPage": "Rows per page:",
+    "validation": {
+        "tooShortName": "Name is too short!",
         "tooLongName": "Name is too long!",
-        "requiredField":"Required field",
+        "requiredField": "Required field",
         "invalidEmail": "Invalid email",
-        "tooShortPassword":"Password iss too shrot - at least 8 symbols",
-        "passwordPattern":"Password must consitsts of: At least 1 number and only Latin letters",
-        "passwordMustMatch":"Password must match",
-        "passwordNeedConfirmation":"Password needs confirmation"
-      }
+        "tooShortPassword": "Password iss too shrot - at least 8 symbols",
+        "passwordPattern": "Password must consitsts of: At least 1 number and only Latin letters",
+        "passwordMustMatch": "Password must match",
+        "passwordNeedConfirmation": "Password needs confirmation"
+    }
 }
