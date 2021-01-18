@@ -20,10 +20,10 @@ const Alert = ({ show, message, type, hide }) => {
                 <div className={classes.Alert}>
                     <DialogTitle className={classes.DialogTitle}>{type}</DialogTitle>
                     <DialogContent className={classes.DialogContent}>
-                        {type === 'Помилка' ? (
-                            <ErrorIcon className={classes.Icon} />
+                        {type === ('Помилка' || 'Error') ? (
+                            <ErrorIcon color="primary" className={classes.Icon} />
                         ) : (
-                            <WarningIcon className={classes.Icon} />
+                            <WarningIcon color="primary" className={classes.Icon} />
                         )}
                         <DialogContentText className={classes.Message}>{message}</DialogContentText>
                     </DialogContent>

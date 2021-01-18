@@ -10,7 +10,6 @@
 
 .Alert .DialogTitle {
     text-align: center;
-    color: black;
 }
 
 .Alert .DialogContent {
@@ -23,7 +22,6 @@
 .Alert .Icon {
     width: 50px !important;
     height: 50px !important;
-    color: #3f51b5;
     margin: -10px auto 10px auto;
 }
 
@@ -32,7 +30,6 @@
     text-align: center;
     font-weight: 500;
     font-size: 15px;
-    color: #000;
 }
 
 .Alert .Divider {
@@ -48,7 +45,6 @@
     width: 100%;
     height: 40px;
     box-shadow: none;
-    color: black;
     font-weight: 500;
 }
 
