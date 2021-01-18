@@ -9,20 +9,18 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Snackbar from '@material-ui/core/Snackbar';
-import { getEntityData } from '../../../common/utils';
+import { Group } from '@material-ui/icons';
+import AddCircle from '@material-ui/icons/AddCircle';
+
+import { getGroupsData, updateGroupsData, addGroupsData, delGroupsData } from './GroupsService';
+import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
 import GroupRow from './GroupRow';
 import GroupAddDialog from './GroupAddDialog';
 import GroupFilter from './GroupFilter';
-
+import styles from './Groups.module.css';
 import { UseLanguage } from '../../../lang/LanguagesContext';
-
-import '../../../styles/app.scss';
 
 const Groups = () => {
     const { t } = UseLanguage();
@@ -32,6 +30,7 @@ const Groups = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [groupsData, setGroupsData] = useState([]);
     const [allGroupsData, setAllGroupsData] = useState([]);
+    const [snack, setSnack] = useState({ open: false, message: '', type: 'success' });
 
     const [facultyData, setFacultyData] = useState([]);
     const [specialityData, setSpecialityData] = useState([]);
@@ -39,67 +38,135 @@ const Groups = () => {
     const [filter, setFilter] = useState(false);
     const [filterData, setFilterData] = useState([]);
     const [isFacFilter, setIsFacFilter] = useState(false);
-    const [openSnack, setOpenSnack] = useState(false);
-    const [snackMes, setSnackMes] = useState('');
-
-    useEffect(() => {
-        const source = axios.CancelToken.source();
-        (async function fetchData() {
-            const requests = [
-                getEntityData('Group', source),
-                getEntityData('speciality', source),
-                getEntityData('faculty', source),
-            ];
-            const response = await Promise.all(requests);
-            let specialities = [],
-                faculties = [];
-            response[1].data.forEach((item) =>
-                specialities.push({
-                    speciality_name: item.speciality_name,
-                    speciality_id: item.speciality_id,
-                }),
-            );
-            setSpecialityData(specialities);
-            response[2].data.forEach((item) =>
-                faculties.push({ faculty_name: item.faculty_name, faculty_id: item.faculty_id }),
-            );
-            setFacultyData(faculties);
-            const newData = genereteTableData(response);
-            setGroupsData(newData);
-            setAllGroupsData(newData);
+    const [editGroup, setEditGroup] = useState({
+        edit: false,
+        data: {},
+        editId: 0,
+        isChanged: false,
+    });
+    const [addGroup, setAddGroup] = useState({
+        add: false,
+        data: {},
+    });
+    const [deleteGroup, setDeleteGroup] = useState({
+        delete: false,
+        id: 0,
+    });
+    useEffect(async () => {
+        const response = await getGroupsData();
+        if (Array.isArray(response)) {
+            setSpecialityData(response[1]);
+            setFacultyData(response[2]);
+            setGroupsData(response[0]);
+            setAllGroupsData(response[0]);
             setLoading(false);
-        })();
-        return () => {
-            source.cancel();
-        };
+            setSnack({
+                open: true,
+                message: 'Групи успішно завантажені',
+                type: 'success',
+            });
+        } else {
+            setLoading(false);
+            setSnack({
+                open: true,
+                message: response.err,
+                type: 'success',
+            });
+        }
     }, []);
 
+    useEffect(async () => {
+        if (!editGroup.isChanged && editGroup.edit) {
+            setSnack({
+                open: true,
+                message: 'Нічого не змінено',
+                type: 'info',
+            });
+        } else {
+            if (editGroup.edit) {
+                const response = await updateGroupsData(
+                    groupsData,
+                    editGroup,
+                    facultyData,
+                    specialityData,
+                );
+                if (Array.isArray(response)) {
+                    setGroupsData(response);
+                    setOpen(false);
+                    setSnack({
+                        open: true,
+                        message: 'Групу редаговано',
+                        type: 'success',
+                    });
+                } else {
+                    setSnack({
+                        open: true,
+                        message: response.err,
+                        type: 'error',
+                    });
+                    setOpen(false);
+                }
+            }
+        }
+    }, [editGroup]);
+
+    useEffect(async () => {
+        if (addGroup.add) {
+            const response = await addGroupsData(addGroup, facultyData, specialityData);
+            console.log(response);
+            if (!response.err) {
+                setGroupsData([...groupsData, response]);
+                setAllGroupsData([...groupsData, response]);
+                setOpen(false);
+                setPage(Math.floor((groupsData.length - 1) / rowsPerPage));
+                setSnackMes('Групу додано');
+                setOpenSnack(true);
+                setSnack({
+                    open: true,
+                    message: 'Групу додано',
+                    type: 'success',
+                });
+            } else {
+                setOpen(false);
+                setSnack({
+                    open: true,
+                    message: response.err,
+                    type: 'error',
+                });
+            }
+        }
+    }, [addGroup]);
+
+    useEffect(async () => {
+        if (deleteGroup.delete) {
+            const response = await delGroupsData(deleteGroup.id, groupsData);
+            console.log(response);
+            if (Array.isArray(response)) {
+                setGroupsData(response);
+                setPage(Math.ceil((groupsData.length - 1) / rowsPerPage) - 1);
+                setSnack({
+                    open: true,
+                    message: 'Групу видалено',
+                    type: 'success',
+                });
+            } else {
+                setOpen(false);
+                setSnack({
+                    open: true,
+                    message: response.err,
+                    type: 'error',
+                });
+            }
+        }
+    }, [deleteGroup]);
+
     const handleChangePage = (event, newPage) => {
-        console.log(event);
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        console.log(event.target.value);
         setRowsPerPage(+event.target.value);
         setPage(0);
-    };
-
-    const genereteTableData = (data) => {
-        const newData = data[0].data;
-        newData.map((item) => {
-            data[1].data.map((elem) => {
-                if (item.speciality_id === elem.speciality_id) {
-                    item.speciality_name = elem.speciality_name;
-                }
-            });
-            data[2].data.map((elem) => {
-                if (item.faculty_id === elem.faculty_id) {
-                    item.faculty_name = elem.faculty_name;
-                }
-            });
-        });
-        return newData;
     };
 
     const dialogOpenHandler = () => {
@@ -139,26 +206,32 @@ const Groups = () => {
         t('groups.table.actions'),
     ];
     return loading ? (
-        <div className="loader">
+        <div className={styles.loader}>
             <CircularProgress />
         </div>
     ) : (
-        <div
-            className="groups"
-            style={{
-                width: '90%',
-                margin: 'auto',
-            }}
-        >
-            <div className="header">
-                <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
+        <div>
+            <div className={styles.entityHeader}>
+                <Typography
+                    component="h2"
+                    variant="h4"
+                    color="textPrimary"
+                    className={styles.entityHeaderTitle}
+                >
+                    <Group fontSize="large" />
                     {t('groups.title')}
                 </Typography>
-                <Button color="primary" onClick={dialogOpenHandler}>
+                <Button
+                    onClick={dialogOpenHandler}
+                    disableElevation
+                    variant="contained"
+                    color="primary"
+                    className={styles.entityHeaderButton}
+                >
+                    <AddCircle />
                     {t('groups.addButton')}
                 </Button>
             </div>
-
             <div>
                 <Button variant="outlined" startIcon={<SearchIcon />} onClick={filterBySpec}>
                     {t('groups.filters.speciality')}
@@ -190,14 +263,10 @@ const Groups = () => {
                                     facultyData={facultyData}
                                     setGroupsData={setGroupsData}
                                     groupsData={groupsData}
-                                    setRowsPerPage={setRowsPerPage}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    setPage={setPage}
-                                    openSnack={openSnack}
-                                    setOpenSnack={setOpenSnack}
-                                    snackMes={snackMes}
-                                    setSnackMes={setSnackMes}
+                                    setEditGroup={setEditGroup}
+                                    setDeleteGroup={setDeleteGroup}
+                                    setOpen={setOpen}
+                                    open={open}
                                 />
                             ))}
                     </TableBody>
@@ -220,13 +289,8 @@ const Groups = () => {
                 facultyData={facultyData}
                 setGroupsData={setGroupsData}
                 groupsData={groupsData}
-                setPage={setPage}
-                rowsPerPage={rowsPerPage}
                 setAllGroupsData={setAllGroupsData}
-                openSnack={openSnack}
-                setOpenSnack={setOpenSnack}
-                snackMes={snackMes}
-                setSnackMes={setSnackMes}
+                setAddGroup={setAddGroup}
             />
             <GroupFilter
                 setFilter={setFilter}
@@ -237,31 +301,9 @@ const Groups = () => {
                 isFacFilter={isFacFilter}
                 allGroupsData={allGroupsData}
                 setIsFacFilter={setIsFacFilter}
-                openSnack={openSnack}
-                setOpenSnack={setOpenSnack}
-                snackMes={snackMes}
-                setSnackMes={setSnackMes}
+                setSnack={setSnack}
             />
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                open={openSnack}
-                autoHideDuration={3000}
-                onClose={handleCloseSnack}
-                message={snackMes}
-                action={
-                    <IconButton
-                        size="small"
-                        aria-label="close"
-                        color="inherit"
-                        onClick={handleCloseSnack}
-                    >
-                        <CloseIcon fontSize="small" />
-                    </IconButton>
-                }
-            />
+            <SnackbarHandler snack={snack} setSnack={setSnack} />
         </div>
     );
 };
