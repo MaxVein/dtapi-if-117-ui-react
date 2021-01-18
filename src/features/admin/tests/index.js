@@ -23,8 +23,8 @@ import {
 import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
 import TableList from './table/tableList';
 import TablePaginationActions from '../../../common/components/Table/tablePagination';
-import FormDialog from './dialog';
-import classes from './test.module.css';
+import FormDialog from './dialog/dialog';
+import classes from './test.module.scss';
 import TableHeadComponent from './table/tableHead';
 import SelectComponent from './selectTest';
 
@@ -187,7 +187,7 @@ export default function Tests() {
     return (
         <div>
             <div className={classes.titleWraper}>
-                <div className="test-title">
+                <div className={classes.testTitle}>
                     Тести з предмета:
                     <b>
                         <em> {name}</em>

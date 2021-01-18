@@ -10,7 +10,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import { objectsAreSame } from '../subjects/apiService';
+import classes from './dialog.module.scss';
+import { objectsAreSame } from '../../subjects/apiService';
 
 export default function FormDialog({
     editTest,
@@ -77,9 +78,9 @@ export default function FormDialog({
     return (
         <div>
             <Dialog open={openForm} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle className="form-title">{dialogTitle}</DialogTitle>
+                <DialogTitle className={classes.formTitle}>{dialogTitle}</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={formik.handleSubmit} className="form-dialog-container">
+                    <form onSubmit={formik.handleSubmit} className={classes.formDialogContainer}>
                         <TextField
                             id="test_name"
                             name="test_name"
@@ -122,7 +123,7 @@ export default function FormDialog({
                             helperText={formik.touched.attempts && formik.errors.attempts}
                         />
                         <RadioGroup
-                            className="form-radio-group"
+                            className={classes.formRadioGroup}
                             id="enabled"
                             name="enabled"
                             value={formik.values.enabled}
@@ -136,7 +137,7 @@ export default function FormDialog({
                                 {formik.touched.enabled && formik.errors.enabled}
                             </span>
                         )}
-                        <div className="form-dialog-btn-group">
+                        <div className={classes.formDialogBtnGroup}>
                             <Button
                                 color="primary"
                                 variant="contained"

@@ -5,6 +5,7 @@ import TableRow from '@material-ui/core/TableRow';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import classes from './table.module.scss';
 import ConfirmDelete from '../../../../common/components/ComfirmDelete';
 
 export default function TableList({ entity, setDeleteEntity, handleEditEntity }) {
@@ -19,14 +20,14 @@ export default function TableList({ entity, setDeleteEntity, handleEditEntity })
             <TableCell align="left">{entity.end_date}</TableCell>
             <TableCell align="left">{entity.end_time}</TableCell>
             <TableCell align="left">
-                <div className="action-btn-container">
+                <div className={classes.actionBtnContainer}>
                     <Tooltip title="Редагувати">
                         <EditOutlined onClick={() => handleEditEntity(entity)} />
                     </Tooltip>
                     <ConfirmDelete
                         id={entity.timetable_id}
                         setDeleteEntity={setDeleteEntity}
-                        message="Ви впевнені що бажаєте видалити тест?"
+                        message="Ви впевнені що бажаєте видалити розклад для тесту?"
                     />
                 </div>
             </TableCell>

@@ -20,5 +20,16 @@
 }
 
 .formDateItem {
-    width: 50%;
+    width: 48%;
+    margin: 5px !important;
+}
+
+.formTitle {
+    text-align: center;
+}
+
+.formDialogBtnGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
 }

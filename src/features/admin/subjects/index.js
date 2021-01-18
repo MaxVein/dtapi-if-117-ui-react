@@ -14,10 +14,11 @@ import {
     filterArr,
 } from './apiService';
 import FormDialog from './dialogs/dialog';
-import SearchComponent from './searchComponent';
+import SearchComponent from './searchComponent/searchComponent';
 import TableComponent from '../../../common/components/Table';
 import TableList from './table/tableList';
 import { UseLanguage } from '../../../lang/LanguagesContext';
+import classes from './index.module.scss';
 
 export default function Subjects() {
     const { t } = UseLanguage();
@@ -140,8 +141,8 @@ export default function Subjects() {
         }
     }, [searchData]);
     return (
-        <div className="subjects-container">
-            <div className="subject-btn">
+        <div className={classes.subjectsContainer}>
+            <div className={classes.subjectBtn}>
                 <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
                     {t('subjects.title')}
                 </Typography>

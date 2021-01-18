@@ -16,7 +16,7 @@ import {
 import Grid from '@material-ui/core/Grid';
 
 import { compareTimetables } from '../../subjects/apiService';
-import classes from './formDialog.module.css';
+import classes from './formDialog.module.scss';
 
 export default function FormDialog({
     groups,
@@ -92,7 +92,7 @@ export default function FormDialog({
     return (
         <div>
             <Dialog open={openForm} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle className="form-title">{dialogTitle}</DialogTitle>
+                <DialogTitle className={classes.formTitle}>{dialogTitle}</DialogTitle>
                 <DialogContent>
                     <form onSubmit={formik.handleSubmit} className={classes.formDialogContainer}>
                         <div className={classes.FormDialogTitle}>
@@ -221,7 +221,7 @@ export default function FormDialog({
                                 />
                             </MuiPickersUtilsProvider>
                         </div>
-                        <div className="form-dialog-btn-group">
+                        <div className={classes.formDialogBtnGroup}>
                             <Button color="primary" variant="contained" type="submit">
                                 {submitBtnTitle}
                             </Button>

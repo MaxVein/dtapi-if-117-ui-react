@@ -1,0 +1,18 @@
+.formRadioGroup {
+    flex-direction: row !important;
+}
+
+.formTitle {
+    text-align: center;
+}
+
+.formDialogContainer {
+    display: flex;
+    flex-direction: column;
+    min-width: 350px;
+}
+
+.formDialogBtnGroup {
+    display: flex;
+    justify-content: space-between;
+}

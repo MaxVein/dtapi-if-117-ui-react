@@ -24,6 +24,40 @@
             "allGroup": "Перелік всіх груп",
             "addButton": "Додати групу"
         },
+        "table": {
+            "id": "№",
+            "groupCode": "Шифр групи",
+            "speciality": "Спецільність",
+            "faculty": "Факультет",
+            "actions": "Дії"
+        },
+        "modal": {
+            "addTitle": "Додати групу",
+            "updateTitle": "Редагувати групу",
+            "deleteTitle": "Підтвердіть видалення",
+            "deleteSubTitle": "Ви впевнені, що хочети видалити дану групу?",
+            "submitAddButton": "Підтвердити",
+            "submitUpdateButton": "Зберегти",
+            "submitDeleteButton": "Видалити",
+            "cancelButton": "Скасувати",
+            "name": "Назва групу",
+            "chooseFacultyButton": "Виберіть Факультет",
+            "chooseSpecialityButton": "Виберіть Спеціальність",
+            "filters": {
+                "title": "Виберіть критерій для фільтрування",
+                "applyButton": "Застосувати"
+            }
+        }
+    },
+    "specialities": {
+        "title": "Спеціальності",
+        "addButton": "Додати спеціальність",
+        "table": {
+            "id": "ID",
+            "name": "Спеціальність",
+            "code": "Код",
+            "actions": "Дії"
+        },
         "modal": {
             "addTitle": "Додати спеціальність",
             "updateTitle": "Редагувати спеціальність",

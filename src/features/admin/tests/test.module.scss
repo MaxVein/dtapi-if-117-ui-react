@@ -1,0 +1,28 @@
+.titleWraper {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.table {
+    min-width: 400px,
+}
+
+.form-error {
+    color: red;
+}
+
+.form-radio-group {
+    flex-direction: row !important;
+}
+
+.testTitle {
+    font-size: 25px;
+}
+
+.sorting-arrows .MuiSvgIcon-root {
+    font-size: 1.25rem;
+    padding: 2px;
+    opacity: 0;
+    transition: 0.3s linear;
+}

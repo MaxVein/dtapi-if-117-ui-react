@@ -5,6 +5,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import classes from './table.module.scss';
 
 export default function TableHeadComponent({ handleSorting, titleRow, sort }) {
     return (
@@ -17,8 +18,8 @@ export default function TableHeadComponent({ handleSorting, titleRow, sort }) {
                             align="left"
                             onClick={() => handleSorting(elem.sortingName)}
                         >
-                            <div className="table-head-title">
-                                <span className="sorting-arrows">
+                            <div className={classes.tableHeadTitle}>
+                                <span className={classes.sortingArrows}>
                                     {sort[elem.sortingName] ? (
                                         <ExpandLessIcon />
                                     ) : (

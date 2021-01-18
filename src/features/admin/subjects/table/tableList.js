@@ -10,6 +10,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 
 import ConfirmDelete from '../../../../common/components/ComfirmDelete';
 import { UseLanguage } from '../../../../lang/LanguagesContext';
+import classes from './tableList.module.scss';
 
 export default function TableList({ entity, handleEditEntity, setDeleteEntity }) {
     const { t } = UseLanguage();
@@ -22,9 +23,9 @@ export default function TableList({ entity, handleEditEntity, setDeleteEntity })
             <TableCell align="left">{entity.subject_name}</TableCell>
             <TableCell align="left">{entity.subject_description}</TableCell>
             <TableCell id={entity.subject_id} align="left">
-                <div className="action-btn-container">
+                <div className={classes.actionBtnContainer}>
                     <Link
-                        className="subject-link"
+                        className={classes.subjectLink}
                         to={{
                             pathname: `${url}/tests`,
                             state: { id: entity.subject_id, name: entity.subject_name },
@@ -35,7 +36,7 @@ export default function TableList({ entity, handleEditEntity, setDeleteEntity })
                         </Tooltip>
                     </Link>
                     <Link
-                        className="subject-link"
+                        className={classes.subjectLink}
                         to={{
                             pathname: `${url}/timetable`,
                             state: { id: entity.subject_id, name: entity.subject_name },

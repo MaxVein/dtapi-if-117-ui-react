@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { UseLanguage } from '../../../../lang/LanguagesContext';
+import classes from './dialog.module.scss';
 
 export default function FormDialog({
     editSubject,
@@ -72,9 +73,11 @@ export default function FormDialog({
     return (
         <div>
             <Dialog open={openForm} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">{dialogTitle}</DialogTitle>
+                <DialogTitle id="form-dialog-title" className={classes.formTitle}>
+                    {dialogTitle}
+                </DialogTitle>
                 <DialogContent>
-                    <form onSubmit={formik.handleSubmit} className="form-dialog-container">
+                    <form onSubmit={formik.handleSubmit} className={classes.formDialogContainer}>
                         <TextField
                             id="subject_name"
                             name="subject_name"
@@ -103,7 +106,7 @@ export default function FormDialog({
                                 formik.errors.subject_description
                             }
                         />
-                        <div className="form-dialog-btn-group">
+                        <div className={classes.formDialogBtnGroup}>
                             <Button
                                 color="primary"
                                 variant="contained"
