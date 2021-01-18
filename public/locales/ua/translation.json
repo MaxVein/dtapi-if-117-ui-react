@@ -114,6 +114,15 @@
               "email":"Електронна пошта",
               "password":"Пароль",
               "passwordConfirm":"Підтвердити Пароль"
+          },
+          "messages":{
+              "deleteSuccess":"Адміна успішно видалено",
+              "addSuccess":"Адміна успішно додано",
+              "updateSuccess":"Адміна успішно оновлено",
+              "nameFailed":"Дане ім'я вже ісує",
+              "nameServerFailed":"На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
+              "serverFailed":"На сервері відбулась помилка - ",
+              "changeNeeded":"Потрібно щось змінити"
           }
       },
       "protocol":{
@@ -176,5 +185,15 @@
               "transferButton":"Перевести"
           }
       },
-      "labelRowsPerPage":"Рядків у таблиці:"
+      "labelRowsPerPage":"Рядків у таблиці:",
+      "validation":{
+        "tooShortName":"Надто коротке ім'я!",
+        "tooLongName": "Надто довге ім'я!",
+        "requiredField":"Обов'язкове поле",
+        "invalidEmail": "Невалідний email",
+        "tooShortPassword":"Надто короткий пароль - повинно бути мінмімум 8 символів",
+        "passwordPattern":"Повинно бути як мінмум 1 цифра та тільки латинські літери",
+        "passwordMustMatch":"Паролі повинні співпадати",
+        "passwordNeedConfirmation":"Потрібно підтвердити пароль"
+      }
 }
