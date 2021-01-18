@@ -8,28 +8,29 @@ import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import ConfirmDelete from './confirm';
+import ConfirmDelete from '../../../../common/components/ComfirmDelete';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
-export default function TableList(props) {
+export default function TableList({ entity, handleEditEntity, setDeleteEntity }) {
+    const { t } = UseLanguage();
     let { url } = useRouteMatch();
-    const { subject, handleEditSubject, setDeleteEntity } = props;
     return (
         <TableRow>
             <TableCell component="th" scope="row">
-                {subject.subject_id}
+                {entity.subject_id}
             </TableCell>
-            <TableCell align="left">{subject.subject_name}</TableCell>
-            <TableCell align="left">{subject.subject_description}</TableCell>
-            <TableCell id={subject.subject_id} align="left">
+            <TableCell align="left">{entity.subject_name}</TableCell>
+            <TableCell align="left">{entity.subject_description}</TableCell>
+            <TableCell id={entity.subject_id} align="left">
                 <div className="action-btn-container">
                     <Link
                         className="subject-link"
                         to={{
                             pathname: `${url}/tests`,
-                            state: { id: subject.subject_id, name: subject.subject_name },
+                            state: { id: entity.subject_id, name: entity.subject_name },
                         }}
                     >
-                        <Tooltip title="Тести предмета">
+                        <Tooltip title={t('subjects.tableList.tooltipTest')}>
                             <SpeakerNotesIcon />
                         </Tooltip>
                     </Link>
@@ -37,20 +38,20 @@ export default function TableList(props) {
                         className="subject-link"
                         to={{
                             pathname: `${url}/timetable`,
-                            state: { id: subject.subject_id, name: subject.subject_name },
+                            state: { id: entity.subject_id, name: entity.subject_name },
                         }}
                     >
-                        <Tooltip title="Розклад тестування">
+                        <Tooltip title={t('subjects.tableList.tooltipTimetable')}>
                             <ScheduleIcon />
                         </Tooltip>
                     </Link>
-                    <Tooltip title="Редагувати">
-                        <EditOutlined onClick={() => handleEditSubject(subject)} />
+                    <Tooltip title={t('subjects.tableList.tooltipEdit')}>
+                        <EditOutlined onClick={() => handleEditEntity(entity)} />
                     </Tooltip>
                     <ConfirmDelete
-                        id={subject.subject_id}
+                        id={entity.subject_id}
                         setDeleteEntity={setDeleteEntity}
-                        message="Ви впевнені що бажаєте видалити предмет?"
+                        message={t('subjects.tableList.confirmMessage')}
                     />
                 </div>
             </TableCell>

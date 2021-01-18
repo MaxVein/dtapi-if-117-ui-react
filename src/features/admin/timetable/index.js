@@ -6,7 +6,8 @@ import { findIndex } from 'lodash';
 
 import classes from './index.module.css';
 import FormDialog from './formDialog/formDialog';
-import TableComponent from './table';
+import TableComponent from '../../../common/components/Table';
+import TableList from './table/tableList';
 import {
     getTimetableRecords,
     getRecords,
@@ -30,6 +31,14 @@ export default function Timetable() {
         'Час закінчення',
         'Дії',
     ];
+    const messages = {
+        error: 'Виникли проблеми на сервері спробуйте пізніше',
+        duplicate: 'Розклад для цієї групи уже існує',
+        create: 'Розклад додано',
+        edit: 'Розклад оновлено',
+        delete: 'Розклад видалено',
+    };
+
     const [openForm, setOpenForm] = useState(false);
     const [renderData, setRenderData] = useState([]);
     const [editEntity, setEditEntity] = useState({});
@@ -38,13 +47,7 @@ export default function Timetable() {
     const [subjects, setSubjects] = useState([]);
     const [createEntity, setCreateEntity] = useState({ create: false });
     const [snack, setSnack] = useState({ open: false });
-    const messages = {
-        error: 'Виникли проблеми на сервері спробуйте пізніше',
-        duplicate: 'Розклад для цієї групи уже існує',
-        create: 'Розклад додано',
-        edit: 'Розклад оновлено',
-        delete: 'Розклад видалено',
-    };
+
     const errorSnack = (message) => {
         setSnack({
             open: true,
@@ -210,6 +213,8 @@ export default function Timetable() {
                 handleEditEntity={handleEditEntity}
                 setDeleteEntity={setDeleteEntity}
                 titleRow={titleRow}
+                TableList={TableList}
+                entityNameId={'timetable_id'}
             />
             <SnackbarHandler snack={snack} setSnack={setSnack} />
         </>

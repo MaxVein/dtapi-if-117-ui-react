@@ -5,7 +5,7 @@ import TableRow from '@material-ui/core/TableRow';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import ConfirmDelete from '../../subjects/confirm';
+import ConfirmDelete from '../../../../common/components/ComfirmDelete';
 
 export default function TableList({ entity, setDeleteEntity, handleEditEntity }) {
     return (

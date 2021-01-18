@@ -6,12 +6,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { UseLanguage } from '../../../lang/LanguagesContext';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 export default function FormDialog({
     editSubject,
     openForm,
-    setSubject,
+    setCreateSubject,
     setOpenForm,
     setEditSubject,
 }) {
@@ -54,7 +54,7 @@ export default function FormDialog({
                 setEditSubject({ edit: true, data: values, equal: false });
             } else {
                 delete values.subject_id;
-                setSubject({ create: true, data: values });
+                setCreateSubject({ create: true, data: values });
             }
         },
     });
