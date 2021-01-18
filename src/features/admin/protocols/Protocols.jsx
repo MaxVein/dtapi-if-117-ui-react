@@ -104,7 +104,7 @@ const Protocols = () => {
         } else {
             setSnack({
                 open: true,
-                message: response.studResponse,
+                message: studResponse.err,
                 type: 'error',
             });
         }
