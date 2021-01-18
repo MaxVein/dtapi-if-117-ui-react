@@ -33,12 +33,12 @@ import AdminsTable from './admins/index';
 import Speciality from './speciality/index';
 import DashboardCards from './dashboard/index';
 import Subjects from './subjects/index';
-import Tests from './subjects/tests/index';
-import Timetable from './subjects/timetable/index';
+import Tests from './tests';
+import Timetable from './timetable/index';
 import Groups from './groups/index';
 import Protocols from './protocols/index';
-import TestDetails from './subjects/tests/test-details/index';
-import Questions from './subjects/tests/questions/index';
+import TestDetails from './test-details';
+import Questions from './questions';
 import { MainListItems } from './AdminNavItem';
 import { UseLanguage } from '../../lang/LanguagesContext';
 import Students from './Students';
@@ -373,6 +373,7 @@ export default function AdminPanel({ setAuthInfo }) {
                             <Route exact path="/admin/subjects" component={Subjects} />
                             <Route exact path="/admin/subjects/tests" component={Tests}></Route>
                             <Route path="/admin/subjects/timetable" component={Timetable}></Route>
+                            <Route path="/admin/protocol" component={Protocols} />
                             <Route
                                 path="/admin/subjects/tests/test-detail"
                                 component={TestDetails}

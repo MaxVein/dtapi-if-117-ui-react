@@ -1,0 +1,23 @@
+.tableHeadTitle {
+    display: flex !important;
+    cursor: pointer;
+    &:hover .sortingArrows svg {
+        opacity: 1;
+        transition: 0.3s linear;
+    }
+}
+
+.sortingArrows svg {
+    font-size: 1.25rem;
+    padding: 2px;
+    opacity: 0;
+    transition: 0.3s linear;
+}
+
+.actionContainer {
+    display: flex;
+    flex-wrap: wrap;
+    svg {
+        fill: black !important;
+    }
+}

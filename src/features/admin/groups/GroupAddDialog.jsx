@@ -8,8 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { v4 as uuidv4 } from 'uuid';
 import { Formik } from 'formik';
-import { addEntity, updateEntity } from '../../../common/utils';
-import InputLabel from '@material-ui/core/InputLabel';
+
 import { UseLanguage } from '../../../lang/LanguagesContext';
 
 import * as Yup from 'yup';
@@ -20,16 +19,9 @@ const GroupAddDialog = ({
     group,
     specialityData,
     facultyData,
-    setGroupsData,
     setEdit,
-    groupsData,
-    setPage,
-    rowsPerPage,
-    setAllGroupsData,
-    openSnack,
-    setOpenSnack,
-    snackMes,
-    setSnackMes,
+    setEditGroup,
+    setAddGroup,
 }) => {
     const { t } = UseLanguage();
 
@@ -52,74 +44,16 @@ const GroupAddDialog = ({
     const handleClose = () => {
         group ? setEdit(false) : setOpen(false);
     };
-    const updateGroup = (data) => {
-        updateEntity('group', group.group_id, {
-            group_name: data.group_name,
-            faculty_id: getFacId(data.faculty_name),
-            speciality_id: getSpecId(data.speciality_name),
-        })
-            .then((res) => {
-                res.data[0] = {
-                    ...res.data[0],
-                    speciality_name: getSpecName(res.data[0].speciality_id),
-                    faculty_name: getFacName(res.data[0].faculty_id),
-                };
-                const updatedList = groupsData.map((item) =>
-                    res.data[0].group_id === item.group_id ? res.data[0] : item,
-                );
-                setGroupsData(updatedList);
-                setEdit(false);
-                setSnackMes('Групу редаговано');
-                setOpenSnack(true);
-            })
-            .catch(() => {
-                setEdit(false);
-                setSnackMes('Виникла проблема під час редагування');
-                setOpenSnack(true);
-            });
+    const compareObj = (x, y) => {
+        let isEqual = true;
+        for (const prop in x) {
+            if (x[prop] !== y[prop]) {
+                isEqual = false;
+                break;
+            }
+        }
+        return isEqual;
     };
-    const getSpecName = (param) => {
-        const currentSpec = specialityData.filter((item) => item.speciality_id === param);
-        return currentSpec[0].speciality_name;
-    };
-    const getFacName = (param) => {
-        const currentSpec = facultyData.filter((item) => item.faculty_id === param);
-        return currentSpec[0].faculty_name;
-    };
-    const getSpecId = (param) => {
-        const currentSpec = specialityData.filter((item) => item.speciality_name === param);
-        return currentSpec[0].speciality_id;
-    };
-    const getFacId = (param) => {
-        const currentSpec = facultyData.filter((item) => item.faculty_name === param);
-        return currentSpec[0].faculty_id;
-    };
-    const addGroup = (data) => {
-        addEntity('group', {
-            group_name: data.group_name,
-            faculty_id: getFacId(data.faculty_name),
-            speciality_id: getSpecId(data.speciality_name),
-        })
-            .then((res) => {
-                res.data[0] = {
-                    ...res.data[0],
-                    speciality_name: getSpecName(res.data[0].speciality_id),
-                    faculty_name: getFacName(res.data[0].faculty_id),
-                };
-                setGroupsData([...groupsData, res.data[0]]);
-                setAllGroupsData([...groupsData, res.data[0]]);
-                setOpen(false);
-                setPage(Math.floor(groupsData.length / rowsPerPage));
-                setSnackMes('Групу додано');
-                setOpenSnack(true);
-            })
-            .catch((e) => {
-                setOpen(false);
-                setSnackMes('Така група вже існує');
-                setOpenSnack(true);
-            });
-    };
-
     return (
         <div>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -132,7 +66,37 @@ const GroupAddDialog = ({
                         validationSchema={validationSchema}
                         validateOnMount={true}
                         onSubmit={(data) => {
-                            group ? updateGroup(data) : addGroup(data);
+                            if (group) {
+                                if (
+                                    compareObj(
+                                        {
+                                            group_name: group.group_name,
+                                            faculty_name: group.faculty_name,
+                                            speciality_name: group.speciality_name,
+                                        },
+                                        data,
+                                    )
+                                ) {
+                                    setEditGroup({
+                                        edit: true,
+                                        data: data,
+                                        isChanged: false,
+                                        editId: group.group_id,
+                                    });
+                                } else {
+                                    setEditGroup({
+                                        edit: true,
+                                        data: data,
+                                        isChanged: true,
+                                        editId: group.group_id,
+                                    });
+                                }
+                            } else {
+                                setAddGroup({
+                                    add: true,
+                                    data: data,
+                                });
+                            }
                         }}
                     >
                         {({
