@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { StudentsServiceAPI } from '../services/StudentsService';
+import React, { useContext, useEffect, useState } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
+import { StudentsServiceApi } from '../services/StudentsService';
+import TableContext from './TableContext';
+import StudentsContext from '../StudentsPage/StudentsContext';
+import TableSearch from './TableSearch/TableSearch';
 import StudentsCreateUpdateModal from '../StudentsCreateUpdateModal/StudentsCreateUpdateModal';
 import StudentsViewModal from '../StudentsViewModal/StudentsViewModal';
 import StudentsTransferModal from '../StudentsTransferModal/StudentsTransferModal';
 import StudentsConfirm from '../StudentsConfirm/StudentsConfirm';
 import PropTypes from 'prop-types';
 import classes from './StudentsTable.module.css';
-import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 import {
     Button,
@@ -26,9 +29,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
+const StudentsTable = ({ students, setStudents }) => {
     const { t } = UseLanguage();
-
+    const { loading, setLoading, open, setOpen, messageHandler, errorHandler } = useContext(
+        StudentsContext,
+    );
     const [dataSource, setDataSource] = useState([]);
     const displayedColumns = [
         t('students.table.id'),
@@ -38,196 +43,266 @@ const StudentsTable = ({ students, setSnackBar, setError, errorHandler }) => {
     ];
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [open, setOpen] = useState({
-        open: false,
-        isUpdate: true,
-        type: 'Update' | 'Transfer' | 'Delete' | 'View',
-        student: {},
-    });
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         setDataSource(students);
-        return () => setDataSource([]);
     }, [students]);
 
-    const remove = async (id) => {
-        try {
-            const response = await StudentsServiceAPI.remove(id);
-            if (response.data.response === 'ok') {
-                setDataSource((prevState) => {
-                    const arr = prevState.filter((s) => s.user_id !== id);
-                    return arr;
-                });
-                setSnackBar({ open: true, message: 'Студента видалено' });
-            }
-        } catch (e) {
+    useEffect(() => {
+        const filteredData = getFilteredData(students);
+        setDataSource(filteredData);
+    }, [search]);
+
+    const getFilteredData = (data) => {
+        if (!search) {
+            return data;
+        }
+
+        return data.filter((item) => {
+            return (
+                item['student_surname'].toLowerCase().includes(search.toLowerCase()) ||
+                item['student_name'].toLowerCase().includes(search.toLowerCase()) ||
+                item['student_fname'].toLowerCase().includes(search.toLowerCase()) ||
+                item['gradebook_id'].toLowerCase().includes(search.toLowerCase())
+            );
+        });
+    };
+
+    const transfer = async (id, student) => {
+        const update = await StudentsServiceApi.update(id, student);
+        if (update.response === 'ok') {
+            setStudents((prevState) => prevState.filter((s) => s.user_id !== student.user_id));
+            setOpen({ open: false });
+            messageHandler(t('students.transfer.messages.studentTransfer'), 'success');
+        } else if (update.error) {
+            setOpen({ open: false });
+            messageHandler(t('students.transfer.messages.closeDueError'), 'error');
             errorHandler(
-                'Сталася помилка! Не вдалося видалити вибраного студента! Спробуйте знову',
+                t('students.transfer.errors.transferStudent'),
+                t('students.transfer.errors.typeWarning'),
+            );
+        }
+    };
+
+    const update = async (id, student) => {
+        const update = await StudentsServiceApi.update(id, student);
+        if (update.response === 'ok') {
+            setStudents((prevState) => {
+                const index = prevState.findIndex((s) => s.user_id === student.user_id);
+                prevState[index] = student;
+                return [...prevState];
+            });
+            setOpen({ open: false });
+            messageHandler(t('students.createUpdate.messages.studentUpdated'), 'success');
+        } else if (update.error) {
+            updateErrorHandler(update);
+        }
+    };
+
+    const updateErrorHandler = (update) => {
+        if (update.error.response === 'Error when update') {
+            setOpen({ open: false });
+            messageHandler(t('students.createUpdate.messages.noChanges'), 'warning');
+            errorHandler(
+                t('students.createUpdate.errors.mustChangeData'),
+                t('students.createUpdate.errors.typeWarning'),
+            );
+        } else {
+            setOpen({ open: false });
+            messageHandler(t('students.createUpdate.messages.closeDueError'), 'error');
+            errorHandler(
+                t('students.createUpdate.errors.updateStudent'),
+                t('students.createUpdate.errors.typeError'),
+            );
+        }
+    };
+
+    const remove = async (id) => {
+        const res = await StudentsServiceApi.remove(id);
+        if (res.response === 'ok') {
+            setStudents((prevState) => prevState.filter((s) => s.user_id !== id));
+            messageHandler(t('students.remove.messages.studentRemove'), 'success');
+        } else if (res.error) {
+            errorHandler(
+                t('students.remove.errors.studentRemove'),
+                t('students.remove.errors.typeError'),
             );
         }
     };
 
     return (
-        <div className={classes.Table}>
-            {students.length > 0 ? (
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                {displayedColumns.map((column, index) => (
-                                    <TableCell key={column + index}>{column}</TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {dataSource
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((student, index) => (
-                                    <TableRow key={student.user_id + index}>
-                                        <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{student.gradebook_id}</TableCell>
-                                        <TableCell>
-                                            {student.student_surname}&nbsp;
-                                            {student.student_name}&nbsp;
-                                            {student.student_fname}
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className={classes.Actions}>
-                                                <Tooltip title="Переглянути дані студента">
-                                                    <Button
-                                                        color="primary"
-                                                        variant="contained"
-                                                        onClick={() =>
-                                                            setOpen({
-                                                                open: true,
-                                                                type: 'View',
-                                                                student: student,
-                                                            })
-                                                        }
-                                                    >
-                                                        <AssignmentIndIcon
-                                                            className={classes.ActionIcon}
-                                                        />
-                                                    </Button>
-                                                </Tooltip>
-                                                <Tooltip title="Редагувати дані студента">
-                                                    <Button
-                                                        color="primary"
-                                                        variant="contained"
-                                                        onClick={() =>
-                                                            setOpen({
-                                                                open: true,
-                                                                isUpdate: true,
-                                                                type: 'Update',
-                                                                student: student,
-                                                            })
-                                                        }
-                                                    >
-                                                        <EditIcon className={classes.ActionIcon} />
-                                                    </Button>
-                                                </Tooltip>
-                                                <Tooltip title="Перевести студента до іншої групи">
-                                                    <Button
-                                                        color="primary"
-                                                        variant="contained"
-                                                        onClick={() =>
-                                                            setOpen({
-                                                                open: true,
-                                                                type: 'Transfer',
-                                                                student: student,
-                                                            })
-                                                        }
-                                                    >
-                                                        <CompareArrowsIcon
-                                                            className={classes.ActionIcon}
-                                                        />
-                                                    </Button>
-                                                </Tooltip>
-                                                <Tooltip title="Видалити студента">
-                                                    <Button
-                                                        color="primary"
-                                                        variant="contained"
-                                                        onClick={() =>
-                                                            setOpen({
-                                                                open: true,
-                                                                type: 'Delete',
-                                                                student: student,
-                                                            })
-                                                        }
-                                                    >
-                                                        <DeleteIcon
-                                                            className={classes.ActionIcon}
-                                                        />
-                                                    </Button>
-                                                </Tooltip>
-                                            </div>
-                                        </TableCell>
+        <TableContext.Provider
+            value={{
+                loading,
+                setLoading,
+                open,
+                setOpen,
+                messageHandler,
+                errorHandler,
+            }}
+        >
+            <div className={classes.Table}>
+                {students.length > 0 ? (
+                    <>
+                        <TableSearch onSearch={(search) => setSearch(search)} />
+                        <TableContainer className={classes.TableContainer} component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        {displayedColumns.map((column, index) => (
+                                            <TableCell key={column + index}>{column}</TableCell>
+                                        ))}
                                     </TableRow>
-                                ))}
-                        </TableBody>
-                    </Table>
-                    <TablePagination
-                        component="div"
-                        labelRowsPerPage={t('labelRowsPerPage')}
-                        className={classes.TablePaginator}
-                        rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
-                        count={dataSource.length}
-                        page={page}
-                        onChangePage={(event, newPage) => setPage(newPage)}
-                        rowsPerPage={rowsPerPage}
-                        onChangeRowsPerPage={(event) => {
-                            setRowsPerPage(+event.target.value);
-                            setPage(0);
-                        }}
+                                </TableHead>
+                                <TableBody>
+                                    {dataSource
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((student, index) => (
+                                            <TableRow key={student.user_id + index}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell>{student.gradebook_id}</TableCell>
+                                                <TableCell>
+                                                    {student.student_surname}&nbsp;
+                                                    {student.student_name}&nbsp;
+                                                    {student.student_fname}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className={classes.Actions}>
+                                                        <Tooltip
+                                                            title={t(
+                                                                'students.table.tooltips.view',
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                color="primary"
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    setOpen({
+                                                                        open: true,
+                                                                        type: 'View',
+                                                                        student: student,
+                                                                    })
+                                                                }
+                                                            >
+                                                                <AssignmentIndIcon
+                                                                    className={classes.ActionIcon}
+                                                                />
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip
+                                                            title={t(
+                                                                'students.table.tooltips.update',
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                color="primary"
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    setOpen({
+                                                                        open: true,
+                                                                        isUpdate: true,
+                                                                        type: 'Update',
+                                                                        student: student,
+                                                                    })
+                                                                }
+                                                            >
+                                                                <EditIcon
+                                                                    className={classes.ActionIcon}
+                                                                />
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip
+                                                            title={t(
+                                                                'students.table.tooltips.transfer',
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                color="primary"
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    setOpen({
+                                                                        open: true,
+                                                                        type: 'Transfer',
+                                                                        student: student,
+                                                                    })
+                                                                }
+                                                            >
+                                                                <CompareArrowsIcon
+                                                                    className={classes.ActionIcon}
+                                                                />
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip
+                                                            title={t(
+                                                                'students.table.tooltips.remove',
+                                                            )}
+                                                        >
+                                                            <Button
+                                                                color="primary"
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    setOpen({
+                                                                        open: true,
+                                                                        type: 'Delete',
+                                                                        student: student,
+                                                                    })
+                                                                }
+                                                            >
+                                                                <DeleteIcon
+                                                                    className={classes.ActionIcon}
+                                                                />
+                                                            </Button>
+                                                        </Tooltip>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                </TableBody>
+                            </Table>
+                            <TablePagination
+                                component="div"
+                                labelRowsPerPage={t('labelRowsPerPage')}
+                                className={classes.TablePaginator}
+                                rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
+                                count={dataSource.length}
+                                page={page}
+                                onChangePage={(event, newPage) => setPage(newPage)}
+                                rowsPerPage={rowsPerPage}
+                                onChangeRowsPerPage={(event) => {
+                                    setRowsPerPage(+event.target.value);
+                                    setPage(0);
+                                }}
+                            />
+                        </TableContainer>
+                    </>
+                ) : (
+                    <div className={classes.Empty}>
+                        <ReportIcon color={'primary'} className={classes.EmptyIcon} />
+                        <h1>{t('students.table.noStudents')}</h1>
+                    </div>
+                )}
+                {open.open && open.type === 'Update' ? (
+                    <StudentsCreateUpdateModal
+                        isUpdate={open.isUpdate}
+                        student={open.student}
+                        update={update}
                     />
-                </TableContainer>
-            ) : (
-                <div className={classes.Empty}>
-                    <ReportIcon className={classes.EmptyIcon} />
-                    <h1>Студенти відсутні</h1>
-                </div>
-            )}
-            {open.open && open.type === 'Update' ? (
-                <StudentsCreateUpdateModal
-                    open={open.open}
-                    setOpen={setOpen}
-                    isUpdate={open.isUpdate}
-                    student={open.student}
-                    setSnackBar={setSnackBar}
-                    setDataSource={setDataSource}
-                    setError={setError}
-                />
-            ) : null}
-            {open.open && open.type === 'View' ? (
-                <StudentsViewModal
-                    open={open.open}
-                    setOpen={setOpen}
-                    groupID={open.student.group_id}
-                    studentID={open.student.user_id}
-                    setSnackBar={setSnackBar}
-                    setError={setError}
-                />
-            ) : null}
-            {open.open && open.type === 'Transfer' ? (
-                <StudentsTransferModal
-                    open={open.open}
-                    setOpen={setOpen}
-                    student={open.student}
-                    setDataSource={setDataSource}
-                    setSnackBar={setSnackBar}
-                    setError={setError}
-                />
-            ) : null}
-            {open.open && open.type === 'Delete' ? (
-                <StudentsConfirm
-                    show={open.open}
-                    hide={setOpen}
-                    student={open.student}
-                    remove={remove}
-                    setSnackBar={setSnackBar}
-                />
-            ) : null}
-        </div>
+                ) : null}
+                {open.open && open.type === 'View' ? (
+                    <StudentsViewModal
+                        groupID={open.student.group_id}
+                        studentID={open.student.user_id}
+                    />
+                ) : null}
+                {open.open && open.type === 'Transfer' ? (
+                    <StudentsTransferModal student={open.student} transfer={transfer} />
+                ) : null}
+                {open.open && open.type === 'Delete' ? (
+                    <StudentsConfirm student={open.student} remove={remove} />
+                ) : null}
+            </div>
+        </TableContext.Provider>
     );
 };
 
@@ -235,7 +310,5 @@ export default StudentsTable;
 
 StudentsTable.propTypes = {
     students: PropTypes.array,
-    setSnackBar: PropTypes.func,
-    setError: PropTypes.func,
-    errorHandler: PropTypes.func,
+    setStudents: PropTypes.func,
 };

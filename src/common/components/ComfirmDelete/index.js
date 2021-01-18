@@ -25,13 +25,11 @@ export default function ConfirmDelete({ id, setDeleteEntity, message }) {
 
     return (
         <div>
-            <Tooltip title="Видалити">
+            <Tooltip title={t('subjects.modal.submitDeleteButton')}>
                 <DeleteIcon onClick={handleClickOpen} />
             </Tooltip>
             <Dialog open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
-                <DialogTitle id="responsive-dialog-title">
-                    {t('subjects.modal.deleteTitle')}
-                </DialogTitle>
+                <DialogTitle id="responsive-dialog-title">{message}</DialogTitle>
                 <DialogActions>
                     <Button autoFocus onClick={handleClose} color="primary">
                         {t('subjects.modal.cancelButton')}

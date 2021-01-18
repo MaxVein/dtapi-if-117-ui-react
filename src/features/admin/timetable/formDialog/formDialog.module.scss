@@ -1,0 +1,35 @@
+.dateStartError {
+    color: red;
+    font-size: 12px;
+}
+
+.formDialogContainer {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.FormDialogTitle {
+    display: flex;
+    justify-content: space-between;
+}
+
+.formDateContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.formDateItem {
+    width: 48%;
+    margin: 5px !important;
+}
+
+.formTitle {
+    text-align: center;
+}
+
+.formDialogBtnGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}

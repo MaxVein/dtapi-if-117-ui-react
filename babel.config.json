@@ -1,0 +1,17 @@
+{
+    "presets": [
+        ["@babel/preset-react"],
+        ["@babel/preset-env", {
+            "targets": {
+                "node": "current"
+            }
+        }]
+    ],
+    "plugins": [
+        ["@babel/plugin-transform-react-jsx"], "transform-es2015-modules-commonjs"
+    ],
+    "babelrc": false
+
+
+
+}
