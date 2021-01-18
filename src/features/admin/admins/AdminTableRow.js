@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AdminsTableRow({ admin }) {
-    const [edit, setEditOpen] = React.useState(false);
+    const [edit, setUpdateOpen] = React.useState(false);
     const [del, setDelOpen] = React.useState(false);
     const classes = useStyles();
 
     const openModal = (mode) => {
-        mode === 'Update' ? setEditOpen(true) : setDelOpen(true);
+        mode === 'Update' ? setUpdateOpen(true) : setDelOpen(true);
     };
 
     return (
@@ -56,8 +56,14 @@ export default function AdminsTableRow({ admin }) {
                     </Button>
                 </TableCell>
             </TableRow>
-            <AdminCreationForm admin={admin} open={edit} setOpen={setEditOpen} mode={'Update'} />
-            <AdminsDeleteForm admin={admin} open={del} setOpen={setDelOpen} mode={'Delete'} />
+            <AdminCreationForm admin={admin} open={edit} setOpen={setUpdateOpen} mode={'Update'} />
+            <AdminsDeleteForm
+                id={admin.id}
+                username={admin.username}
+                open={del}
+                setOpen={setDelOpen}
+                mode={'Delete'}
+            />
         </React.Fragment>
     );
 }

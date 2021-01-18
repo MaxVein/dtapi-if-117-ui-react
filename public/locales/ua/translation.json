@@ -24,40 +24,6 @@
             "allGroup": "Перелік всіх груп",
             "addButton": "Додати групу"
         },
-        "table": {
-            "id": "№",
-            "groupCode": "Шифр групи",
-            "speciality": "Спецільність",
-            "faculty": "Факультет",
-            "actions": "Дії"
-        },
-        "modal": {
-            "addTitle": "Додати групу",
-            "updateTitle": "Редагувати групу",
-            "deleteTitle": "Підтвердіть видалення",
-            "deleteSubTitle": "Ви впевнені, що хочети видалити дану групу?",
-            "submitAddButton": "Підтвердити",
-            "submitUpdateButton": "Зберегти",
-            "submitDeleteButton": "Видалити",
-            "cancelButton": "Скасувати",
-            "name": "Назва групу",
-            "chooseFacultyButton": "Виберіть Факультет",
-            "chooseSpecialityButton": "Виберіть Спеціальність",
-            "filters": {
-                "title": "Виберіть критерій для фільтрування",
-                "applyButton": "Застосувати"
-            }
-        }
-    },
-    "specialities": {
-        "title": "Спеціальності",
-        "addButton": "Додати спеціальність",
-        "table": {
-            "id": "ID",
-            "name": "Спеціальність",
-            "code": "Код",
-            "actions": "Дії"
-        },
         "modal": {
             "addTitle": "Додати спеціальність",
             "updateTitle": "Редагувати спеціальність",
@@ -77,12 +43,6 @@
             "name": "Назва предмету",
             "description": "Опис",
             "actions": "Дії"
-        },
-        "tableList": {
-            "tooltipTest": "Тести предмета",
-            "tooltipTimetable": "Розклад тестування",
-            "tooltipEdit": "Редагувати",
-            "confirmMessage": "Ви впевнені що бажаєте видалити предмет?"
         },
         "modal": {
             "addTitle": "Додати предмет",
@@ -128,6 +88,15 @@
             "email": "Електронна пошта",
             "password": "Пароль",
             "passwordConfirm": "Підтвердити Пароль"
+        },
+        "messages": {
+            "deleteSuccess": "Адміна успішно видалено",
+            "addSuccess": "Адміна успішно додано",
+            "updateSuccess": "Адміна успішно оновлено",
+            "nameFailed": "Дане ім'я вже ісує",
+            "nameServerFailed": "На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
+            "serverFailed": "На сервері відбулась помилка - ",
+            "changeNeeded": "Потрібно щось змінити"
         }
     },
     "protocol": {
@@ -190,5 +159,15 @@
             "transferButton": "Перевести"
         }
     },
-    "labelRowsPerPage": "Рядків у таблиці:"
+    "labelRowsPerPage": "Рядків у таблиці:",
+    "validation": {
+        "tooShortName": "Надто коротке ім'я!",
+        "tooLongName": "Надто довге ім'я!",
+        "requiredField": "Обов'язкове поле",
+        "invalidEmail": "Невалідний email",
+        "tooShortPassword": "Надто короткий пароль - повинно бути мінмімум 8 символів",
+        "passwordPattern": "Повинно бути як мінмум 1 цифра та тільки латинські літери",
+        "passwordMustMatch": "Паролі повинні співпадати",
+        "passwordNeedConfirmation": "Потрібно підтвердити пароль"
+    }
 }

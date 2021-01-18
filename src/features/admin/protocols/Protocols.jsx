@@ -8,19 +8,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Snackbar from '@material-ui/core/Snackbar';
-import { getEntityData } from '../../../common/utils';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { format } from 'date-fns/esm';
+import { List } from '@material-ui/icons';
+
+import { getProtocolData, filterProtocolsData } from './ProtocolServise';
 import ProtocolsRow from './ProtocolsRow';
-import '../../../styles/app.scss';
+import SnackbarHandler from '../../../common/components/Snackbar/snackbar';
+import styles from '../groups/Groups.module.css';
 
 import { UseLanguage } from '../../../lang/LanguagesContext';
 
@@ -36,80 +34,41 @@ const Protocols = () => {
     const [allProtocolsData, setAllProtocolsData] = useState([]);
     const [protocolsDataToShow, setProtocolsDataToShow] = useState([]);
 
-    const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState(false);
     const [filterData, setFilterData] = useState([]);
-    const [openSnack, setOpenSnack] = useState(false);
-    const [snackMes, setSnackMes] = useState('');
+    const [snack, setSnack] = useState({ open: false, message: '', type: 'success' });
     const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-dd'));
     const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
-    useEffect(() => {
-        const source = axios.CancelToken.source();
-        (async function fetchData() {
-            const requests = [getEntityData('log', source), getEntityData('test', source)];
-            const response = await Promise.all(requests);
-            let tests = [];
-            response[1].data.forEach((item) =>
-                tests.push({
-                    test_name: item.test_name,
-                    test_id: item.test_id,
-                }),
-            );
-            setTestsData(tests);
-            const newData = genereteTableData(response);
-            setProtocolsData(newData);
-            setAllProtocolsData(newData);
+    useEffect(async () => {
+        const response = await getProtocolData();
+        if (Array.isArray(response)) {
+            setTestsData(response[1]);
+            setProtocolsData(response[0]);
+            setAllProtocolsData(response[0]);
             setLoading(false);
-        })();
-        return () => {
-            source.cancel();
-        };
-    }, []);
-
-    const genereteTableData = (data) => {
-        const newData = data[0].data;
-        newData.map((item) => {
-            data[1].data.map((elem) => {
-                if (item.test_id === elem.test_id) {
-                    item.test_name = elem.test_name;
-                }
+            setSnack({
+                open: true,
+                message: 'Оберіть період для відображення',
+                type: 'info',
             });
-        });
-        return newData;
-    };
+        } else {
+            setLoading(false);
+            setSnack({
+                open: true,
+                message: response.err,
+                type: 'error',
+            });
+        }
+    }, []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        console.log(event.target.value);
         setRowsPerPage(+event.target.value);
         setPage(0);
-    };
-
-    const dialogOpenHandler = () => {
-        setOpen(true);
-    };
-
-    const filterByFaculty = () => {
-        setFilter(true);
-        setIsFacFilter(true);
-        const newData = [];
-        facultyData.forEach((item) => {
-            newData.push(item.faculty_name);
-        });
-        setFilterData(newData);
-    };
-
-    const filterBySpec = () => {
-        setFilter(true);
-        const newData = [];
-        specialityData.forEach((item) => {
-            newData.push(item.speciality_name);
-        });
-        setFilterData(newData);
     };
 
     const handleCloseSnack = () => {
@@ -123,14 +82,32 @@ const Protocols = () => {
         setEndDate(format(date, 'yyyy-MM-dd'));
     };
 
-    const showProtocolsData = () => {
+    const showProtocolsData = async () => {
         const newData = [];
-        protocolsData.forEach(async (protocol) => {
+        protocolsData.forEach((protocol) => {
             if (protocol.log_date > startDate && protocol.log_date < endDate) {
                 newData.push(protocol);
             }
         });
-        setProtocolsDataToShow(newData);
+        let studentsIds = [];
+        newData.forEach((item) => {
+            if (!studentsIds.includes(item.user_id)) studentsIds.push(item.user_id);
+        });
+        const studResponse = await filterProtocolsData(studentsIds, newData);
+        if (Array.isArray(studResponse)) {
+            setProtocolsDataToShow(studResponse);
+            setSnack({
+                open: true,
+                message: 'Успішно відфільтровано',
+                type: 'success',
+            });
+        } else {
+            setSnack({
+                open: true,
+                message: response.studResponse,
+                type: 'error',
+            });
+        }
     };
 
     const fieldsName = [
@@ -142,19 +119,19 @@ const Protocols = () => {
         t('protocol.table.time'),
     ];
     return loading ? (
-        <div className="loader">
+        <div className={styles.loader}>
             <CircularProgress />
         </div>
     ) : (
-        <div
-            className="groups"
-            style={{
-                width: '90%',
-                margin: 'auto',
-            }}
-        >
-            <div className="header">
-                <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
+        <div>
+            <div className={styles.entityHeader}>
+                <Typography
+                    component="h2"
+                    variant="h4"
+                    color="textPrimary"
+                    className={styles.entityHeaderTitle}
+                >
+                    <List fontSize="large" />
                     {t('protocol.title')}
                 </Typography>
             </div>
@@ -181,6 +158,7 @@ const Protocols = () => {
                         margin="normal"
                         id="date-picker-inline"
                         label="Date picker inline"
+                        minDate={startDate}
                         value={endDate}
                         onChange={handleEndDateChange}
                         KeyboardButtonProps={{
@@ -202,7 +180,7 @@ const Protocols = () => {
                     </TableHead>
                     <TableBody>
                         {protocolsDataToShow.length
-                            ? protocolsData
+                            ? protocolsDataToShow
                                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                   .map((protocolData) => (
                                       <ProtocolsRow key={uuidv4()} log={protocolData} />
@@ -220,27 +198,8 @@ const Protocols = () => {
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
+                <SnackbarHandler snack={snack} setSnack={setSnack} />
             </div>
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                open={openSnack}
-                autoHideDuration={3000}
-                onClose={handleCloseSnack}
-                message={snackMes}
-                action={
-                    <IconButton
-                        size="small"
-                        aria-label="close"
-                        color="inherit"
-                        onClick={handleCloseSnack}
-                    >
-                        <CloseIcon fontSize="small" />
-                    </IconButton>
-                }
-            />
         </div>
     );
 };

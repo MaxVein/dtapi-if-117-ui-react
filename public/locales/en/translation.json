@@ -77,12 +77,6 @@
             "description": "Description",
             "actions": "Actions"
         },
-        "tableList": {
-            "tooltipTest": "Tests of subject",
-            "tooltipTimetable": "Timetable of subject",
-            "tooltipEdit": "Edit",
-            "confirmMessage": "Do you really want to delete this subject?"
-        },
         "modal": {
             "addTitle": "Add subject",
             "updateTitle": "Update subject",
@@ -128,6 +122,15 @@
             "email": "Email",
             "password": "Password",
             "passwordConfirm": "Password Confirm"
+        },
+        "messages": {
+            "deleteSuccess": "Admin successfully deleted",
+            "addSuccess": "Admin successfully added",
+            "updateSuccess": "Admin successfully updated",
+            "nameFailed": "Name already exists",
+            "nameServerFailed": "На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
+            "serverFailed": "Server responded with error - ",
+            "changeNeeded": "You need to change something"
         }
     },
     "protocol": {
@@ -190,5 +193,15 @@
             "transferButton": "Transfer"
         }
     },
-    "labelRowsPerPage": "Rows per page:"
+    "labelRowsPerPage": "Rows per page:",
+    "validation": {
+        "tooShortName": "Name is too short!",
+        "tooLongName": "Name is too long!",
+        "requiredField": "Required field",
+        "invalidEmail": "Invalid email",
+        "tooShortPassword": "Password iss too shrot - at least 8 symbols",
+        "passwordPattern": "Password must consitsts of: At least 1 number and only Latin letters",
+        "passwordMustMatch": "Password must match",
+        "passwordNeedConfirmation": "Password needs confirmation"
+    }
 }
