@@ -1,199 +1,347 @@
 {
-      "menuTitles": {
-          "main":"Головна",
-          "faculties":"Факультети",
-          "groups":"Групи",
-          "specialities":"Спеціальності",
-          "subjects":"Предмети",
-          "students":"Студенти",
-          "results":"Результати",
-          "admins":"Адміни",
-          "protocol":"Протокол",
-          "exit":"Вихід",
-          "cardLink":"Перейти"
-      },
-      "faculties":{
-          "title":"Факультети"
-      },
-      "groups":{
-          "title":"Групи і студенти",
-           "addButton":"Додати групу",
-          "filters":{
-              "speciality":"Перелік груп по cпеціальності",
-              "faculty":"Перелік груп по факультету",
-              "allGroup":"Перелік всіх груп",
-              "addButton":"Додати групу"
-          },
-          "table":{
-              "id":"№",
-              "groupCode":"Шифр групи",
-              "speciality":"Спецільність",
-              "faculty":"Факультет",
-              "actions":"Дії"
-          },
-          "modal":{
-              "addTitle":"Додати групу",
-              "updateTitle":"Редагувати групу",
-              "deleteTitle":"Підтвердіть видалення",
-              "deleteSubTitle":"Ви впевнені, що хочети видалити дану групу?",
-              "submitAddButton":"Підтвердити",
-              "submitUpdateButton":"Зберегти",
-              "submitDeleteButton":"Видалити",
-              "cancelButton":"Скасувати",
-              "name":"Назва групу",
-              "chooseFacultyButton":"Виберіть Факультет",
-              "chooseSpecialityButton":"Виберіть Спеціальність",
-              "filters":{
-                  "title":"Виберіть критерій для фільтрування",
-                  "applyButton":"Застосувати"
-              }
-          }
-      },
-      "specialities":{
-        "title":"Спеціальності",
-        "addButton":"Додати спеціальність",
-        "table":{
-            "id":"ID",
-            "name":"Спеціальність",
-            "code":"Код",
-            "actions":"Дії"
+    "menuTitles": {
+        "main": "Головна",
+        "faculties": "Факультети",
+        "groups": "Групи",
+        "specialities": "Спеціальності",
+        "subjects": "Предмети",
+        "students": "Студенти",
+        "results": "Результати",
+        "admins": "Адміни",
+        "protocol": "Протокол",
+        "exit": "Вихід",
+        "cardLink": "Перейти"
+    },
+    "faculties": {
+        "title": "Факультети"
+    },
+    "groups": {
+        "title": "Групи і студенти",
+        "addButton": "Додати групу",
+        "filters": {
+            "speciality": "Перелік груп по cпеціальності",
+            "faculty": "Перелік груп по факультету",
+            "allGroup": "Перелік всіх груп",
+            "addButton": "Додати групу"
         },
-          "modal":{
-              "addTitle":"Додати спеціальність",
-              "updateTitle":"Редагувати спеціальність",
-              "submitAddButton":"Підтвердити",
-              "submitUpdateButton":"Зберегти",
-              "cancelButton":"Скасувати",
-              "name":"Назва спеціальності",
-              "code":"Код"
-          }
+        "table": {
+            "id": "№",
+            "groupCode": "Шифр групи",
+            "speciality": "Спецільність",
+            "faculty": "Факультет",
+            "actions": "Дії"
+        },
+        "modal": {
+            "addTitle": "Додати групу",
+            "updateTitle": "Редагувати групу",
+            "deleteTitle": "Підтвердіть видалення",
+            "deleteSubTitle": "Ви впевнені, що хочети видалити дану групу?",
+            "submitAddButton": "Підтвердити",
+            "submitUpdateButton": "Зберегти",
+            "submitDeleteButton": "Видалити",
+            "cancelButton": "Скасувати",
+            "name": "Назва групу",
+            "chooseFacultyButton": "Виберіть Факультет",
+            "chooseSpecialityButton": "Виберіть Спеціальність",
+            "filters": {
+                "title": "Виберіть критерій для фільтрування",
+                "applyButton": "Застосувати"
+            }
+        }
+    },
+    "specialities": {
+        "title": "Спеціальності",
+        "addButton": "Додати спеціальність",
+        "table": {
+            "id": "ID",
+            "name": "Спеціальність",
+            "code": "Код",
+            "actions": "Дії"
+        },
+        "modal": {
+            "addTitle": "Додати спеціальність",
+            "updateTitle": "Редагувати спеціальність",
+            "submitAddButton": "Підтвердити",
+            "submitUpdateButton": "Зберегти",
+            "cancelButton": "Скасувати",
+            "name": "Назва спеціальності",
+            "code": "Код"
+        }
+    },
+    "subjects": {
+        "title": "Предмети",
+        "addButton": "Додати предмет",
+        "search": "Пошук",
+        "table": {
+            "id": "ID",
+            "name": "Назва предмету",
+            "description": "Опис",
+            "actions": "Дії"
+        },
+        "tableList": {
+            "tooltipTest": "Тести предмета",
+            "tooltipTimetable": "Розклад тестування",
+            "tooltipEdit": "Редагувати",
+            "confirmMessage": "Ви впевнені що бажаєте видалити предмет?"
+        },
+        "modal": {
+            "addTitle": "Додати предмет",
+            "updateTitle": "Редагувати предмет",
+            "deleteTitle": "Ви впевнені що бажаєте видалити предмет?",
+            "submitAddButton": "Підтвердити",
+            "submitUpdateButton": "Зберегти",
+            "submitDeleteButton": "Видалити",
+            "cancelButton": "Скасувати",
+            "name": "Назва предмету",
+            "description": "Опис"
+        },
+        "messages": {
+            "error": "Виникли проблеми на сервері спробуйте пізніше",
+            "duplicate": "Схоже предмет з такою назвою уже існує",
+            "create": "Предмет додано",
+            "edit": "Предмет оновлено",
+            "delete": "Предмет видалено",
+            "noEdit": "Внесіть зміни у форму"
+        }
+    },
+    "results": {
+        "title": "Результати"
+    },
+    "admins": {
+        "title": "Адміни",
+        "addButton": "Додати адміна",
+        "table": {
+            "id": "ID",
+            "name": "Назва адміна",
+            "email": "Електронна пошта",
+            "actions": "Дії"
+        },
+        "modal": {
+            "addTitle": "Додати адміна",
+            "updateTitle": "Редагувати адміна",
+            "deleteTitle": "Видалити адміна",
+            "submitAddButton": "Підтвердити",
+            "submitUpdateButton": "Зберегти",
+            "submitDeleteButton": "Видалити",
+            "cancelButton": "Скасувати",
+            "name": "Ім'я",
+            "email": "Електронна пошта",
+            "password": "Пароль",
+            "passwordConfirm": "Підтвердити Пароль"
+        },
+        "messages": {
+            "deleteSuccess": "Адміна успішно видалено",
+            "addSuccess": "Адміна успішно додано",
+            "updateSuccess": "Адміна успішно оновлено",
+            "nameFailed": "Дане ім'я вже ісує",
+            "nameServerFailed": "На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
+            "serverFailed": "На сервері відбулась помилка - ",
+            "changeNeeded": "Потрібно щось змінити"
+        }
+    },
+    "protocol": {
+        "title": "Протокол",
+        "showButton": "Вивести дані",
+        "table": {
+            "id": "ID користувача",
+            "student": "Студент",
+            "test": "Тест",
+            "ip": "IP-Адреса",
+            "date": "Дата",
+            "time": "Час"
+        }
+    },
+  "students":{
+    "page": {
+      "title":"Студенти групи",
+      "addButton":"Додати студента",
+      "messages": {
+        "uploadStudents": "Студентів завантажено",
+        "noStudents": "Студенти відсутні"
       },
-      "subjects":{
-          "title":"Предмети",
-          "addButton":"Додати предмет",
-          "search":"Пошук",
-          "table":{
-              "id":"ID",
-              "name":"Назва предмету",
-              "description":"Опис",
-              "actions":"Дії"
-          },
-          "modal":{
-              "addTitle":"Додати предмет",
-              "updateTitle":"Редагувати предмет",
-              "deleteTitle":"Ви впевнені що бажаєте видалити предмет?",
-              "submitAddButton":"Підтвердити",
-              "submitUpdateButton":"Зберегти",
-              "submitDeleteButton":"Видалити",
-              "cancelButton":"Скасувати",
-              "name":"Назва предмету",
-              "description":"Опис"
-          }
-      },
-      "results":{
-          "title":"Результати"
-      },
-      "admins":{
-          "title":"Адміни",
-          "addButton":"Додати адміна",
-          "table":{
-              "id":"ID",
-              "name":"Назва адміна",
-              "email":"Електронна пошта",
-              "actions":"Дії"
-          },
-           "modal":{
-              "addTitle":"Додати адміна",
-              "updateTitle":"Редагувати адміна",
-              "deleteTitle":"Видалити адміна",
-              "submitAddButton":"Підтвердити",
-              "submitUpdateButton":"Зберегти",
-              "submitDeleteButton":"Видалити",
-              "cancelButton":"Скасувати",
-              "name":"Ім'я",
-              "email":"Електронна пошта",
-              "password":"Пароль",
-              "passwordConfirm":"Підтвердити Пароль"
-          },
-          "messages":{
-              "deleteSuccess":"Адміна успішно видалено",
-              "addSuccess":"Адміна успішно додано",
-              "updateSuccess":"Адміна успішно оновлено",
-              "nameFailed":"Дане ім'я вже ісує",
-              "nameServerFailed":"На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
-              "serverFailed":"На сервері відбулась помилка - ",
-              "changeNeeded":"Потрібно щось змінити"
-          }
-      },
-      "protocol":{
-          "title":"Протокол",
-          "showButton" : "Вивести дані",
-          "table":{
-              "id":"ID користувача",
-              "student":"Студент",
-              "test": "Тест",
-              "ip":"IP-Адреса",
-              "date":"Дата",
-              "time":"Час"
-          }
-      },
-      "students":{
-          "title":"Студенти групи",
-          "addButton":"Додати студента",
-          "table":{
-              "id":"No.",
-              "code":"Номер залікової книжки",
-              "fullName":"ПІБ",
-              "actions":"Дії"
-          },
-           "modal":{
-              "addTitle":"Додати студента",
-              "updateTitle":"Редагувати студента",
-              "deleteTitle":"Підтвердіть дію",
-              "deleteSubTitle":"Видалити студента",
-              "submitAddButton":"Підтвердити",
-              "submitUpdateButton":"Зберегти",
-              "submitDeleteButton":"Видалити",
-              "cancelButton":"Скасувати",
-              "lastName":"Прізвище",
-              "name":"Ім'я",
-              "afterName":"По батькові",
-              "сode":"Номер залікової книжки",
-              "login":"Системне ім'я користувача",
-              "email":"Електронна пошта",
-              "password":"Пароль",
-              "passwordConfirm":"Підтвердити Пароль",
-              "uploadPhoto":"Завантажити фото",
-              "updatePhoto":"Оновити фото"
-          },
-          "details":{
-              "title":"Інформація про студента",
-              "fullName":"ПІБ",
-              "faculty":"Факультет/Інститут",
-              "speaciality":"Спеціальність",
-              "group":"Група",
-              "code":"Номер залікової книжки",
-              "email":"Електронна пошта",
-              "login":"Унікальне ім'я користувача в системі",
-              "close":"Закрити"
-          },
-          "transfer":{
-              "title":"Переведення студента",
-              "chooseFaculty":"Виберіть Факультет/Інститут",
-              "chooseGroup":"Виберіть групу",
-              "cancel":"Закрити",
-              "transferButton":"Перевести"
-          }
-      },
-      "labelRowsPerPage":"Рядків у таблиці:",
-      "validation":{
-        "tooShortName":"Надто коротке ім'я!",
-        "tooLongName": "Надто довге ім'я!",
-        "requiredField":"Обов'язкове поле",
-        "invalidEmail": "Невалідний email",
-        "tooShortPassword":"Надто короткий пароль - повинно бути мінмімум 8 символів",
-        "passwordPattern":"Повинно бути як мінмум 1 цифра та тільки латинські літери",
-        "passwordMustMatch":"Паролі повинні співпадати",
-        "passwordNeedConfirmation":"Потрібно підтвердити пароль"
+      "errors": {
+        "uploadStudents": "Сталася помилка! Не вдалося завантажити студентів даної групи! Спробуйте знову",
+        "typeError": "Помилка"
       }
+    },
+    "table":{
+      "search": "Пошук",
+      "search_placeholder": "Здійснюйте фільтрацію по всіх колонках таблиці",
+      "id":"No.",
+      "code":"Номер залікової книжки",
+      "fullName":"ПІБ",
+      "actions":"Дії",
+      "noStudents": "Студенти відсутні",
+      "tooltips": {
+        "view": "Переглянути дані студента",
+        "update": "Редагувати дані студента",
+        "transfer": "Перевести студента до іншої групи",
+        "remove": "Видалити студента"
+      }
+    },
+    "view": {
+      "title": "Інформація про студента",
+      "details":{
+        "fullName":"ПІБ",
+        "faculty":"Факультет/Інститут",
+        "speciality":"Спеціальність",
+        "group":"Група",
+        "code":"Номер залікової книжки",
+        "email":"Електронна пошта",
+        "login":"Унікальне ім'я користувача в системі"
+      },
+      "messages": {
+        "uploadStudentData": "Дані студента завантажено",
+        "notStudentData": "Дані студента відсутні",
+        "closeDueError": "Закрито через помилку",
+        "close": "Закрито"
+      },
+      "errors": {
+        "uploadStudentData": "Сталася помилка при отриманні даних студента. Спробуйте знову",
+        "typeError": "Помилка"
+      },
+      "buttons": {
+        "close":"Закрити"
+      }
+    },
+    "remove": {
+      "title": "Підтвердіть дію",
+      "text": "Видалити студента",
+      "messages": {
+        "studentRemove": "Студента видалено",
+        "canceled": "Скасовано"
+      },
+      "errors": {
+        "studentRemove": "Сталася помилка! Не вдалося видалити вибраного студента! Спробуйте знову",
+        "typeError": "Помилка"
+      },
+      "buttons": {
+        "cancel": "Скасувати",
+        "submit": "Підтвердити"
+      }
+    },
+    "createUpdate":{
+      "addTitle":"Додати студента",
+      "updateTitle":"Редагувати студента",
+      "messages": {
+        "closeDueError": "Закрито через помилку",
+        "canceled": "Скасовано",
+        "incorrectEmail": "Некоректні дані електронної пошти користувача! Операцію скасовано!",
+        "incorrectUsername": "Некоректні дані системного імені користувача! Операцію скасовано!",
+        "incorrectGradebookId": "Некоректні дані номеру залікової книжки! Операцію скасовано!",
+        "photoUpload": "Фото завантажено",
+        "formNotValid": "Заповнена форма не відповідає вимогам! Будь ласка введіть коректні дані",
+        "studentAdded": "Студента додано",
+        "studentUpdated": "Дані студента змінено",
+        "noChanges": "Зміни не було внесено"
+      },
+      "errors": {
+        "getStudentInfo": "Сталася помилка при отриманні даних студента. Спробуйте знову",
+        "typeError": "Помилка",
+        "typeWarning": "Попередження",
+        "updateStudent": "Сталася помилка під час оновлення даних студента. Спробуйте знову",
+        "mustChangeData": "Сталася помилка під час оновлення даних студента. Щоб оновити дані студента слід здійснити зміни у поточних даних",
+        "createStudent": "Сталася помилка під час створення студента. Спробуйте знову"
+      },
+      "buttons": {
+        "cancel": "Скасувати",
+        "addStudent": "Додати студента",
+        "updateStudent": "Оновити дані"
+      },
+      "tooltips": {
+        "showPassword": "Показати пароль",
+        "hidePassword": "Сховати пароль",
+        "uploadPhoto": "Нажміть, щоб завантажити фото",
+        "updatePhoto": "Нажміть, щоб оновити фото"
+      },
+      "form": {
+        "fields": {
+          "lastname":"Прізвище",
+          "name":"Ім'я",
+          "afterName":"По батькові",
+          "gradebook":"Номер залікової книжки",
+          "login":"Системне ім'я користувача",
+          "email":"Електронна пошта",
+          "password":"Пароль",
+          "passwordConfirm":"Підтвердити Пароль",
+          "uploadPhoto":"Завантажити фото",
+          "updatePhoto":"Оновити фото"
+        },
+        "placeholders": {
+          "lastname":"Шевченко",
+          "name":"Андрій/Катерина",
+          "afterName":"Миколайович/Миколаївна",
+          "gradebook":"07-AS-IP",
+          "login":"andrew_sheva7",
+          "email":"Ex. pat@example.com",
+          "password":"Пароль має містити лише літери, цифри та поширені розділові знаки",
+          "passwordConfirm":"Введіть повторно пароль, який був введений у попередньому полі",
+          "uploadPhoto":"Add Photo",
+          "updatePhoto":"Update Photo"
+        },
+        "messages": {
+          "lastnameRequired": "Поле не заповнене! Будь-ласка введіть прізвище студента",
+          "firstnameRequired": "Поле не заповнене! Будь-ласка введіть ім'я студента",
+          "fathernameRequired": "Поле не заповнене! Будь-ласка введіть ім'я по-батькові студента",
+          "gradebookIdRequired": "Поле не заповнене! Будь-ласка введіть номер залікової книжки студента",
+          "gradebookIdNotValid": "Користувач з таким номером залікової книжки вже існує",
+          "usernameMatches": "Ім'я користувача повинно складатись з QWERTY літер, цифр та поширених розділових знаків, окрім знаку - .",
+          "usernameRequired": "Поле не заповнене! Будь-ласка введіть системне ім'я користувача студента",
+          "usernameMin": "Мінімальна довжина ім'я користувача 6 символів",
+          "usernameMax": "Довжина ім'я користувача не повинна бути більша ніж 12 символів",
+          "usernameNotValid": "Користувач з таким системним ім`я вже існує",
+          "emailMatches": "Некоректні дані! Будь-ласка введіть існуючу електронну пошту",
+          "emailRequired": "Поле не заповнене! Будь-ласка введіть електронну пошту студента",
+          "emailIsEmail": "Некоректні дані! Будь-ласка введіть коректну електронну пошту",
+          "emailNotValid": "Користувач з такою електронною адресою вже існує",
+          "passwordMatches": "Пароль має містити лише QWERTY літери (великі та малі), цифри та поширені розділові знаки",
+          "passwordRequired": "Поле не заповнене! Будь-ласка введіть унікальний пароль студента",
+          "passwordMin": "Мінімальна довжина паролю 8 символів",
+          "passwordConfirmRequired": "Поле не заповнене! Будь-ласка введіть повторно пароль студента, який був введений у попередньому полі",
+          "passwordConfirmTest": "Паролі не збігаються. Пароль у попередньому полі повинен співпадати з паролем даного поля"
+        }
+      }
+    },
+    "transfer":{
+      "title":"Переведення студента",
+      "messages": {
+        "closeDueError": "Закрито через помилку",
+        "canceled": "Скасовано",
+        "studentTransfer": "Студента переведено",
+        "noFaculties": "Факультети відсутні",
+        "notGroups": "Групи відсутні",
+        "notData": "Сталася помилка при отриманні даних! Спробуйте знову",
+        "selectedGroup": "Групу вибрано",
+        "sameGroup": "Ви вибрали поточну групу студента! Змініть групу!",
+        "selectedFaculty": "Факультет вибрано"
+      },
+      "placeholders": {
+        "chooseFaculty":"Виберіть Факультет/Інститут",
+        "chooseGroup":"Виберіть групу"
+      },
+      "errors": {
+        "getStudentInfo": "Сталася помилка при отриманні даних студента. Спробуйте знову",
+        "typeError": "Помилка",
+        "typeWarning": "Попередження",
+        "transferStudent": "Сталася помилка при переведенні студента. Спробуйте знову",
+        "facultyError": "Сталася помилка при списку факультетів. Спробуйте знову",
+        "groupError": "Сталася помилка під час отримання списку груп! Спробуйте знову"
+      },
+      "buttons": {
+        "cancel": "Скасувати",
+        "transfer":"Перевести"
+      }
+    }
+  },
+    "labelRowsPerPage": "Рядків у таблиці:",
+    "validation": {
+        "tooShortName": "Надто коротке ім'я!",
+        "tooLongName": "Надто довге ім'я!",
+        "requiredField": "Обов'язкове поле",
+        "invalidEmail": "Невалідний email",
+        "tooShortPassword": "Надто короткий пароль - повинно бути мінмімум 8 символів",
+        "passwordPattern": "Повинно бути як мінмум 1 цифра та тільки латинські літери",
+        "passwordMustMatch": "Паролі повинні співпадати",
+        "passwordNeedConfirmation": "Потрібно підтвердити пароль"
+    }
 }

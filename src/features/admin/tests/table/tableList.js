@@ -8,7 +8,8 @@ import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import ConfirmDelete from '../confirm';
+import classes from './table.module.scss';
+import ConfirmDelete from '../../../../common/components/ComfirmDelete';
 
 export default function TableList({ test, setDeleteEntity, handleEditTest, subjectName }) {
     let { url } = useRouteMatch();
@@ -22,7 +23,7 @@ export default function TableList({ test, setDeleteEntity, handleEditTest, subje
             <TableCell align="left">{test.tasks}</TableCell>
             <TableCell align="left">{test.time_for_test}</TableCell>
             <TableCell id={test.test_id} align="left">
-                <div className="action-btn-container">
+                <div className={classes.actionContainer}>
                     <Tooltip title="Редагувати">
                         <EditOutlined onClick={() => handleEditTest(test)} />
                     </Tooltip>

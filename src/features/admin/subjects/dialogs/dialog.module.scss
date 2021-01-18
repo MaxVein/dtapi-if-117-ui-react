@@ -1,0 +1,20 @@
+.formDialogBtnGroup {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.formDialogContainer {
+    display: flex;
+    flex-direction: column;
+    min-width: 350px;
+}
+
+.formTitle {
+    text-align: center;
+}
+
+.searchIconWrap {
+    height: 100%;
+    vertical-align: middle;
+}
