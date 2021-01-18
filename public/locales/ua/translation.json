@@ -44,6 +44,12 @@
             "description": "Опис",
             "actions": "Дії"
         },
+        "tableList": {
+            "tooltipTest": "Тести предмета",
+            "tooltipTimetable": "Розклад тестування",
+            "tooltipEdit": "Редагувати",
+            "confirmMessage": "Ви впевнені що бажаєте видалити предмет?"
+        },
         "modal": {
             "addTitle": "Додати предмет",
             "updateTitle": "Редагувати предмет",

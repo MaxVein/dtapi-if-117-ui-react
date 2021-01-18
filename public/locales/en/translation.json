@@ -77,6 +77,15 @@
             "description": "Description",
             "actions": "Actions"
         },
+<<<<<<< HEAD
+=======
+        "tableList": {
+            "tooltipTest": "Tests of subject",
+            "tooltipTimetable": "Timetable of subject",
+            "tooltipEdit": "Edit",
+            "confirmMessage": "Do you really want to delete this subject?"
+        },
+>>>>>>> development
         "modal": {
             "addTitle": "Add subject",
             "updateTitle": "Update subject",
