@@ -44,7 +44,6 @@ export const updateGroupsData = async (groupsData, editGroup, facultyData, speci
         const updatedList = groupsData.map((item) =>
             response.data[0].group_id === item.group_id ? response.data[0] : item,
         );
-        console.log(updatedList);
         return updatedList;
     } catch (err) {
         return { err: 'Виникла проблема під час редагування' };

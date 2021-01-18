@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 jest.mock('axios');
 
-describe('test should return object which correct data', () => {
+it('test should return object which correct data', () => {
     const x = [
         {
             data: [
@@ -96,7 +96,7 @@ describe('test should return object which correct data', () => {
     ];
     expect(genereteTableData(x)).toEqual(y);
 });
-describe('test should return object which correct spec name', () => {
+it('test should return object which correct spec name', () => {
     const x = '1';
     let y = [
         { speciality_name: "Автоматизація та комп'ютерні наук", speciality_id: '1' },
@@ -115,7 +115,7 @@ describe('test should return object which correct spec name', () => {
     const z = `Автоматизація та комп'ютерні наук`;
     expect(getSpecName(x, y)).toEqual(z);
 });
-describe('test should return object which correct fac name', () => {
+it('test should return object which correct fac name', () => {
     const x = '1';
     let y = [
         { faculty_name: 'Програмна інженерія', faculty_id: '1' },
@@ -133,7 +133,7 @@ describe('test should return object which correct fac name', () => {
     const z = `Програмна інженерія`;
     expect(getFacName(x, y)).toEqual(z);
 });
-describe('test should return object which correct spec id', () => {
+it('test should return object which correct spec id', () => {
     const x = `Автоматизація та комп'ютерні наук`;
     let y = [
         { speciality_name: "Автоматизація та комп'ютерні наук", speciality_id: '1' },
@@ -152,7 +152,7 @@ describe('test should return object which correct spec id', () => {
     const z = `1`;
     expect(getSpecId(x, y)).toEqual(z);
 });
-describe('test should return object which correct fac id', () => {
+it('test should return object which correct fac id', () => {
     const x = `Програмна інженерія`;
     const y = [
         { faculty_name: 'Програмна інженерія', faculty_id: '1' },
