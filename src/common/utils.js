@@ -18,6 +18,12 @@ export const getEntityData = (entity, source, id = '') => {
 export const updateEntity = (entity, id, payload) => {
     return axios.post(`${environment.BASEURL}${entity}/update/${id}`, payload);
 };
+export const entityManager = (entity, ids) => {
+    return axios.post(`${environment.BASEURL}EntityManager/getEntityValues`, {
+        entity: entity,
+        ids: ids,
+    });
+};
 
 export const isLogged = () => {
     return axios.get(`${environment.BASEURL}login/isLogged`);
