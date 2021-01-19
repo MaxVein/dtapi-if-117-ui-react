@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 import { ResultsServiceApi } from '../services/ResultsService';
 import ResultsDetailsByQuestionModal from '../ResultsDetailsByQuestionModal/ResultsDetailsByQuestionModal';
 import PropTypes from 'prop-types';
@@ -11,13 +12,20 @@ import {
     Paper,
     Table,
     TableBody,
-    TableCell,
     TableContainer,
     TableHead,
     TableRow,
     Tooltip,
+    withStyles,
 } from '@material-ui/core';
+import MuiTableCell from '@material-ui/core/TableCell';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
+
+const TableCell = withStyles({
+    root: {
+        borderBottom: 'none',
+    },
+})(MuiTableCell);
 
 const ResultsDetailsModal = ({
     open,
@@ -25,9 +33,10 @@ const ResultsDetailsModal = ({
     results,
     loading,
     setLoading,
-    setSnackBar,
+    messageHandler,
     errorHandler,
 }) => {
+    const { t } = UseLanguage();
     const [data] = useState({
         results: results,
         questions: JSON.parse(results.questions),
@@ -39,7 +48,13 @@ const ResultsDetailsModal = ({
         ],
     });
     const [dataSource, setDataSource] = useState([]);
-    const displayedColumns = ['No.', 'Ідентифікатор', 'Текст запитання', 'Відповідь', 'Детальніше'];
+    const displayedColumns = [
+        t('results.detailsModal.table.no'),
+        t('results.detailsModal.table.id'),
+        t('results.detailsModal.table.text'),
+        t('results.detailsModal.table.answer'),
+        t('results.detailsModal.table.details'),
+    ];
     const [openDetails, setOpenDetails] = useState({
         open: false,
         data: {},
@@ -50,40 +65,24 @@ const ResultsDetailsModal = ({
         (async function allQuestions(ids) {
             await getAllQuestions(ids);
         })(data.ids);
-    }, [data.ids]);
-
-    const messageHandler = useCallback(
-        (message, type) => {
-            setSnackBar({
-                open: true,
-                message,
-                type,
+        return () => {
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: true,
+                detailsByQuestionModal: true,
             });
-        },
-        [setSnackBar],
-    );
+        };
+    }, [data.ids]);
 
     const getAllQuestions = async (ids) => {
         const questions = await ResultsServiceApi.fetchAllQuestions(ids);
         if (questions.length) {
             initQuestions(questions);
         } else if (!questions.length) {
-            setDataSource([]);
-            messageHandler('Деталі про тестування відсутні', 'warning');
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: false,
-                detailsByQuestionModal: true,
-            });
+            getAllQuestionErrorHandler(false);
         } else if (questions.error) {
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: false,
-                detailsByQuestionModal: true,
-            });
-            errorHandler('Сталася помилка під час отримання деталей тестування! Спробуйте знову');
+            getAllQuestionErrorHandler(true);
         }
     };
 
@@ -102,7 +101,18 @@ const ResultsDetailsModal = ({
             detailsModal: false,
             detailsByQuestionModal: true,
         });
-        messageHandler('Деталі про тестування завантажено', 'success');
+        messageHandler(t('results.detailsModal.messages.detailsUpload'), 'success');
+    };
+
+    const getAllQuestionErrorHandler = (error) => {
+        setOpen({ open: false });
+        setDataSource([]);
+        error
+            ? errorHandler(
+                  t('results.detailsModal.errors.getDetailsError'),
+                  t('results.detailsModal.errors.typeError'),
+              )
+            : messageHandler(t('results.detailsModal.messages.noDetails'), 'warning');
     };
 
     return (
@@ -118,18 +128,37 @@ const ResultsDetailsModal = ({
                 ) : (
                     <div className={classes.ResultsDetailsDialog}>
                         <TableContainer component={Paper}>
-                            <Table>
+                            <Table stickyHeader>
                                 <TableHead>
                                     <TableRow>
                                         {displayedColumns.map((column, index) => (
-                                            <TableCell key={column + index}>{column}</TableCell>
+                                            <TableCell
+                                                align={'center'}
+                                                key={column + index + Math.random()}
+                                            >
+                                                {column}
+                                            </TableCell>
                                         ))}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {dataSource.map((item, index) => (
-                                        <TableRow key={index}>
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            tabIndex={-1}
+                                            className={classes.TableRow}
+                                            key={index + Math.random()}
+                                            onClick={() =>
+                                                setOpenDetails({
+                                                    open: true,
+                                                    data: item,
+                                                    q_num: Number(index + 1).toString(),
+                                                })
+                                            }
+                                        >
                                             <TableCell
+                                                align={'center'}
                                                 className={
                                                     +item.true ? classes.True : classes.False
                                                 }
@@ -137,6 +166,7 @@ const ResultsDetailsModal = ({
                                                 {index + 1}
                                             </TableCell>
                                             <TableCell
+                                                align={'center'}
                                                 className={
                                                     +item.true ? classes.True : classes.False
                                                 }
@@ -151,19 +181,27 @@ const ResultsDetailsModal = ({
                                                 {item.question_text}
                                             </TableCell>
                                             <TableCell
+                                                align={'center'}
                                                 className={
                                                     +item.true ? classes.True : classes.False
                                                 }
                                             >
-                                                {+item.true ? 'Правильна' : 'Неправильна'}
+                                                {+item.true
+                                                    ? t('results.detailsModal.table.true')
+                                                    : t('results.detailsModal.table.false')}
                                             </TableCell>
                                             <TableCell
+                                                align={'center'}
                                                 className={
                                                     +item.true ? classes.True : classes.False
                                                 }
                                             >
                                                 <div className={classes.Actions}>
-                                                    <Tooltip title="Переглянути деталі питання">
+                                                    <Tooltip
+                                                        title={t(
+                                                            'results.detailsModal.tooltips.details',
+                                                        )}
+                                                    >
                                                         <Button
                                                             color="primary"
                                                             variant="contained"
@@ -195,17 +233,11 @@ const ResultsDetailsModal = ({
                             className={classes.Button}
                             onClick={() => {
                                 setOpen({ open: false });
-                                messageHandler('Закрито', 'info');
-                                setLoading({
-                                    filter: false,
-                                    table: false,
-                                    detailsModal: true,
-                                    detailsByQuestionModal: true,
-                                });
+                                messageHandler(t('results.detailsModal.messages.close'), 'info');
                             }}
                             type="reset"
                         >
-                            Закрити
+                            {t('results.detailsModal.buttons.close')}
                         </Button>
                         {openDetails.open ? (
                             <ResultsDetailsByQuestionModal
@@ -234,6 +266,6 @@ ResultsDetailsModal.propTypes = {
     results: PropTypes.object,
     loading: PropTypes.object,
     setLoading: PropTypes.func,
-    setSnackBar: PropTypes.func,
+    messageHandler: PropTypes.func,
     errorHandler: PropTypes.func,
 };

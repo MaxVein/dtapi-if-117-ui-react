@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { UseLanguage } from '../../../../../lang/LanguagesContext';
 import PropTypes from 'prop-types';
 import classes from './TableSearch.module.css';
 
@@ -6,13 +7,8 @@ import { FormControl, InputAdornment, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
 const TableSearch = ({ onSearch }) => {
+    const { t } = UseLanguage();
     const [search, setSearch] = useState('');
-
-    const handleSearch = (event) => {
-        const value = event.target.value;
-        setSearch(event.target.value);
-        onSearch(value);
-    };
 
     return (
         <div className={classes.Search}>
@@ -20,11 +16,14 @@ const TableSearch = ({ onSearch }) => {
                 <TextField
                     className={classes.TextField}
                     value={search}
-                    onChange={handleSearch}
-                    label="Пошук"
+                    onChange={(event) => {
+                        setSearch(event.target.value);
+                        onSearch(event.target.value);
+                    }}
+                    label={t('results.table.search')}
                     type="text"
                     id="search"
-                    placeholder="Здійснюйте пошук по ПІБ студента"
+                    placeholder={t('results.table.searchPlaceholder')}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

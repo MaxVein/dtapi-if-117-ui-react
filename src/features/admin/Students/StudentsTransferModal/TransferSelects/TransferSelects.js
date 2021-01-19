@@ -7,7 +7,6 @@ import classes from './TransferSelects.module.css';
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 import GroupIcon from '@material-ui/icons/Group';
-import { ResultsServiceApi } from '../../../Results/services/ResultsService';
 
 const TransferSelects = ({
     setOpen,

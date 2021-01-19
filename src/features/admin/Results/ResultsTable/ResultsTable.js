@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 import ResultsContext from '../ResultsPage/ResultsContext';
 import ResultsDetailsModal from '../ResultsDetailsModal/ResultsDetailsModal';
 import TableSearch from './TableSearch/TableSearch';
@@ -8,7 +9,6 @@ import classes from './ResultsTable.module.css';
 import {
     Button,
     Chip,
-    Paper,
     Table,
     TableBody,
     TableCell,
@@ -19,32 +19,34 @@ import {
     Tooltip,
     Icon,
 } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import ReportIcon from '@material-ui/icons/Report';
 
 const ResultsTable = ({ results }) => {
+    const { t } = UseLanguage();
     const [chips] = useState([
         { name: JSON.parse(localStorage.getItem('group_name')), icon: 'group' },
         { name: JSON.parse(localStorage.getItem('subject_name')), icon: 'playlist_add_check' },
         { name: JSON.parse(localStorage.getItem('test_name')), icon: 'subject' },
     ]);
-    const { loading, setLoading, setSnackBar, errorHandler } = useContext(ResultsContext);
+    const { loading, setLoading, messageHandler, errorHandler } = useContext(ResultsContext);
     const [dataSource, setDataSource] = useState([]);
     const displayedColumns = [
-        'No.',
-        'ПІБ',
-        'Оцінка',
-        'Дата',
-        'Початок',
-        'Тривалість',
-        'Детальніше',
+        t('results.table.no'),
+        t('results.table.fullname'),
+        t('results.table.mark'),
+        t('results.table.date'),
+        t('results.table.start'),
+        t('results.table.duration'),
+        t('results.table.details'),
     ];
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(7);
     const [open, setOpen] = useState({
         open: false,
         data: {},
     });
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(7);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -70,10 +72,6 @@ const ResultsTable = ({ results }) => {
         });
     };
 
-    const searchHandler = (search) => {
-        setSearch(search);
-    };
-
     return (
         <div className={classes.Table}>
             {chips.length ? (
@@ -91,13 +89,18 @@ const ResultsTable = ({ results }) => {
             ) : null}
             {results.length > 0 ? (
                 <>
-                    <TableSearch onSearch={searchHandler} />
+                    <TableSearch onSearch={(search) => setSearch(search)} />
                     <TableContainer className={classes.TableContainer} component={Paper}>
-                        <Table>
+                        <Table stickyHeader>
                             <TableHead>
                                 <TableRow>
                                     {displayedColumns.map((column, index) => (
-                                        <TableCell key={column + index}>{column}</TableCell>
+                                        <TableCell
+                                            align={'center'}
+                                            key={column + index + Math.random()}
+                                        >
+                                            {column}
+                                        </TableCell>
                                     ))}
                                 </TableRow>
                             </TableHead>
@@ -105,20 +108,31 @@ const ResultsTable = ({ results }) => {
                                 {dataSource
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((item, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell>
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            tabIndex={-1}
+                                            key={index + Math.random()}
+                                        >
+                                            <TableCell align={'center'}>{index + 1}</TableCell>
+                                            <TableCell align={'center'}>
                                                 {item.student_surname}&nbsp;
                                                 {item.student_name}&nbsp;
                                                 {item.student_fname}
                                             </TableCell>
-                                            <TableCell>{item.result}</TableCell>
-                                            <TableCell>{item.session_date}</TableCell>
-                                            <TableCell>{item.start_time}</TableCell>
-                                            <TableCell>{item.duration}</TableCell>
-                                            <TableCell>
+                                            <TableCell align={'center'}>{item.result}</TableCell>
+                                            <TableCell align={'center'}>
+                                                {item.session_date}
+                                            </TableCell>
+                                            <TableCell align={'center'}>
+                                                {item.start_time}
+                                            </TableCell>
+                                            <TableCell align={'center'}>{item.duration}</TableCell>
+                                            <TableCell align="center">
                                                 <div className={classes.Actions}>
-                                                    <Tooltip title="Переглянути деталі тестування">
+                                                    <Tooltip
+                                                        title={t('results.table.tooltips.details')}
+                                                    >
                                                         <Button
                                                             color="primary"
                                                             variant="contained"
@@ -142,7 +156,7 @@ const ResultsTable = ({ results }) => {
                         </Table>
                         <TablePagination
                             component="div"
-                            labelRowsPerPage="Рядків у таблиці"
+                            labelRowsPerPage={t('labelRowsPerPage')}
                             className={classes.TablePaginator}
                             rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
                             count={dataSource.length}
@@ -158,8 +172,8 @@ const ResultsTable = ({ results }) => {
                 </>
             ) : (
                 <div className={classes.Empty}>
-                    <ReportIcon className={classes.EmptyIcon} />
-                    <h1>Результати відсутні</h1>
+                    <ReportIcon color={'primary'} className={classes.EmptyIcon} />
+                    <h1>{t('results.table.noResults')}</h1>
                 </div>
             )}
             {open.open ? (
@@ -169,7 +183,7 @@ const ResultsTable = ({ results }) => {
                     results={open.data}
                     loading={loading}
                     setLoading={setLoading}
-                    setSnackBar={setSnackBar}
+                    messageHandler={messageHandler}
                     errorHandler={errorHandler}
                 />
             ) : null}
