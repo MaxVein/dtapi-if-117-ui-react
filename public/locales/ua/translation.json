@@ -333,6 +333,21 @@
       }
     }
   },
+  "questions":{
+    "title":"Питання",
+    "addButton":"Додати запитання",
+    "table":{
+      "id":"ID",
+      "questionText":"Текст запитання",
+      "type":"Тип",
+      "level":"Рівень",
+      "actions":"Дії"
+    }
+  },
+  "answers":{
+    "title":"Відповіді до питання",
+    "addButton":"Додати відповідь"
+  },
     "labelRowsPerPage": "Рядків у таблиці:",
     "validation": {
         "tooShortName": "Надто коротке ім'я!",

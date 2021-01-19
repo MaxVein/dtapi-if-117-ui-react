@@ -333,6 +333,21 @@
       }
     }
   },
+  "questions":{
+    "title":"Questions",
+    "addButton":"Add question",
+    "table":{
+      "id":"ID",
+      "questionText":"Question Text",
+      "type":"Type",
+      "level":"Level",
+      "actions":"Operations"
+    }
+  },
+    "answers":{
+    "title":"Answers for question",
+    "addButton":"Add answer"
+  },
     "labelRowsPerPage": "Rows per page:",
     "validation": {
         "tooShortName": "Name is too short!",

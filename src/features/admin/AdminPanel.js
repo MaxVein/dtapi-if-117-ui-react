@@ -39,6 +39,7 @@ import Groups from './groups/index';
 import Protocols from './protocols/index';
 import TestDetails from './test-details';
 import Questions from './questions';
+import Answers from './answers';
 import { MainListItems } from './AdminNavItem';
 import { UseLanguage } from '../../lang/LanguagesContext';
 import Students from './Students';
@@ -378,10 +379,8 @@ export default function AdminPanel({ setAuthInfo }) {
                                 path="/admin/subjects/tests/test-detail"
                                 component={TestDetails}
                             ></Route>
-                            <Route
-                                path="/admin/subjects/tests/questions"
-                                component={Questions}
-                            ></Route>
+                            <Route path="/admin/subjects/tests/questions" component={Questions} />
+                            <Route path="/admin/subjects/tests/answers" component={Answers} />
                             <Route path="/admin/protocols" component={Protocols} />
                             <Route path="*" component={NotFoundPage} />
                         </Switch>
