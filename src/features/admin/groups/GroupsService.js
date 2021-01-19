@@ -62,7 +62,6 @@ export const addGroupsData = async (addGroup, facultyData, specialityData) => {
             speciality_name: getSpecName(response.data[0].speciality_id, specialityData),
             faculty_name: getFacName(response.data[0].faculty_id, facultyData),
         };
-        console.log(response.data[0]);
         return response.data[0];
     } catch (err) {
         return { err: 'Виникла проблема під час додавання' };
@@ -79,7 +78,7 @@ export const delGroupsData = async (id, groupsData) => {
     }
 };
 
-const genereteTableData = (data) => {
+export const genereteTableData = (data) => {
     const newData = data[0].data;
     newData.map((item) => {
         data[1].data.map((elem) => {
@@ -96,19 +95,19 @@ const genereteTableData = (data) => {
     return newData;
 };
 
-const getSpecName = (param, specialityData) => {
+export const getSpecName = (param, specialityData) => {
     const currentSpec = specialityData.filter((item) => item.speciality_id === param);
     return currentSpec[0].speciality_name;
 };
-const getFacName = (param, facultyData) => {
+export const getFacName = (param, facultyData) => {
     const currentSpec = facultyData.filter((item) => item.faculty_id === param);
     return currentSpec[0].faculty_name;
 };
-const getSpecId = (param, specialityData) => {
+export const getSpecId = (param, specialityData) => {
     const currentSpec = specialityData.filter((item) => item.speciality_name === param);
     return currentSpec[0].speciality_id;
 };
-const getFacId = (param, facultyData) => {
+export const getFacId = (param, facultyData) => {
     const currentSpec = facultyData.filter((item) => item.faculty_name === param);
     return currentSpec[0].faculty_id;
 };

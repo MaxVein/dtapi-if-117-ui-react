@@ -119,8 +119,6 @@ const Groups = () => {
                 setAllGroupsData([...groupsData, response]);
                 setOpen(false);
                 setPage(Math.floor((groupsData.length - 1) / rowsPerPage));
-                setSnackMes('Групу додано');
-                setOpenSnack(true);
                 setSnack({
                     open: true,
                     message: 'Групу додано',
