@@ -5,24 +5,16 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
-import Input from '@material-ui/core/Input';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AddCircle from '@material-ui/icons/AddCircle';
 import Loader from '../../../common/components/Loader/Loader';
 import { createDataSource, getAnswers, getQuestionById } from './AnswersService';
 import AnswersCard from './AnswersCard';
+import CreationForm from './CreationForm/AnswersCreationForm';
 import styles from './Answers.module.css';
 
 import { UseLanguage } from '../../../lang/LanguagesContext';
@@ -39,21 +31,25 @@ export default function Answers() {
     const [question, setQuestion] = React.useState({});
     const [level, setLevel] = React.useState('');
     const [loaded, setLoaded] = React.useState(false);
+    const [mode, setMode] = React.useState('');
 
-    const handleChange = (event) => {
-        setLevel(event.target.value);
-    };
     useEffect(() => {
-        getQuestionById(state.id).then((res) => {
-            setQuestion(() => {
-                return { ...res[0] };
-            });
-            setLevel(question.level);
-        });
-        getAnswers(state.id).then((res) => {
-            setDataSource(createDataSource(res));
+        if (state.mode === 'Add') {
+            setMode('Add');
             setLoaded(true);
-        });
+            return null;
+        } else {
+            getQuestionById(state.id).then((res) => {
+                setQuestion(() => {
+                    return { ...res[0] };
+                });
+                setLevel(question.level);
+            });
+            getAnswers(state.id).then((res) => {
+                setDataSource(createDataSource(res));
+                setLoaded(true);
+            });
+        }
     }, []);
     const closeModal = () => {
         setOpen(false);
@@ -72,7 +68,9 @@ export default function Answers() {
 
     return (
         <>
-            {loaded ? (
+            {mode === 'Add' ? (
+                <CreationForm mode={state.mode} question={question} />
+            ) : loaded ? (
                 <React.Fragment>
                     <div className={styles.entityHeader}>
                         <Typography
@@ -95,28 +93,7 @@ export default function Answers() {
                             {t('answers.addButton')}
                         </Button>
                     </div>
-                    <Card elevation={6} style={{ marginBottom: '1rem' }}>
-                        <CardContent>
-                            <FormControl fullWidth variant="filled">
-                                <TextField variant="filled" value={question.question_text} />
-                            </FormControl>
-                            <FormControl fullWidth variant="filled">
-                                <Input variant="filled" />
-                            </FormControl>
-                            <FormControl fullWidth variant="filled">
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={level}
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </CardContent>
-                    </Card>
+                    <CreationForm mode={state.mode} question={question} />
                     <Paper elevation={6}>
                         <TableContainer className={styles.entityTableContainer}>
                             <Table stickyHeader className={styles.entityTable}>

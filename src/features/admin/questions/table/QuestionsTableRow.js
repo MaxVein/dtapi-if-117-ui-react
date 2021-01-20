@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
+import QuestionDeleteConfirm from '../DeleteConfirm/QuestionsDeleteConfirm';
 import { Delete, Edit, QuestionAnswer } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
@@ -66,7 +67,11 @@ export default function QuestionsTableRow({ question }) {
                             }}
                             to={{
                                 pathname: '/admin/subjects/tests/answers',
-                                state: { id: question.question_id, name: question.question_text },
+                                state: {
+                                    id: question.question_id,
+                                    name: question.question_text,
+                                    mode: 'Edit',
+                                },
                             }}
                         >
                             <QuestionAnswer />
@@ -74,6 +79,12 @@ export default function QuestionsTableRow({ question }) {
                     </Button>
                 </TableCell>
             </TableRow>
+            <QuestionDeleteConfirm
+                question={question}
+                open={del}
+                setOpen={setDelOpen}
+                mode={'Delete'}
+            />
         </React.Fragment>
     );
 }

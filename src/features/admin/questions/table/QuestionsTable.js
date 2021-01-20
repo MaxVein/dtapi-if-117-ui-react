@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,11 +14,18 @@ import { Typography } from '@material-ui/core';
 
 import { Help, AddCircle } from '@material-ui/icons';
 
-import { createDataSource, getNumberOfQuestions, getQuestions } from '../QuestionsService';
 import QuestionsTableRow from './QuestionsTableRow';
 import Loader from '../../../../common/components/Loader/Loader';
 import styles from './QuestionTable.module.css';
 
+import {
+    createDataSource,
+    getNumberOfQuestions,
+    getQuestions,
+    deleteModeSubmit,
+} from '../QuestionsService';
+
+import QuestionsContext from '../QuestionsContext';
 import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 export default function Questions() {
@@ -42,12 +49,12 @@ export default function Questions() {
         setOpen(true);
     };
     const columns = [
-        { id: 'question_id', label: t('questions.table.id'), minWidth: '10%' },
-        { id: 'question_text', label: t('questions.table.questionText'), minWidth: '25%' },
+        { id: 'question_id', label: t('questions.table.id'), minWidth: '15%' },
+        { id: 'question_text', label: t('questions.table.questionText'), minWidth: '15%' },
         {
             id: 'type',
             label: t('questions.table.type'),
-            minWidth: '25%',
+            minWidth: '20%',
             align: 'left',
         },
         {
@@ -59,7 +66,7 @@ export default function Questions() {
         {
             id: 'operations',
             label: t('questions.table.actions'),
-            minWidth: '10%',
+            minWidth: '25%',
             align: 'center',
         },
     ];
@@ -67,11 +74,21 @@ export default function Questions() {
     useEffect(() => {
         getNumberOfQuestions(state.id).then((res) => {
             getQuestions(state.id, res.numberOfRecords).then((res) => {
+                if (res.response) {
+                    setSnack({ open: true, message: 'Питань немає', type: 'info' });
+                    return null;
+                }
                 setDataSource(createDataSource(res));
                 setLoaded(true);
             });
         });
     }, []);
+
+    useEffect(() => {
+        if (deleted.status) {
+            deleteModeSubmit(deleted.id, setSnack, setDataSource, t, closeModal);
+        }
+    }, [deleted]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -84,7 +101,7 @@ export default function Questions() {
     return (
         <>
             {loaded ? (
-                <React.Fragment>
+                <QuestionsContext.Provider value={{ setAdded, setUpdated, setDeleted, closeModal }}>
                     <div className={styles.entityHeader}>
                         <Typography
                             className={styles.entityHeaderTitle}
@@ -102,8 +119,22 @@ export default function Questions() {
                             variant="contained"
                             color="primary"
                         >
-                            <AddCircle />
-                            {t('questions.addButton')}
+                            <Link
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    color: 'white',
+                                }}
+                                to={{
+                                    pathname: '/admin/subjects/tests/answers',
+                                    state: {
+                                        mode: 'Add',
+                                    },
+                                }}
+                            >
+                                <AddCircle />
+                                <span>{t('questions.addButton')}</span>
+                            </Link>
                         </Button>
                     </div>
                     <Paper elevation={6}>
@@ -147,7 +178,7 @@ export default function Questions() {
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
                     </Paper>
-                </React.Fragment>
+                </QuestionsContext.Provider>
             ) : (
                 <Loader />
             )}

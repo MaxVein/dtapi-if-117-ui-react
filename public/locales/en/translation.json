@@ -332,24 +332,35 @@
         "transfer":"Transfer"
       }
     }
-  },
+    },
   "questions":{
     "title":"Questions",
     "addButton":"Add question",
+    "modal":{
+      "deleteTitle":"Delete question"
+    },
     "table":{
       "id":"ID",
       "questionText":"Question Text",
       "type":"Type",
       "level":"Level",
       "actions":"Operations"
+    },
+    "form":{
+      "addTitle":"Add Question",
+      "updateTitle":"Edit Question",
+      "questionText": "Question Text",
+      "attachment": "Attachment(image)",
+      "type":"Type",
+      "level":"Level"
     }
-  },
-    "answers":{
+    },
+  "answers":{
     "title":"Answers for question",
     "addButton":"Add answer"
-  },
-    "labelRowsPerPage": "Rows per page:",
-    "validation": {
+    },
+  "labelRowsPerPage": "Rows per page:",
+  "validation": {
         "tooShortName": "Name is too short!",
         "tooLongName": "Name is too long!",
         "requiredField": "Required field",

@@ -336,12 +336,23 @@
   "questions":{
     "title":"Питання",
     "addButton":"Додати запитання",
+    "modal":{
+      "deleteTitle":"Видалити запитання"
+    },
     "table":{
       "id":"ID",
       "questionText":"Текст запитання",
       "type":"Тип",
       "level":"Рівень",
       "actions":"Дії"
+    },
+    "form":{
+      "addTitle":"Додати питання",
+      "updateTitle":"Редагувати питання",
+      "questionText": "Текст питання",
+      "attachment": "Додаток (зображення)",
+      "type":"Тип",
+      "level":"Рівень"
     }
   },
   "answers":{

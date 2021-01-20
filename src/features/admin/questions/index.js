@@ -1,2 +1,2 @@
-import Questions from './table/QuestionsTable';
+import Questions from './Table/QuestionsTable';
 export default Questions;

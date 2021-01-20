@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { environment } from '../../../environments/environment';
 export const source = axios.CancelToken.source();
+import { getAnswers } from '../answers/AnswersService';
 
 export function createData(question_id, question_text, type, level) {
     return { question_id, question_text, type, level };
@@ -32,8 +33,17 @@ export async function getQuestions(id, quantity) {
         .then((res) => res.data);
 }
 
-export async function deleteQuestionWithAnswers(id) {
-    return await axios.delete(`${environment.BASEURL}AdminUser/del/${id}`).then((res) => res.data);
+export async function deleteAnswers(answers) {
+    if (answers.length) {
+        const newAnswers = answers.map((answer) =>
+            axios.delete(`${environment.BASEURL}Answer/del/${answer.answer_id}`),
+        );
+        return axios.all(newAnswers).then((res) => res);
+    }
+}
+
+export async function deleteQuestion(id) {
+    return await axios.delete(`${environment.BASEURL}Question/del/${id}`).then((res) => res.data);
 }
 
 export async function updateQuestion(body, id) {
@@ -43,23 +53,35 @@ export async function updateQuestion(body, id) {
 }
 
 export function deleteModeSubmit(id, setSnack, setDataSource, t, closeModal) {
-    deleteQuestionWithAnswers(id)
-        .then((res) => {
-            if (res.response === 'ok') {
-                setDataSource((prevVal) => prevVal.filter((tableAdmin) => tableAdmin.id !== id));
-                closeModal();
-                setSnack({
-                    open: true,
-                    message: t('admins.messages.deleteSuccess'),
-                    type: 'success',
-                });
-            }
-        })
-        .catch((err) =>
-            setSnack({
-                open: true,
-                message: `${t('admins.messages.serverFailed')}${err}`,
-                type: 'error',
-            }),
-        );
+    getAnswers(id).then((res) => {
+        deleteAnswers(res).then((res) => console.log(res));
+    });
+    // deleteAnswers(id).then((res) => {
+    //     console.log(res);
+    //     if (res.response === 'ok') {
+    //         setDataSource((prevVal) =>
+    //             prevVal.filter((tableQuestion) => tableQuestion.question_id !== id),
+    //         );
+    //         closeModal();
+    //         setSnack({
+    //             open: true,
+    //             message: t('admins.messages.deleteSuccess'),
+    //             type: 'success',
+    //         });
+    //     }
+    // });
+    //     .catch((err) =>
+    //         setSnack({
+    //             open: true,
+    //             message: `${t('admins.messages.serverFailed')}${err}`,
+    //             type: 'error',
+    //         }),
+    //     );
 }
+// Answers(deleted.id).then((res) => {
+//     if (res.length) {
+//         deleteAnswers(res).then((res) => {
+//             if (res[0].status === 200) {
+//                 deleteQuestion(deleted.id)
+//         }}
+// }
