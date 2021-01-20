@@ -333,6 +333,49 @@
       }
     }
   },
+  "questions":{
+    "title":"Питання",
+    "addButton":"Додати запитання",
+    "modal":{
+      "deleteTitle":"Видалити запитання",
+      "submitUpdateButton":"Зберегти"
+    },
+    "table":{
+      "id":"ID",
+      "questionText":"Текст запитання",
+      "type":"Тип",
+      "level":"Рівень",
+      "actions":"Дії"
+    },
+    "form":{
+      "addTitle":"Додати запитання",
+      "updateTitle":"Редагувати запитання",
+      "questionText": "Текст запитання",
+      "attachment": "Додаток (зображення)",
+      "type":{
+        "title":"Тип",
+        "simpleChoice":"Простий вибір",
+        "multiChoice":"Мульти-вибір",
+        "textField":"Текстове поле",
+        "numberRange":"Числовий діапазон"
+      },
+      "level":"Рівень"
+    },
+    "messages":{
+      "deleteSuccess":"Запитання успішно видалено",
+      "addSuccess": "Запитання успішно додано",
+      "updateSuccess": "Запитання успішно оновлено",
+      "serverFailed": "На сервері відбулась помилка - ",
+      "addTooltip":"Додати запитання",
+      "updateTooltip":"Оновити запитання",
+      "deleteTooltip":"Видалити запитання",
+      "answersTooltip":"Відповіді до запитання"
+    }
+  },
+  "answers":{
+    "title":"Відповіді до питання",
+    "addButton":"Додати відповідь"
+  },
   "results": {
     "page": {
       "title": "Результати тестувань",

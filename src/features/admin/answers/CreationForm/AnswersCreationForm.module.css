@@ -1,0 +1,8 @@
+.card{
+    margin-bottom: 2rem;
+}
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
