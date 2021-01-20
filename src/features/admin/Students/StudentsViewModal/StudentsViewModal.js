@@ -46,23 +46,23 @@ const StudentsViewModal = ({ groupID, studentID }) => {
             });
             messageHandler(t('students.view.messages.uploadStudentData'), 'success');
         } else if (!info.length) {
-            setOpen({ open: false });
-            setLoading((prevState) => {
-                prevState.view = true;
-                return prevState;
-            });
-            messageHandler(t('students.view.messages.notStudentData'), 'warning');
+            getStudentInfoErrorHandler(false);
         } else if (info.error) {
-            setOpen({ open: false });
-            setLoading((prevState) => {
-                prevState.view = true;
-                return prevState;
-            });
+            getStudentInfoErrorHandler(true);
+        }
+    };
+
+    const getStudentInfoErrorHandler = (error) => {
+        setOpen({ open: false });
+        setStudent({});
+        if (error) {
             errorHandler(
                 t('students.view.errors.uploadStudentData'),
                 t('students.view.errors.typeError'),
             );
             messageHandler(t('students.view.messages.closeDueError'), 'error');
+        } else {
+            messageHandler(t('students.view.messages.notStudentData'), 'warning');
         }
     };
 

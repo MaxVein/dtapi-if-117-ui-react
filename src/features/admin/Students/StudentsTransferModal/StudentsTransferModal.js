@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StudentsServiceApi } from '../services/StudentsService';
 import { UseLanguage } from '../../../../lang/LanguagesContext';
 import TableContext from '../StudentsTable/TableContext';
@@ -26,15 +26,6 @@ const StudentsTransferModal = ({ student, transfer }) => {
     const [loader, setLoader] = useState(loading.transfer);
     const [submitted, setSubmitted] = useState(false);
 
-    const transferErrorHandler = useCallback(
-        (message) => {
-            setOpen({ open: false });
-            messageHandler(t('students.transfer.messages.closeDueError'), 'error');
-            errorHandler(message, t('students.transfer.errors.typeWarning'));
-        },
-        [setOpen, messageHandler, errorHandler],
-    );
-
     useEffect(() => {
         (async function studentInfo(id) {
             await getStudentInfo(id);
@@ -60,6 +51,12 @@ const StudentsTransferModal = ({ student, transfer }) => {
         } else if (response.error) {
             transferErrorHandler(t('students.transfer.errors.getStudentInfo'));
         }
+    };
+
+    const transferErrorHandler = (message) => {
+        setOpen({ open: false });
+        messageHandler(t('students.transfer.messages.closeDueError'), 'error');
+        errorHandler(message, t('students.transfer.errors.typeWarning'));
     };
 
     return (

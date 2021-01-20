@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UseLanguage } from '../../../../lang/LanguagesContext';
 import { StudentsServiceApi } from '../services/StudentsService';
 import StudentsContext from './StudentsContext';
@@ -39,28 +39,6 @@ const StudentsPage = ({ match, location }) => {
     const [snackBar, setSnackBar] = useState({ open: false, message: '', type: 'success' });
     const [error, setError] = useState({ error: false, message: '', type: '' });
 
-    const errorHandler = useCallback(
-        (message, type) => {
-            setError({
-                error: true,
-                message,
-                type,
-            });
-        },
-        [error, setError],
-    );
-
-    const messageHandler = useCallback(
-        (message, type) => {
-            setSnackBar({
-                open: true,
-                message,
-                type,
-            });
-        },
-        [setSnackBar],
-    );
-
     useEffect(() => {
         if (location.query !== undefined) {
             localStorage.setItem('group_name', location.query.group_name);
@@ -83,22 +61,9 @@ const StudentsPage = ({ match, location }) => {
             });
             messageHandler(t('students.page.messages.uploadStudents'), 'success');
         } else if (!students.length) {
-            setStudents([]);
-            setLoading((prevState) => {
-                prevState.page = false;
-                return prevState;
-            });
-            messageHandler(t('students.page.messages.noStudents'), 'warning');
+            getStudentsByGroupErrorHandler(false);
         } else if (students.error) {
-            setStudents([]);
-            setLoading((prevState) => {
-                prevState.page = false;
-                return prevState;
-            });
-            errorHandler(
-                t('students.page.errors.uploadStudents'),
-                t('students.page.errors.typeError'),
-            );
+            getStudentsByGroupErrorHandler(true);
         }
     };
 
@@ -107,22 +72,56 @@ const StudentsPage = ({ match, location }) => {
         if (create.id && create.response === 'ok') {
             student.user_id = create.id.toString();
             setStudents((prevState) => [...prevState, student]);
-            setOpen((prevState) => {
-                prevState.open = false;
-                return prevState;
-            });
-            messageHandler(t('students.createUpdate.messages.studentAdded'), 'success');
+            createHandler(false);
         } else if (create.error) {
-            setOpen((prevState) => {
-                prevState.open = false;
-                return prevState;
-            });
+            createHandler(true);
+        }
+    };
+
+    const getStudentsByGroupErrorHandler = (error) => {
+        setStudents([]);
+        setLoading((prevState) => {
+            prevState.page = false;
+            return prevState;
+        });
+        error
+            ? errorHandler(
+                  t('students.page.errors.uploadStudents'),
+                  t('students.page.errors.typeError'),
+              )
+            : messageHandler(t('students.page.messages.noStudents'), 'warning');
+    };
+
+    const createHandler = (error) => {
+        setOpen((prevState) => {
+            prevState.open = false;
+            return prevState;
+        });
+        if (error) {
             messageHandler(t('students.createUpdate.messages.closeDueError'), 'error');
             errorHandler(
                 t('students.createUpdate.errors.createStudent'),
                 t('students.createUpdate.errors.typeError'),
             );
+        } else {
+            messageHandler(t('students.createUpdate.messages.studentAdded'), 'success');
         }
+    };
+
+    const errorHandler = (message, type) => {
+        setError({
+            error: true,
+            message,
+            type,
+        });
+    };
+
+    const messageHandler = (message, type) => {
+        setSnackBar({
+            open: true,
+            message,
+            type,
+        });
     };
 
     return (
