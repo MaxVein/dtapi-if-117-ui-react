@@ -1,9 +1,7 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { Card, CardContent, Typography, TableRow, Table, TableCell } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -18,17 +16,9 @@ export default function AnswersCard({ answer }) {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root}>
-            <div className={classes.details}>
-                <CardContent className={classes.content}>
-                    <Typography component="h5" variant="h5">
-                        {answer.answer_text}
-                    </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                        {answer.answer_id}
-                    </Typography>
-                </CardContent>
-            </div>
-        </Card>
+        <TableRow>
+            <TableCell>{answer.answer_id}</TableCell>
+            <TableCell>{answer.answer_text}</TableCell>
+        </TableRow>
     );
 }

@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TablePagination from '@material-ui/core/TablePagination';
-
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import { Typography } from '@material-ui/core';
-
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TablePagination,
+    Paper,
+    Button,
+    Typography,
+    Tooltip,
+} from '@material-ui/core';
 import { Help, AddCircle } from '@material-ui/icons';
 
 import QuestionsTableRow from './QuestionsTableRow';
@@ -23,8 +24,9 @@ import {
     getNumberOfQuestions,
     getQuestions,
     deleteModeSubmit,
+    updateModeSubmit,
 } from '../QuestionsService';
-
+import SnackbarHandler from '../../../../common/components/Snackbar/snackbar';
 import QuestionsContext from '../QuestionsContext';
 import { UseLanguage } from '../../../../lang/LanguagesContext';
 
@@ -38,8 +40,8 @@ export default function Questions() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [dataSource, setDataSource] = React.useState([]);
     const [loaded, setLoaded] = React.useState(false);
-    const [deleted, setDeleted] = React.useState({ status: false, id: '' });
     const [added, setAdded] = React.useState({ status: false, data: {} });
+    const [deleted, setDeleted] = React.useState({ status: false, id: '' });
     const [updated, setUpdated] = React.useState({ status: false, data: {} });
 
     const closeModal = () => {
@@ -90,6 +92,12 @@ export default function Questions() {
         }
     }, [deleted]);
 
+    useEffect(() => {
+        if (updated.status) {
+            updateModeSubmit(updated.data, setSnack, setDataSource, t, updated.closeModal);
+        }
+    }, [updated]);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -112,30 +120,32 @@ export default function Questions() {
                             <Help fontSize="large" />
                             {t('questions.title')}
                         </Typography>
-                        <Button
-                            className={styles.entityHeaderButton}
-                            onClick={openModal}
-                            disableElevation
-                            variant="contained"
-                            color="primary"
-                        >
-                            <Link
-                                style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    color: 'white',
-                                }}
-                                to={{
-                                    pathname: '/admin/subjects/tests/answers',
-                                    state: {
-                                        mode: 'Add',
-                                    },
-                                }}
+                        <Tooltip title={t('questions.messages.addTooltip')} arrow>
+                            <Button
+                                className={styles.entityHeaderButton}
+                                onClick={openModal}
+                                disableElevation
+                                variant="contained"
+                                color="primary"
                             >
-                                <AddCircle />
-                                <span>{t('questions.addButton')}</span>
-                            </Link>
-                        </Button>
+                                <Link
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        color: 'white',
+                                    }}
+                                    to={{
+                                        pathname: '/admin/subjects/tests/answers',
+                                        state: {
+                                            mode: 'Add',
+                                        },
+                                    }}
+                                >
+                                    <AddCircle />
+                                    <span>{t('questions.addButton')}</span>
+                                </Link>
+                            </Button>
+                        </Tooltip>
                     </div>
                     <Paper elevation={6}>
                         <TableContainer>
@@ -178,6 +188,7 @@ export default function Questions() {
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
                     </Paper>
+                    <SnackbarHandler snack={snack} setSnack={setSnack} />
                 </QuestionsContext.Provider>
             ) : (
                 <Loader />

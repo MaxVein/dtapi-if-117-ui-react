@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
+        marginTop: '1rem',
     },
     formControl: {
         width: '45%',
@@ -34,10 +35,10 @@ export default function CreationForm({ mode, question }) {
 
     const classes = useStyles();
     const types = [
-        { num: 1, text: 'Simple choice' },
-        { num: 2, text: 'Multi-choice' },
-        { num: 3, text: 'Text field' },
-        { num: 4, text: 'Number range' },
+        { num: 1, text: t('questions.type.simpleChoice') },
+        { num: 2, text: t('questions.type.multiChoice') },
+        { num: 3, text: t('questions.type.textField') },
+        { num: 4, text: t('questions.type.numberRange') },
     ];
     const levels = [...Array(20).keys()];
     const intialFormValues = {
@@ -65,8 +66,9 @@ export default function CreationForm({ mode, question }) {
     });
     return (
         <React.Fragment>
-            <Card elevation={6}>
+            <Card className={styles.card} elevation={6}>
                 <CardHeader
+                    className={styles.title}
                     title={
                         mode === 'Add'
                             ? t('questions.form.addTitle')
@@ -97,6 +99,7 @@ export default function CreationForm({ mode, question }) {
                                     id="username"
                                     label={t('questions.form.questionText')}
                                     fullWidth
+                                    multiline
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.question_text}
@@ -115,14 +118,10 @@ export default function CreationForm({ mode, question }) {
                                     helperText={touched.attachment ? errors.attachment : ''}
                                     error={touched.attachment && Boolean(errors.attachment)}
                                 />
-                                <FormGroup className={classes.row} fullWidth row={true}>
-                                    <FormControl
-                                        helperText={touched.level ? errors.level : ''}
-                                        error={touched.level && Boolean(errors.level)}
-                                        className={classes.formControl}
-                                    >
+                                <FormGroup className={classes.row} row={true}>
+                                    <FormControl className={classes.formControl}>
                                         <InputLabel id="type-label">
-                                            {t('questions.form.type')}
+                                            {t('questions.form.type.title')}
                                         </InputLabel>
                                         <Select
                                             variant={mode === 'Add' ? 'standard' : 'filled'}
@@ -133,8 +132,6 @@ export default function CreationForm({ mode, question }) {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             value={values.type}
-                                            helperText={touched.type ? errors.type : ''}
-                                            error={touched.type && Boolean(errors.type)}
                                         >
                                             {types.map((type, index) => {
                                                 return (
@@ -144,12 +141,11 @@ export default function CreationForm({ mode, question }) {
                                                 );
                                             })}
                                         </Select>
+                                        {errors.type && touched.type ? (
+                                            <div>{errors.type}</div>
+                                        ) : null}
                                     </FormControl>
-                                    <FormControl
-                                        helperText={touched.level ? errors.level : ''}
-                                        error={touched.level && Boolean(errors.level)}
-                                        className={classes.formControl}
-                                    >
+                                    <FormControl className={classes.formControl}>
                                         <InputLabel id="level-label">
                                             {t('questions.form.level')}
                                         </InputLabel>
@@ -164,12 +160,15 @@ export default function CreationForm({ mode, question }) {
                                         >
                                             {levels.map((level, index) => {
                                                 return (
-                                                    <MenuItem key={index} value={level}>
-                                                        {level}
+                                                    <MenuItem key={index} value={level + 1}>
+                                                        {level + 1}
                                                     </MenuItem>
                                                 );
                                             })}
                                         </Select>
+                                        {errors.level && touched.level ? (
+                                            <div>{errors.level}</div>
+                                        ) : null}
                                     </FormControl>
                                 </FormGroup>
                             </form>

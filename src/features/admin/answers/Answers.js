@@ -54,6 +54,7 @@ export default function Answers() {
     const closeModal = () => {
         setOpen(false);
     };
+
     const openModal = () => {
         setOpen(true);
     };

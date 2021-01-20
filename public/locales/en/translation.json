@@ -131,7 +131,7 @@
             "addSuccess": "Admin successfully added",
             "updateSuccess": "Admin successfully updated",
             "nameFailed": "Name already exists",
-            "nameServerFailed": "На сервері відбулась помилка, можливо ви ввели ім'я яке вже існує, будь ласка введіть нове ім'я",
+            "nameServerFailed": "Server responded with an error, maybe you wrote existing name, change name please",
             "serverFailed": "Server responded with error - ",
             "changeNeeded": "You need to change something"
         }
@@ -334,7 +334,8 @@
     "title":"Questions",
     "addButton":"Add question",
     "modal":{
-      "deleteTitle":"Delete question"
+      "deleteTitle":"Delete question",
+      "submitUpdateButton":"Save"
     },
     "table":{
       "id":"ID",
@@ -345,11 +346,27 @@
     },
     "form":{
       "addTitle":"Add Question",
-      "updateTitle":"Edit Question",
+      "updateTitle":"Update Question",
       "questionText": "Question Text",
       "attachment": "Attachment(image)",
-      "type":"Type",
+     "type":{
+        "title":"Type",
+        "simpleChoice":"Simple choice",
+        "multiChoice":"Multi-choice",
+        "textField":"Text field",
+        "numberRange":"Number range"
+      },
       "level":"Level"
+    },
+    "messages":{
+      "deleteSuccess":"Question succesfully deleted",
+      "addSuccess": "Question successfully added",
+      "updateSuccess": "Question successfully updated",
+      "serverFailed": "Server responded with error - ",
+      "addTooltip":"Add question",
+      "updateTooltip":"Update question",
+      "deleteTooltip":"Delete question",
+      "answersTooltip":"Answers for question"
     }
     },
   "answers":{

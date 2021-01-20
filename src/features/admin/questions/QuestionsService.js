@@ -48,40 +48,144 @@ export async function deleteQuestion(id) {
 
 export async function updateQuestion(body, id) {
     return await axios
-        .post(`${environment.BASEURL}AdminUser/update/${id}`, body)
+        .post(`${environment.BASEURL}Question/update/${id}`, body)
         .then((res) => res.data);
 }
 
 export function deleteModeSubmit(id, setSnack, setDataSource, t, closeModal) {
     getAnswers(id).then((res) => {
-        deleteAnswers(res).then((res) => console.log(res));
+        deleteAnswers(res).then((res) => {
+            if (Array.isArray(res)) {
+                deleteQuestion(id)
+                    .then((res) => {
+                        if (res.response === 'ok') {
+                            setDataSource((prevVal) =>
+                                prevVal.filter((tableQuestion) => tableQuestion.question_id !== id),
+                            );
+                            closeModal();
+                            setSnack({
+                                open: true,
+                                message: t('questions.messages.deleteSuccess'),
+                                type: 'success',
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        setSnack({
+                            open: true,
+                            message: t('questions.messages.serverFailed')`${err}`,
+                            type: 'error',
+                        });
+                    });
+            } else if (res === undefined) {
+                deleteQuestion(id)
+                    .then((res) => {
+                        if (res.response === 'ok') {
+                            setDataSource((prevVal) =>
+                                prevVal.filter((tableQuestion) => tableQuestion.question_id !== id),
+                            );
+                            closeModal();
+                            setSnack({
+                                open: true,
+                                message: t('questions.messages.deleteSuccess'),
+                                type: 'success',
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        setSnack({
+                            open: true,
+                            message: t('questions.messages.serverFailed')`${err}`,
+                            type: 'error',
+                        });
+                    });
+            }
+        });
     });
-    // deleteAnswers(id).then((res) => {
-    //     console.log(res);
-    //     if (res.response === 'ok') {
-    //         setDataSource((prevVal) =>
-    //             prevVal.filter((tableQuestion) => tableQuestion.question_id !== id),
-    //         );
-    //         closeModal();
-    //         setSnack({
-    //             open: true,
-    //             message: t('admins.messages.deleteSuccess'),
-    //             type: 'success',
-    //         });
-    //     }
-    // });
-    //     .catch((err) =>
-    //         setSnack({
-    //             open: true,
-    //             message: `${t('admins.messages.serverFailed')}${err}`,
-    //             type: 'error',
-    //         }),
-    //     );
 }
-// Answers(deleted.id).then((res) => {
-//     if (res.length) {
-//         deleteAnswers(res).then((res) => {
-//             if (res[0].status === 200) {
-//                 deleteQuestion(deleted.id)
-//         }}
+
+export function updateModeSubmit(data, setSnack, setDataSource, t, closeModal) {
+    if (
+        data.values.question_text === data.intialFormValues.question_text &&
+        data.values.level === data.intialFormValues.level
+    ) {
+        setSnack({
+            open: true,
+            message: t('questions.messages.changeNeeded'),
+            type: 'info',
+        });
+    } else {
+        updateQuestion(data.values, data.id)
+            .then((res) => {
+                if (Array.isArray(res)) {
+                    setDataSource((prevVal) =>
+                        prevVal.map((item) =>
+                            item.question_id === data.id
+                                ? (item = { question_id: data.id, type: item.type, ...data.values })
+                                : item,
+                        ),
+                    );
+                    closeModal();
+                    setSnack({
+                        open: true,
+                        message: t('questions.messages.updateSuccess'),
+                        type: 'success',
+                    });
+                }
+            })
+            .catch((err) =>
+                setSnack({
+                    open: true,
+                    message: `${t('questions.messages.serverFailed')}${err}`,
+                    type: 'error',
+                }),
+            );
+    }
+}
+// export function updateModeSubmit(data, setSnack, setDataSource, t, closeModal) {
+//      else {
+//         checkAdminName(data.values.username)
+//             .then((res) => {
+//                 if (res.response) {
+//                     setSnack({
+//                         open: true,
+//                         message: t('admins.messages.nameFailed'),
+//                         type: 'error',
+//                     });
+//                 } else {
+//                     updateAdmin(data.values, data.id)
+//                         .then((res) => {
+//                             if (res.response === 'ok') {
+//                                 setDataSource((prevVal) =>
+//                                     prevVal.map((item) =>
+//                                         item.id === data.id
+//                                             ? (item = { id: data.id, ...data.values })
+//                                             : item,
+//                                     ),
+//                                 );
+//                                 closeModal();
+//                                 setSnack({
+//                                     open: true,
+//                                     message: t('admins.messages.updateSuccess'),
+//                                     type: 'success',
+//                                 });
+//                             }
+//                         })
+//                         .catch((err) =>
+//                             setSnack({
+//                                 open: true,
+//                                 message: `${t('admins.messages.serverFailed')}${err}`,
+//                                 type: 'error',
+//                             }),
+//                         );
+//                 }
+//             })
+//             .catch(() =>
+//                 setSnack({
+//                     open: true,
+//                     message: t('admins.messages.nameServerFailed'),
+//                     type: 'error',
+//                 }),
+//             );
+//     }
 // }

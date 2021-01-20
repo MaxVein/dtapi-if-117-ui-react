@@ -334,7 +334,8 @@
     "title":"Питання",
     "addButton":"Додати запитання",
     "modal":{
-      "deleteTitle":"Видалити запитання"
+      "deleteTitle":"Видалити запитання",
+      "submitUpdateButton":"Зберегти"
     },
     "table":{
       "id":"ID",
@@ -344,12 +345,28 @@
       "actions":"Дії"
     },
     "form":{
-      "addTitle":"Додати питання",
-      "updateTitle":"Редагувати питання",
-      "questionText": "Текст питання",
+      "addTitle":"Додати запитання",
+      "updateTitle":"Редагувати запитання",
+      "questionText": "Текст запитання",
       "attachment": "Додаток (зображення)",
-      "type":"Тип",
+      "type":{
+        "title":"Тип",
+        "simpleChoice":"Простий вибір",
+        "multiChoice":"Мульти-вибір",
+        "textField":"Текстове поле",
+        "numberRange":"Числовий діапазон"
+      },
       "level":"Рівень"
+    },
+    "messages":{
+      "deleteSuccess":"Запитання успішно видалено",
+      "addSuccess": "Запитання успішно додано",
+      "updateSuccess": "Запитання успішно оновлено",
+      "serverFailed": "На сервері відбулась помилка - ",
+      "addTooltip":"Додати запитання",
+      "updateTooltip":"Оновити запитання",
+      "deleteTooltip":"Видалити запитання",
+      "answersTooltip":"Відповіді до запитання"
     }
   },
   "answers":{
