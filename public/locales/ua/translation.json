@@ -124,7 +124,10 @@
             "name": "Ім'я",
             "email": "Електронна пошта",
             "password": "Пароль",
-            "passwordConfirm": "Підтвердити Пароль"
+            "passwordConfirm": "Підтвердити Пароль",
+            "addTooltip":"Додати адміна",
+            "updateTooltip":"Оновити адміна",
+            "deleteTooltip":"Видалити адміна"
         },
         "messages": {
             "deleteSuccess": "Адміна успішно видалено",

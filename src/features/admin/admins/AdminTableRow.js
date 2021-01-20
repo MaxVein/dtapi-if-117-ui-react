@@ -1,15 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import { TableCell, TableRow, Button, Tooltip } from '@material-ui/core';
 
-import Button from '@material-ui/core/Button';
-
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { Edit, Delete } from '@material-ui/icons';
 
 import AdminCreationForm from './AdminsCreationForm';
 import AdminsDeleteForm from './AdminsDeleteForm';
+
+import { UseLanguage } from '../../../lang/LanguagesContext';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -21,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AdminsTableRow({ admin }) {
+    const { t } = UseLanguage();
+
     const [edit, setUpdateOpen] = React.useState(false);
     const [del, setDelOpen] = React.useState(false);
     const classes = useStyles();
@@ -36,24 +36,28 @@ export default function AdminsTableRow({ admin }) {
                 <TableCell>{admin.username}</TableCell>
                 <TableCell>{admin.email}</TableCell>
                 <TableCell align="center">
-                    <Button
-                        disableElevation
-                        variant="contained"
-                        className={classes.button}
-                        color="primary"
-                        onClick={() => openModal('Update')}
-                    >
-                        <EditIcon />
-                    </Button>
-                    <Button
-                        onClick={() => openModal('Delete')}
-                        disableElevation
-                        variant="contained"
-                        className={classes.button}
-                        color="primary"
-                    >
-                        <DeleteIcon />
-                    </Button>
+                    <Tooltip title={t('admins.modal.updateTooltip')} arrow>
+                        <Button
+                            disableElevation
+                            variant="contained"
+                            className={classes.button}
+                            color="primary"
+                            onClick={() => openModal('Update')}
+                        >
+                            <Edit />
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title={t('admins.modal.deleteTooltip')} arrow>
+                        <Button
+                            onClick={() => openModal('Delete')}
+                            disableElevation
+                            variant="contained"
+                            className={classes.button}
+                            color="primary"
+                        >
+                            <Delete />
+                        </Button>
+                    </Tooltip>
                 </TableCell>
             </TableRow>
             <AdminCreationForm admin={admin} open={edit} setOpen={setUpdateOpen} mode={'Update'} />
