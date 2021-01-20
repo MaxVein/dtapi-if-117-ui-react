@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useLocation } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { findIndex } from 'lodash';
 
 import classes from './index.module.css';
@@ -192,7 +193,7 @@ export default function Timetable() {
                     </b>
                 </div>
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
-                    Додати новий розклад
+                    <AddCircleIcon /> Додати новий розклад
                 </Button>
             </div>
             {openForm && (
@@ -215,6 +216,7 @@ export default function Timetable() {
                 titleRow={titleRow}
                 TableList={TableList}
                 entityNameId={'timetable_id'}
+                noData={'Немає розкладу для заданого предмету'}
             />
             <SnackbarHandler snack={snack} setSnack={setSnack} />
         </>
