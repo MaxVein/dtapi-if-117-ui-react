@@ -5,6 +5,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
+
+import classes from './index.module.scss';
+
 import { UseLanguage } from '../../../lang/LanguagesContext';
 
 export default function ConfirmDelete({ id, setDeleteEntity, message }) {
@@ -22,11 +25,17 @@ export default function ConfirmDelete({ id, setDeleteEntity, message }) {
         setDeleteEntity({ delete: true, id: id });
         setOpen(false);
     };
-
     return (
         <div>
             <Tooltip title={t('subjects.modal.submitDeleteButton')}>
-                <DeleteIcon onClick={handleClickOpen} />
+                <Button
+                    disableElevation
+                    className={classes.iconBtn}
+                    variant="contained"
+                    color="primary"
+                >
+                    <DeleteIcon onClick={handleClickOpen} />
+                </Button>
             </Tooltip>
             <Dialog open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
                 <DialogTitle id="responsive-dialog-title">{message}</DialogTitle>

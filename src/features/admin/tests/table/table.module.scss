@@ -18,6 +18,12 @@
     display: flex;
     flex-wrap: wrap;
     svg {
-        fill: black !important;
+        fill: white !important;
     }
+}
+
+.iconBtn {
+    min-width: 20px !important;
+    padding: 6px 6px !important;
+    margin: 2px !important;
 }

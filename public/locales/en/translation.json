@@ -103,9 +103,6 @@
             "noEdit": "Please change something"
         }
     },
-    "results": {
-        "title": "Results"
-    },
     "admins": {
         "title": "Admins",
         "addButton": "Add admin",
@@ -359,8 +356,150 @@
     "title":"Answers for question",
     "addButton":"Add answer"
     },
-  "labelRowsPerPage": "Rows per page:",
-  "validation": {
+  "results": {
+    "page": {
+      "title": "Test results",
+      "text": "Select the group whose results you want to see",
+      "messages": {
+        "resultsUpload": "Results uploaded",
+        "noResults": "No results"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getResultsError": "An error occurred while obtaining and generating test results! Please try again"
+      }
+    },
+    "table": {
+      "noResults": "No results",
+      "search": "Search",
+      "searchPlaceholder": "Search by student's full name",
+      "no": "No.",
+      "fullname": "Student Full Name",
+      "mark": "Rating",
+      "date": "Date",
+      "start": "Start",
+      "duration": "Duration",
+      "details": "Read more",
+      "tooltips": {
+        "details": "View test details"
+      }
+    },
+    "filters": {
+      "labels": {
+        "all": "All results",
+        "min": "The lowest result",
+        "max": "Maximum result",
+        "titleResultsFilter": "Filter by result"
+      },
+      "placeholders": {
+        "resultsFilter": "Select a result filter",
+        "dateFilter": "Select the date of the test"
+      },
+      "messages": {
+        "min": "Filtered by the lowest student scores",
+        "max": "Filtered by the highest student results",
+        "all": "All student results are shown",
+        "dateSuccess": "Showing all student results for",
+        "dateFail": "Student results for",
+        "noDateResults": "missing"
+      }
+    },
+    "filter": {
+      "messages": {
+        "selectFaculty": "Faculty selected",
+        "noFaculties": "There are no faculties",
+        "selectGroup": "Group selected",
+        "noGroups": "There are no groups",
+        "selectTest": "Test selected",
+        "noTests": "There are no tests",
+        "noGroupTests": "There are no tests available for the selected group",
+        "getDataError": "An error occurred while retrieving data! Please try again"
+      },
+      "labels": {
+        "faculty": "Select Faculty / Institute",
+        "group": "Select Group",
+        "test": "Select Test"
+      },
+      "placeholders": {
+        "faculty": "Faculty / Institute",
+        "group": "Group",
+        "test": "Group tests"
+      },
+      "buttons": {
+        "get": "Get test results"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getFacultiesError": "An error occurred while obtaining the list of faculties! Please try again",
+        "getTestsError": "An error occurred while retrieving the test list! Please try again",
+        "getGroupTestsError": "An error occurred while retrieving the group test list! Please try again",
+        "getGroupsError": "An error occurred while retrieving the group list! Please try again"
+      }
+    },
+    "detailsModal": {
+      "table": {
+        "no": "No.",
+        "id": "Identifier",
+        "text": "Question text",
+        "answer": "Answer",
+        "details": "Read more",
+        "true": "Right",
+        "false": "Wrong"
+      },
+      "messages": {
+        "detailsUpload": "Test details downloaded",
+        "noDetails": "Details about testing are missing",
+        "close": "Closed"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getDetailsError": "An error occurred while retrieving test details! Please try again"
+      },
+      "tooltips": {
+        "details": "View details of the question"
+      },
+      "buttons": {
+        "close": "Close"
+      }
+    },
+    "detailsByQuestion": {
+      "texts": {
+        "noStudentAnswer": "The student did not answer this question"
+      },
+      "types": {
+        "first": "Choosing one correct answer",
+        "second": "Choosing a few correct answers",
+        "third": "Text answer",
+        "fourth": "Numerical answer"
+      },
+      "labels": {
+        "details": "Details of the question №",
+        "id": "Identifier №",
+        "question": "Question:",
+        "info": "Details of the question:",
+        "level": "Level:",
+        "type": "Type:",
+        "answer": "Student answer:",
+        "options": "Options for answering the question",
+        "true": "Right",
+        "false": "Wrong"
+      },
+      "buttons": {
+        "close": "Close"
+      },
+      "messages": {
+        "detailsUpload": "Details of the test questions are loaded",
+        "noDetails": "There is no data on the details of this question",
+        "close": "Closed"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getDetailsError": "An error occurred while retrieving the question details! Please try again"
+      }
+    }
+  },
+    "labelRowsPerPage": "Rows per page:",
+    "validation": {
         "tooShortName": "Name is too short!",
         "tooLongName": "Name is too long!",
         "requiredField": "Required field",

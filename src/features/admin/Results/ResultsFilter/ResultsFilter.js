@@ -1,4 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 import { ResultsServiceApi } from '../services/ResultsService';
 import ResultsContext from '../ResultsPage/ResultsContext';
 import PropTypes from 'prop-types';
@@ -19,12 +20,18 @@ import GroupIcon from '@material-ui/icons/Group';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 
 const ResultsFilter = ({ getTestInfoByGroup }) => {
-    const { loading, setLoading, setSnackBar, errorHandler } = useContext(ResultsContext);
+    const { t } = UseLanguage();
+    const { loading, setLoading, messageHandler, errorHandler } = useContext(ResultsContext);
     const [faculties, setFaculties] = useState([]);
     const [groups, setGroups] = useState([]);
     const [tests, setTests] = useState({ allTests: [], groupTests: [] });
     const [ids, setIds] = useState({ groupId: null, testId: null, subjectId: null });
-    const [disabled, setDisabled] = useState({ faculties: true, groups: true, tests: true });
+    const [disabled, setDisabled] = useState({
+        faculties: true,
+        groups: true,
+        tests: true,
+        get: true,
+    });
     const [faculty, setFaculty] = useState('');
     const [group, setGroup] = useState('');
     const [test, setTest] = useState('');
@@ -38,39 +45,15 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
         })();
     }, []);
 
-    const messageHandler = useCallback(
-        (message, type) => {
-            setSnackBar({
-                open: true,
-                message,
-                type,
-            });
-        },
-        [setSnackBar],
-    );
-
     const getFacultyList = async () => {
         const faculties = await ResultsServiceApi.fetchFaculties();
         if (faculties.length) {
             setFaculties(faculties);
-            setDisabled({ faculties: false, groups: true, tests: true });
+            setDisabled({ faculties: false, groups: true, tests: true, get: true });
         } else if (!faculties.length) {
-            setFaculties([]);
-            messageHandler('Факультети відсутні', 'warning');
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: true,
-                detailsByQuestionModal: true,
-            });
+            facultyErrorHandler(false);
         } else if (faculties.error) {
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: true,
-                detailsByQuestionModal: true,
-            });
-            errorHandler('Сталася помилка під час отримання списку факультетів! Спробуйте знову');
+            facultyErrorHandler(true);
         }
     };
 
@@ -85,58 +68,64 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                 detailsByQuestionModal: true,
             });
         } else if (!tests.length) {
-            setTests({ allTests: [], groupTests: [] });
-            messageHandler('Тести відсутні', 'warning');
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: true,
-                detailsByQuestionModal: true,
-            });
+            allTestsErrorhandler(false);
         } else if (tests.error) {
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: true,
-                detailsByQuestionModal: true,
-            });
-            errorHandler('Сталася помилка під час отримання списку тестів! Спробуйте знову');
+            allTestsErrorhandler(true);
         }
     };
 
-    const groupsList = async (id) => {
-        if (id) {
-            await getGroupList(id);
-        } else {
-            messageHandler('Сталася помилка при отриманні даних! Спробуйте знову', 'error');
-        }
+    const facultiesChangeHandler = async (event) => {
+        const id = event.target.value;
+        setFaculty(id);
+        setGroup('');
+        setGroups([]);
+        setTest('');
+        setTests((prevState) => {
+            return {
+                allTests: [...prevState.allTests],
+                groupTests: [],
+            };
+        });
+        messageHandler(t('results.filter.messages.selectFaculty'), 'success');
+        id
+            ? await getGroupList(id)
+            : messageHandler(t('results.filter.messages.getDataError'), 'error');
     };
 
     const getGroupList = async (id) => {
         const groups = await ResultsServiceApi.fetchGroupsByFaculty(id);
         if (groups.length) {
             setGroups(groups);
-            setDisabled({ faculties: false, groups: false, tests: true });
+            setDisabled({ faculties: false, groups: false, tests: true, get: true });
         } else if (!groups.length) {
-            setGroup('');
-            setGroups([]);
-            setDisabled({ faculties: false, groups: true, tests: true });
-            messageHandler('Групи відсутні', 'warning');
+            groupsErrorHandler(false);
         } else if (groups.error) {
-            errorHandler('Сталася помилка під час отримання списку груп! Спробуйте знову');
+            groupsErrorHandler(true);
         }
     };
 
-    const getGroup = async (id) => {
-        if (id) {
-            messageHandler('Групу вибрано', 'success');
-            setIds({ groupId: id, testId: null, subjectId: null });
-            await getGroupTests(id);
-            const arr = groups.filter((g) => g.group_id === id.toString());
-            localStorage.setItem('group_name', JSON.stringify(arr[0].group_name));
-        } else {
-            messageHandler('Сталася помилка при отриманні даних! Спробуйте знову', 'error');
-        }
+    const groupsChangeHandler = (event) => {
+        const id = event.target.value;
+        setGroup(id);
+        setTest('');
+        setTests((prevState) => {
+            return {
+                allTests: [...prevState.allTests],
+                groupTests: [],
+            };
+        });
+        id ? selectedGroup(id) : messageHandler(t('results.filter.messages.getDataError'), 'error');
+    };
+
+    const selectedGroup = async (id) => {
+        messageHandler(t('results.filter.messages.selectGroup'), 'success');
+        setIds((prevState) => {
+            prevState.groupId = id;
+            return prevState;
+        });
+        const arr = groups.filter((g) => g.group_id === id.toString());
+        localStorage.setItem('group_name', JSON.stringify(arr[0].group_name));
+        await getGroupTests(id);
     };
 
     const getGroupTests = async (id) => {
@@ -151,20 +140,89 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                     groupTests: [...prevState.groupTests],
                 };
             });
-            setDisabled({ faculties: false, groups: false, tests: false });
+            setDisabled({ faculties: false, groups: false, tests: false, get: true });
         } else if (!response.length) {
-            setTest('');
-            setTests((prevState) => {
-                return {
-                    allTests: [...prevState.allTests],
-                    groupTests: [],
-                };
-            });
-            setDisabled({ faculties: false, groups: false, tests: true });
-            messageHandler('Немає доступних тестів у вибраної групи', 'warning');
+            testsErrorHandler(false);
         } else if (response.error) {
-            errorHandler('Сталася помилка під час отримання списку тестів групи! Спробуйте знову');
+            testsErrorHandler(true);
         }
+    };
+
+    const testsChangeHandler = (event) => {
+        setTest(event.target.value);
+        const arr = tests.groupTests.filter((t) => t.test_id === event.target.value.toString());
+        setIds((prevState) => {
+            return {
+                groupId: prevState.groupId,
+                testId: +event.target.value,
+                subjectId: arr[0].subject_id,
+            };
+        });
+        localStorage.setItem('test_name', JSON.stringify(arr[0].test_name));
+        messageHandler(t('results.filter.messages.selectTest'), 'success');
+        setDisabled({ faculties: false, groups: false, tests: false, get: false });
+    };
+
+    const facultyErrorHandler = (error) => {
+        setFaculties([]);
+        setDisabled({ faculties: true, groups: true, tests: true, get: true });
+        setLoading({
+            filter: false,
+            table: false,
+            detailsModal: true,
+            detailsByQuestionModal: true,
+        });
+        error
+            ? errorHandler(
+                  t('results.filter.errors.getFacultiesError'),
+                  t('results.filter.errors.typeError'),
+              )
+            : messageHandler(t('results.filter.messages.noFaculties'), 'warning');
+    };
+
+    const allTestsErrorhandler = (error) => {
+        setTests({ allTests: [], groupTests: [] });
+        setLoading({
+            filter: false,
+            table: false,
+            detailsModal: true,
+            detailsByQuestionModal: true,
+        });
+        error
+            ? errorHandler(
+                  t('results.filter.errors.getTestsError'),
+                  t('results.filter.errors.typeError'),
+              )
+            : messageHandler(t('results.filter.messages.noTests'), 'warning');
+    };
+
+    const groupsErrorHandler = (error) => {
+        setGroup('');
+        setDisabled({ faculties: false, groups: true, tests: true, get: true });
+        setGroups([]);
+        error
+            ? errorHandler(
+                  t('results.filter.errors.getGroupsError'),
+                  t('results.filter.errors.typeError'),
+              )
+            : messageHandler(t('results.filter.messages.noGroups'), 'warning');
+    };
+
+    const testsErrorHandler = (error) => {
+        setTest('');
+        setDisabled({ faculties: false, groups: false, tests: true, get: true });
+        setTests((prevState) => {
+            return {
+                allTests: [...prevState.allTests],
+                groupTests: [],
+            };
+        });
+        error
+            ? errorHandler(
+                  t('results.filter.errors.getGroupTestsError'),
+                  t('results.filter.errors.typeError'),
+              )
+            : messageHandler(t('results.filter.messages.noGroupTests'), 'warning');
     };
 
     return (
@@ -187,23 +245,22 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                         className={classes.Label}
                                     >
                                         <SchoolIcon className={classes.SelectorIcon} />
-                                        Виберіть Факультет/Інститут
+                                        {t('results.filter.labels.faculty')}
                                     </InputLabel>
                                     <Select
                                         defaultValue={''}
-                                        placeholder="Факультет/Інститут"
+                                        placeholder={t('results.filter.placeholders.faculty')}
                                         required
                                         value={faculty}
                                         className={classes.Select}
-                                        onChange={async (event) => {
-                                            setFaculty(event.target.value);
-                                            messageHandler('Факультет вибрано', 'success');
-                                            await groupsList(+event.target.value);
-                                        }}
+                                        onChange={facultiesChangeHandler}
                                         disabled={disabled.faculties}
                                     >
                                         {faculties.map(({ faculty_id, faculty_name }) => (
-                                            <MenuItem key={faculty_id} value={+faculty_id}>
+                                            <MenuItem
+                                                key={faculty_id + Math.random()}
+                                                value={+faculty_id}
+                                            >
                                                 {faculty_name}
                                             </MenuItem>
                                         ))}
@@ -216,22 +273,22 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                 <FormControl fullWidth={true} className={classes.FormControl}>
                                     <InputLabel className={classes.Label}>
                                         <GroupIcon className={classes.SelectorIcon} />
-                                        Виберіть Групу
+                                        {t('results.filter.labels.group')}
                                     </InputLabel>
                                     <Select
                                         defaultValue={''}
-                                        placeholder="Група"
+                                        placeholder={t('results.filter.placeholders.group')}
                                         required
                                         value={group}
                                         className={classes.Select}
-                                        onChange={async (event) => {
-                                            setGroup(event.target.value);
-                                            await getGroup(+event.target.value);
-                                        }}
+                                        onChange={groupsChangeHandler}
                                         disabled={disabled.groups}
                                     >
                                         {groups.map(({ group_id, group_name }) => (
-                                            <MenuItem key={group_id} value={+group_id}>
+                                            <MenuItem
+                                                key={group_id + Math.random()}
+                                                value={+group_id}
+                                            >
                                                 {group_name}
                                             </MenuItem>
                                         ))}
@@ -244,36 +301,22 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                 <FormControl fullWidth={true} className={classes.FormControl}>
                                     <InputLabel className={classes.Label}>
                                         <PlaylistAddCheckIcon className={classes.SelectorIcon} />
-                                        Виберіть Тест
+                                        {t('results.filter.labels.test')}
                                     </InputLabel>
                                     <Select
                                         defaultValue={''}
-                                        placeholder="Тести групи"
+                                        placeholder={t('results.filter.placeholders.test')}
                                         required
                                         value={test}
                                         className={classes.Select}
-                                        onChange={(event) => {
-                                            setTest(event.target.value);
-                                            const arr = tests.groupTests.filter(
-                                                (t) => t.test_id === event.target.value.toString(),
-                                            );
-                                            setIds((prevState) => {
-                                                return {
-                                                    groupId: prevState.groupId,
-                                                    testId: +event.target.value,
-                                                    subjectId: arr[0].subject_id,
-                                                };
-                                            });
-                                            messageHandler('Тест вибрано', 'success');
-                                            localStorage.setItem(
-                                                'test_name',
-                                                JSON.stringify(arr[0].test_name),
-                                            );
-                                        }}
+                                        onChange={testsChangeHandler}
                                         disabled={disabled.tests}
                                     >
                                         {tests.groupTests.map(({ test_id, test_name }) => (
-                                            <MenuItem key={test_id} value={+test_id}>
+                                            <MenuItem
+                                                key={test_id + Math.random()}
+                                                value={+test_id}
+                                            >
                                                 {test_name}
                                             </MenuItem>
                                         ))}
@@ -287,7 +330,7 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                 color={'primary'}
                                 className={classes.Button}
                                 type="submit"
-                                disabled={test === ''}
+                                disabled={test === '' && disabled.get}
                                 onClick={() => {
                                     setLoading({
                                         filter: false,
@@ -298,7 +341,7 @@ const ResultsFilter = ({ getTestInfoByGroup }) => {
                                     getTestInfoByGroup(ids.testId, ids.groupId, ids.subjectId);
                                 }}
                             >
-                                Отримати результати тесту
+                                {t('results.filter.buttons.get')}
                             </Button>
                         </div>
                     </CardContent>

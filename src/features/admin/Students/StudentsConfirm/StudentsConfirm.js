@@ -52,7 +52,6 @@ const StudentsConfirm = ({ student, remove }) => {
                             type="submit"
                             className={classes.Button}
                             onClick={() => {
-                                setOpen({ open: false });
                                 remove(student.user_id);
                             }}
                         >

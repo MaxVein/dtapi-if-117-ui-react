@@ -73,12 +73,11 @@ const StudentsTable = ({ students, setStudents }) => {
         const update = await StudentsServiceApi.update(id, student);
         if (update.response === 'ok') {
             setStudents((prevState) => prevState.filter((s) => s.user_id !== student.user_id));
-            setOpen({ open: false });
-            messageHandler(t('students.transfer.messages.studentTransfer'), 'success');
+            successHandler(t('students.transfer.messages.studentTransfer'));
         } else if (update.error) {
-            setOpen({ open: false });
-            messageHandler(t('students.transfer.messages.closeDueError'), 'error');
-            errorHandler(
+            failHandler(
+                t('students.transfer.messages.closeDueError'),
+                'error',
                 t('students.transfer.errors.transferStudent'),
                 t('students.transfer.errors.typeWarning'),
             );
@@ -93,8 +92,7 @@ const StudentsTable = ({ students, setStudents }) => {
                 prevState[index] = student;
                 return [...prevState];
             });
-            setOpen({ open: false });
-            messageHandler(t('students.createUpdate.messages.studentUpdated'), 'success');
+            successHandler(t('students.createUpdate.messages.studentUpdated'));
         } else if (update.error) {
             updateErrorHandler(update);
         }
@@ -102,16 +100,16 @@ const StudentsTable = ({ students, setStudents }) => {
 
     const updateErrorHandler = (update) => {
         if (update.error.response === 'Error when update') {
-            setOpen({ open: false });
-            messageHandler(t('students.createUpdate.messages.noChanges'), 'warning');
-            errorHandler(
+            failHandler(
+                t('students.createUpdate.messages.noChanges'),
+                'warning',
                 t('students.createUpdate.errors.mustChangeData'),
                 t('students.createUpdate.errors.typeWarning'),
             );
         } else {
-            setOpen({ open: false });
-            messageHandler(t('students.createUpdate.messages.closeDueError'), 'error');
-            errorHandler(
+            failHandler(
+                t('students.createUpdate.messages.closeDueError'),
+                'error',
                 t('students.createUpdate.errors.updateStudent'),
                 t('students.createUpdate.errors.typeError'),
             );
@@ -122,13 +120,24 @@ const StudentsTable = ({ students, setStudents }) => {
         const res = await StudentsServiceApi.remove(id);
         if (res.response === 'ok') {
             setStudents((prevState) => prevState.filter((s) => s.user_id !== id));
-            messageHandler(t('students.remove.messages.studentRemove'), 'success');
+            successHandler(t('students.remove.messages.studentRemove'));
         } else if (res.error) {
             errorHandler(
                 t('students.remove.errors.studentRemove'),
                 t('students.remove.errors.typeError'),
             );
         }
+    };
+
+    const successHandler = (message) => {
+        setOpen({ open: false });
+        messageHandler(message, 'success');
+    };
+
+    const failHandler = (snackMessage, snackType, errorMessage, errorType) => {
+        setOpen({ open: false });
+        messageHandler(snackMessage, snackType);
+        errorHandler(errorMessage, errorType);
     };
 
     return (
@@ -147,11 +156,20 @@ const StudentsTable = ({ students, setStudents }) => {
                     <>
                         <TableSearch onSearch={(search) => setSearch(search)} />
                         <TableContainer className={classes.TableContainer} component={Paper}>
-                            <Table>
+                            <Table stickyHeader>
                                 <TableHead>
                                     <TableRow>
                                         {displayedColumns.map((column, index) => (
-                                            <TableCell key={column + index}>{column}</TableCell>
+                                            <TableCell
+                                                align={
+                                                    column === ('Actions' || 'Дії')
+                                                        ? 'center'
+                                                        : 'left'
+                                                }
+                                                key={column + index}
+                                            >
+                                                {column}
+                                            </TableCell>
                                         ))}
                                     </TableRow>
                                 </TableHead>
@@ -159,7 +177,12 @@ const StudentsTable = ({ students, setStudents }) => {
                                     {dataSource
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((student, index) => (
-                                            <TableRow key={student.user_id + index}>
+                                            <TableRow
+                                                hover
+                                                role="checkbox"
+                                                tabIndex={-1}
+                                                key={student.user_id + index + Math.random()}
+                                            >
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>{student.gradebook_id}</TableCell>
                                                 <TableCell>
@@ -167,7 +190,7 @@ const StudentsTable = ({ students, setStudents }) => {
                                                     {student.student_name}&nbsp;
                                                     {student.student_fname}
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell align={'center'}>
                                                     <div className={classes.Actions}>
                                                         <Tooltip
                                                             title={t(

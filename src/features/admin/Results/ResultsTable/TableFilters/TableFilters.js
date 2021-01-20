@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { UseLanguage } from '../../../../../lang/LanguagesContext';
 import { ResultsServiceApi } from '../../services/ResultsService';
 import ResultsContext from '../../ResultsPage/ResultsContext';
 import PropTypes from 'prop-types';
@@ -19,21 +20,22 @@ import DateFnsUtils from '@date-io/date-fns';
 import { format } from 'date-fns/esm';
 
 const TableFilters = ({ results, setResults }) => {
-    const { setSnackBar } = useContext(ResultsContext);
+    const { t } = UseLanguage();
+    const { messageHandler } = useContext(ResultsContext);
     const [dataSource] = useState(results);
     const [ranges] = useState([
         {
-            label: 'Всі результати',
+            label: `${t('results.filters.labels.all')}`,
             value: 'all',
             icon: 'grading',
         },
         {
-            label: 'Найменший результат',
+            label: `${t('results.filters.labels.min')}`,
             value: 'min',
             icon: 'trending_down',
         },
         {
-            label: 'Максимальний результат',
+            label: `${t('results.filters.labels.max')}`,
             value: 'max',
             icon: 'trending_up',
         },
@@ -46,30 +48,18 @@ const TableFilters = ({ results, setResults }) => {
             case 'min': {
                 const newMinResults = ResultsServiceApi.getMinStudentsResults(dataSource);
                 setResults(newMinResults);
-                setSnackBar({
-                    open: true,
-                    message: 'Відфільтровано по найменшим результатам студентів',
-                    type: 'success',
-                });
+                messageHandler(t('results.filters.messages.min'), 'success');
                 break;
             }
             case 'max': {
                 const newMaxResults = ResultsServiceApi.getMaxStudentsResults(dataSource);
                 setResults(newMaxResults);
-                setSnackBar({
-                    open: true,
-                    message: 'Відфільтровано по найбільшим результатам студентів',
-                    type: 'success',
-                });
+                messageHandler(t('results.filters.messages.max'), 'success');
                 break;
             }
             case 'all': {
                 setResults(dataSource);
-                setSnackBar({
-                    open: true,
-                    message: 'Показано всі результати студентів',
-                    type: 'success',
-                });
+                messageHandler(t('results.filters.messages.all'), 'success');
                 break;
             }
             default:
@@ -81,18 +71,15 @@ const TableFilters = ({ results, setResults }) => {
         setResults((prevState) => {
             const arr = prevState.filter((d) => d.session_date === date);
             if (arr.length) {
-                setSnackBar({
-                    open: true,
-                    message: `Показано всі результати студентів за ${date}`,
-                    type: 'success',
-                });
+                messageHandler(`${t('results.filters.messages.dateSuccess')} ${date}`, 'success');
                 return [...arr];
             } else {
-                setSnackBar({
-                    open: true,
-                    message: `Результати студентів за ${date} відсутні`,
-                    type: 'warning',
-                });
+                messageHandler(
+                    `${t('results.filters.messages.dateFail')} ${date} ${t(
+                        'results.filters.messages.noDateResults',
+                    )}`,
+                    'warning',
+                );
                 return [...dataSource];
             }
         });
@@ -109,11 +96,11 @@ const TableFilters = ({ results, setResults }) => {
                                 className={classes.Label}
                             >
                                 <SwapVertIcon className={classes.SelectorIcon} />
-                                Фільтрація по результату
+                                {t('results.filters.labels.titleResultsFilter')}
                             </InputLabel>
                             <Select
                                 defaultValue={''}
-                                placeholder="Виберіть фільтр результату"
+                                placeholder={t('results.filters.placeholders.resultsFilter')}
                                 value={range}
                                 className={classes.Select}
                                 onChange={(event) => {
@@ -139,7 +126,7 @@ const TableFilters = ({ results, setResults }) => {
                                 <KeyboardDatePicker
                                     format="yyyy-MM-dd"
                                     margin="normal"
-                                    label="Виберіть дату здачі тесту"
+                                    placeholder={t('results.filters.placeholders.dateFilter')}
                                     value={selectedDate}
                                     onChange={(date) => {
                                         setSelectedDate(format(date, 'yyyy-MM-dd'));
