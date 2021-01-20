@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StudentsServiceAPI } from '../services/StudentsService';
+import React, { useContext, useEffect, useState } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
+import { StudentsServiceApi } from '../services/StudentsService';
+import TableContext from '../StudentsTable/TableContext';
 import StudentInfo from './StudentInfo/StudentInfo';
 import PropTypes from 'prop-types';
 import classes from './StudentsViewModal.module.css';
-import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 import {
     Dialog,
@@ -16,48 +17,59 @@ import {
 } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 
-const StudentsViewModal = ({ open, setOpen, groupID, studentID, setError, setSnackBar }) => {
+const StudentsViewModal = ({ groupID, studentID }) => {
     const { t } = UseLanguage();
-
+    const { loading, setLoading, open, setOpen, messageHandler, errorHandler } = useContext(
+        TableContext,
+    );
     const [student, setStudent] = useState({});
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        (async function getStudentInfo() {
-            try {
-                const response = await StudentsServiceAPI.fetchStudentInfo(studentID, groupID);
-                if (response.length) {
-                    setStudent(response[0]);
-                    setLoading(false);
-                    setSnackBar({
-                        open: true,
-                        message: 'Дані студента завантажено',
-                    });
-                } else {
-                    setOpen({ open: false });
-                    setSnackBar({
-                        open: true,
-                        message: 'Немає даних про вибраного студента',
-                    });
-                }
-            } catch (e) {
-                setLoading(false);
-                setOpen({ open: false });
-                setSnackBar({ open: true, message: 'Закрито через помилку' });
-                setError({
-                    error: true,
-                    message: 'Сталася помилка при отриманні даних студента. Спробуйте знову',
-                    type: 'Помилка',
-                });
-            }
-        })();
-        return () => setStudent({});
-    }, [groupID, studentID, setError, setOpen, setSnackBar]);
+        (async function studentInfo(studentID, groupID) {
+            await getStudentInfo(studentID, groupID);
+        })(studentID, groupID);
+        return () => {
+            setLoading((prevState) => {
+                prevState.view = true;
+                return prevState;
+            });
+        };
+    }, [groupID, studentID]);
+
+    const getStudentInfo = async (studentID, groupID) => {
+        const info = await StudentsServiceApi.fetchStudentInfo(studentID, groupID);
+        if (info.length) {
+            setStudent(info[0]);
+            setLoading((prevState) => {
+                prevState.view = false;
+                return prevState;
+            });
+            messageHandler(t('students.view.messages.uploadStudentData'), 'success');
+        } else if (!info.length) {
+            setOpen({ open: false });
+            setLoading((prevState) => {
+                prevState.view = true;
+                return prevState;
+            });
+            messageHandler(t('students.view.messages.notStudentData'), 'warning');
+        } else if (info.error) {
+            setOpen({ open: false });
+            setLoading((prevState) => {
+                prevState.view = true;
+                return prevState;
+            });
+            errorHandler(
+                t('students.view.errors.uploadStudentData'),
+                t('students.view.errors.typeError'),
+            );
+            messageHandler(t('students.view.messages.closeDueError'), 'error');
+        }
+    };
 
     return (
         <Paper component="div" elevation={0} variant={'outlined'}>
-            <Dialog fullWidth={false} maxWidth={false} className={classes.Dialog} open={open}>
-                {loading ? (
+            <Dialog fullWidth={false} maxWidth={false} className={classes.Dialog} open={open.open}>
+                {loading.view ? (
                     <CircularProgress
                         className={classes.Spinner}
                         color={'primary'}
@@ -69,7 +81,7 @@ const StudentsViewModal = ({ open, setOpen, groupID, studentID, setError, setSna
                         <DialogTitle disableTypography={true} className={classes.Title}>
                             <h3>
                                 <InfoIcon className={classes.TitleIcon} />
-                                {t('students.details.title')}
+                                {t('students.view.title')}
                             </h3>
                         </DialogTitle>
                         <DialogContent className={classes.Content}>
@@ -81,11 +93,11 @@ const StudentsViewModal = ({ open, setOpen, groupID, studentID, setError, setSna
                                 className={classes.Button}
                                 onClick={() => {
                                     setOpen({ open: false });
-                                    setSnackBar({ open: true, message: 'Закрито' });
+                                    messageHandler(t('students.view.messages.close'), 'info');
                                 }}
                                 type="reset"
                             >
-                                {t('students.details.close')}
+                                {t('students.view.buttons.close')}
                             </Button>
                         </DialogActions>
                     </div>
@@ -98,10 +110,6 @@ const StudentsViewModal = ({ open, setOpen, groupID, studentID, setError, setSna
 export default StudentsViewModal;
 
 StudentsViewModal.propTypes = {
-    open: PropTypes.bool,
     groupID: PropTypes.string,
     studentID: PropTypes.string,
-    setOpen: PropTypes.func,
-    setSnackBar: PropTypes.func,
-    setError: PropTypes.func,
 };

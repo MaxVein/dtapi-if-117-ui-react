@@ -10,7 +10,6 @@
 
 .StudentsConfirm .Title {
     text-align: center;
-    color: black;
 }
 
 .StudentsConfirm .Content {
@@ -23,7 +22,6 @@
 .StudentsConfirm .Icon {
     width: 50px !important;
     height: 50px !important;
-    color: #3f51b5;
     margin: -10px auto 10px auto;
 }
 
@@ -32,7 +30,6 @@
     text-align: center;
     font-weight: 500;
     font-size: 16px;
-    color: #000;
 }
 
 .StudentsConfirm .Divider {
@@ -48,7 +45,6 @@
     width: 100%;
     height: 40px;
     box-shadow: none;
-    color: black;
 }
 
 .StudentsConfirm .Button:hover {

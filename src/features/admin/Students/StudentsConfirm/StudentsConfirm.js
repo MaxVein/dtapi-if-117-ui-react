@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
+import TableContext from '../StudentsTable/TableContext';
 import PropTypes from 'prop-types';
 import classes from './StudentsConfirm.module.css';
-import { UseLanguage } from '../../../../lang/LanguagesContext';
 
 import {
     Button,
@@ -15,30 +16,21 @@ import {
 } from '@material-ui/core';
 import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 
-const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
+const StudentsConfirm = ({ student, remove }) => {
     const { t } = UseLanguage();
-
-    const cancel = () => {
-        hide({ open: false });
-        setSnackBar({ open: true, message: 'Скасовано' });
-    };
-
-    const confirm = () => {
-        hide({ open: false });
-        remove(student.user_id);
-    };
+    const { open, setOpen, messageHandler } = useContext(TableContext);
 
     return (
         <Paper className={classes.Dialog} elevation={0} variant={'outlined'}>
-            <Dialog open={show} className={classes.Dialog} fullWidth={false} maxWidth={false}>
+            <Dialog open={open.open} className={classes.Dialog} fullWidth={false} maxWidth={false}>
                 <div className={classes.StudentsConfirm}>
                     <DialogTitle className={classes.Title}>
-                        {t('students.modal.deleteTitle')}
+                        {t('students.remove.title')}
                     </DialogTitle>
                     <DialogContent className={classes.Content}>
-                        <PersonAddDisabledIcon className={classes.Icon} />
+                        <PersonAddDisabledIcon color="primary" className={classes.Icon} />
                         <DialogContentText className={classes.Message}>
-                            {`${t('students.modal.deleteSubTitle')} ${student.student_surname} ${
+                            {`${t('students.remove.text')} ${student.student_surname} ${
                                 student.student_name
                             }?`}
                         </DialogContentText>
@@ -48,13 +40,23 @@ const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
                         <Button
                             variant={'contained'}
                             className={classes.Button}
-                            onClick={() => cancel()}
+                            onClick={() => {
+                                setOpen({ open: false });
+                                messageHandler(t('students.remove.messages.canceled'), 'warning');
+                            }}
                             type="reset"
                         >
-                            {t('students.modal.cancelButton')}
+                            {t('students.remove.buttons.cancel')}
                         </Button>
-                        <Button className={classes.Button} onClick={() => confirm()} type="submit">
-                            {t('students.modal.submitAddButton')}
+                        <Button
+                            type="submit"
+                            className={classes.Button}
+                            onClick={() => {
+                                setOpen({ open: false });
+                                remove(student.user_id);
+                            }}
+                        >
+                            {t('students.remove.buttons.submit')}
                         </Button>
                     </DialogActions>
                 </div>
@@ -66,9 +68,6 @@ const StudentsConfirm = ({ show, hide, student, remove, setSnackBar }) => {
 export default StudentsConfirm;
 
 StudentsConfirm.propTypes = {
-    show: PropTypes.bool,
-    hide: PropTypes.func,
     student: PropTypes.object,
     remove: PropTypes.func,
-    setSnackBar: PropTypes.func,
 };

@@ -1,5 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StudentsServiceAPI } from '../services/StudentsService';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { StudentsServiceApi } from '../services/StudentsService';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
+import TableContext from '../StudentsTable/TableContext';
 import TransferSelects from './TransferSelects/TransferSelects';
 import PropTypes from 'prop-types';
 import classes from './StudentsTransferModal.module.css';
@@ -14,81 +16,56 @@ import {
     Paper,
 } from '@material-ui/core';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import { UseLanguage } from '../../../../lang/LanguagesContext';
 
-const StudentsTransferModal = ({
-    open,
-    setOpen,
-    student,
-    setDataSource,
-    setSnackBar,
-    setError,
-}) => {
+const StudentsTransferModal = ({ student, transfer }) => {
     const { t } = UseLanguage();
-
+    const { loading, setLoading, open, setOpen, messageHandler, errorHandler } = useContext(
+        TableContext,
+    );
     const [studentData, setStudentData] = useState(student);
+    const [loader, setLoader] = useState(loading.transfer);
     const [submitted, setSubmitted] = useState(false);
-    const [loading, setLoading] = useState(true);
 
-    const errorHandler = useCallback(
+    const transferErrorHandler = useCallback(
         (message) => {
-            setLoading(false);
             setOpen({ open: false });
-            setSnackBar({ open: true, message: 'Закрито через помилку' });
-            setError({
-                error: true,
-                message,
-                type: 'Помилка',
-            });
+            messageHandler(t('students.transfer.messages.closeDueError'), 'error');
+            errorHandler(message, t('students.transfer.errors.typeWarning'));
         },
-        [setLoading, setOpen, setSnackBar, setError],
+        [setOpen, messageHandler, errorHandler],
     );
 
     useEffect(() => {
-        (async function getStudentInfo(id) {
-            try {
-                const response = await StudentsServiceAPI.fetchStudentById('AdminUser', id);
-                const { username, email } = response[0];
-                if (response.length) {
-                    setStudentData((prevState) => {
-                        prevState.username = username;
-                        prevState.email = email;
-                        return { ...prevState };
-                    });
-                    setLoading(false);
-                }
-            } catch (e) {
-                errorHandler('Сталася помилка при отриманні даних студента. Спробуйте знову');
-            }
-            return () => setStudentData({});
+        (async function studentInfo(id) {
+            await getStudentInfo(id);
         })(student.user_id);
-    }, [student, errorHandler]);
+        return () => {
+            setLoading((prevState) => {
+                prevState.transfer = true;
+                return prevState;
+            });
+        };
+    }, [student]);
 
-    const submit = async () => {
-        setLoading(true);
-        try {
-            const response = await StudentsServiceAPI.update(studentData.user_id, studentData);
-            if (response.data.response === 'ok') {
-                setDataSource((prevState) => {
-                    const arr = prevState.filter((s) => s.user_id !== studentData.user_id);
-                    return arr;
-                });
-                setLoading(false);
-                setOpen(false);
-                setSnackBar({
-                    open: true,
-                    message: 'Студента переведено',
-                });
-            }
-        } catch (e) {
-            errorHandler('Сталася помилка при переведенні студента. Спробуйте знову');
+    const getStudentInfo = async (id) => {
+        const response = await StudentsServiceApi.fetchStudentById('AdminUser', id, 'Transfer');
+        if (response.length) {
+            const { username, email } = response[0];
+            setStudentData((prevState) => {
+                prevState.username = username;
+                prevState.email = email;
+                return { ...prevState };
+            });
+            setLoader(false);
+        } else if (response.error) {
+            transferErrorHandler(t('students.transfer.errors.getStudentInfo'));
         }
     };
 
     return (
         <Paper component="div" elevation={0} variant={'outlined'}>
-            <Dialog fullWidth={false} maxWidth={false} className={classes.Dialog} open={open}>
-                {loading ? (
+            <Dialog fullWidth={false} maxWidth={false} className={classes.Dialog} open={open.open}>
+                {loader ? (
                     <CircularProgress
                         className={classes.Spinner}
                         color={'primary'}
@@ -105,11 +82,12 @@ const StudentsTransferModal = ({
                         </DialogTitle>
                         <DialogContent className={classes.Content}>
                             <TransferSelects
+                                setOpen={setOpen}
                                 setSubmitted={setSubmitted}
                                 oldGroupId={+studentData.group_id}
                                 setStudentData={setStudentData}
-                                setSnackBar={setSnackBar}
-                                errorHandler={errorHandler}
+                                messageHandler={messageHandler}
+                                errorHandler={transferErrorHandler}
                             />
                         </DialogContent>
                         <DialogActions className={classes.Actions}>
@@ -118,19 +96,25 @@ const StudentsTransferModal = ({
                                 className={classes.Button}
                                 onClick={() => {
                                     setOpen({ open: false });
-                                    setSnackBar({ open: true, message: 'Скасовано' });
+                                    messageHandler(
+                                        t('students.transfer.messages.canceled'),
+                                        'warning',
+                                    );
                                 }}
                                 type="reset"
                             >
-                                {t('students.transfer.cancel')}
+                                {t('students.transfer.buttons.cancel')}
                             </Button>
                             <Button
                                 className={classes.Button}
                                 type="submit"
                                 disabled={!submitted}
-                                onClick={submit}
+                                onClick={() => {
+                                    setLoader(true);
+                                    transfer(studentData.user_id, studentData);
+                                }}
                             >
-                                {t('students.transfer.transferButton')}
+                                {t('students.transfer.buttons.transfer')}
                             </Button>
                         </DialogActions>
                     </div>
@@ -143,10 +127,6 @@ const StudentsTransferModal = ({
 export default StudentsTransferModal;
 
 StudentsTransferModal.propTypes = {
-    open: PropTypes.bool,
-    setOpen: PropTypes.func,
     student: PropTypes.object,
-    setDataSource: PropTypes.func,
-    setSnackBar: PropTypes.func,
-    setError: PropTypes.func,
+    transfer: PropTypes.func,
 };

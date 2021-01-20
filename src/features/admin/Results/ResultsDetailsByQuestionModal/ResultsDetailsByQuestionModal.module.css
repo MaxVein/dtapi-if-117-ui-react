@@ -134,10 +134,14 @@
     align-items: center;
 }
 
+.SAnswerCardHeader {
+    max-height: 500px;
+    padding-bottom: 10px;
+}
+
 .SAnswerCard h3 {
     font-size: 18px;
     font-weight: 500;
-    height: 50px;
 }
 
 .SAnswerCardContent span {

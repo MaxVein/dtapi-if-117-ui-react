@@ -20,10 +20,10 @@ const TableSearch = ({ onSearch }) => {
                         setSearch(event.target.value);
                         onSearch(event.target.value);
                     }}
-                    label={t('results.table.search')}
+                    label={t('students.table.search')}
                     type="text"
                     id="search"
-                    placeholder={t('results.table.searchPlaceholder')}
+                    placeholder={t('students.table.search_placeholder')}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

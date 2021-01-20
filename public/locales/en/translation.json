@@ -103,9 +103,6 @@
             "noEdit": "Please change something"
         }
     },
-    "results": {
-        "title": "Results"
-    },
     "admins": {
         "title": "Admins",
         "addButton": "Add admin",
@@ -151,54 +148,330 @@
             "time": "Time"
         }
     },
-    "students": {
-        "title": "Students of the group",
-        "addButton": "Add students",
-        "table": {
-            "id": "No.",
-            "code": "Test book number",
-            "fullName": "Full Name",
-            "actions": "Actions"
-        },
-        "modal": {
-            "addTitle": "Add student",
-            "updateTitle": "Update student",
-            "deleteTitle": "Submit Action",
-            "deleteSubTitle": "Delete student",
-            "submitAddButton": "Submit",
-            "submitUpdateButton": "Save",
-            "submitDeleteButton": "Delete",
-            "cancelButton": "Cancel",
-            "lastName": "Last Name",
-            "name": "Name",
-            "afterName": "After Name",
-            "сode": "Test Book Number",
-            "login": "Login Name",
-            "email": "Email",
-            "password": "Password",
-            "passwordConfirm": "Confirm Password",
-            "uploadPhoto": "Add Photo",
-            "updatePhoto": "Udate Photo"
-        },
-        "details": {
-            "title": "Student's Info",
-            "fullName": "Full Name",
-            "faculty": "Faculty/Institute",
-            "speaciality": "Speciality",
-            "group": "Group",
-            "code": "Test book number",
-            "email": "Email",
-            "login": "Login Name",
-            "close": "Close"
-        },
-        "transfer": {
-            "title": "Student Transfer",
-            "chooseFaculty": "Choose Faculty/Institute",
-            "chooseGroup": "Choose Group",
-            "cancel": "Cancel",
-            "transferButton": "Transfer"
-        }
+  "students":{
+    "page": {
+      "title":"Students of the group",
+      "addButton":"Add student",
+      "messages": {
+        "uploadStudents": "Students loaded",
+        "noStudents": "Students are absent"
+      },
+      "errors": {
+        "uploadStudents": "An error has occurred! Failed to load students in this group! Please try again",
+        "typeError": "Error"
+      }
     },
+    "table":{
+      "search": "Search",
+      "search_placeholder": "Filter all columns of the table",
+      "id":"No.",
+      "code":"Grade book number",
+      "fullName":"Student Full Name",
+      "actions":"Actions",
+      "noStudents": "Students are absent",
+      "tooltips": {
+        "view": "View student data",
+        "update": "Edit student data",
+        "transfer": "Transfer the student to another group",
+        "remove": "Delete student"
+      }
+    },
+    "view": {
+      "title":"Student's Info",
+      "details":{
+        "fullName":"Full Name",
+        "faculty":"Faculty/Institute",
+        "speciality":"Speciality",
+        "group":"Group",
+        "code":"Test book number",
+        "email":"Email",
+        "login":"Login Name"
+      },
+      "messages": {
+        "uploadStudentData": "Student data uploaded",
+        "notStudentData": "No student data",
+        "closeDueError": "Closed due to an error",
+        "close": "Close"
+      },
+      "errors": {
+        "uploadStudentData": "An error occurred while retrieving student data. Please try again",
+        "typeError": "Error"
+      },
+      "buttons": {
+        "close":"Close"
+      }
+    },
+    "remove": {
+      "title": "Submit Action",
+      "text": "Delete student",
+      "messages": {
+        "studentRemove": "Student removed",
+        "canceled": "Canceled"
+      },
+      "errors": {
+        "studentRemove": "An error has occurred! Failed to delete selected student! Please try again",
+        "typeError": "Error"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "submit": "Submit"
+      }
+    },
+    "createUpdate":{
+      "addTitle":"Add student",
+      "updateTitle":"Update student",
+      "messages": {
+        "closeDueError": "Closed due to an error",
+        "canceled": "Canceled",
+        "incorrectEmail": "Incorrect user email! The operation has been canceled!",
+        "incorrectUsername": "Incorrect system username data! The operation has been canceled!",
+        "incorrectGradebookId": "Incorrect credit book number data! The operation has been canceled!",
+        "photoUpload": "Photo uploaded",
+        "formNotValid": "The completed form does not meet the requirements! Please enter the correct data",
+        "studentAdded": "Student added",
+        "studentUpdated": "Student data changed",
+        "noChanges": "No changes were made"
+      },
+      "errors": {
+        "getStudentInfo": "An error occurred while retrieving student data. Please try again",
+        "typeError": "Error",
+        "typeWarning": "Warning",
+        "updateStudent": "An error occurred while updating student data. Please try again",
+        "mustChangeData": "An error occurred while updating student data. To update student data, you must make changes to the current data",
+        "createStudent": "An error occurred while creating the student. Please try again"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "addStudent": "Add student",
+        "updateStudent": "Update student"
+      },
+      "tooltips": {
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "uploadPhoto": "Click to upload a photo",
+        "updatePhoto": "Click to update the photo"
+      },
+      "form": {
+        "fields": {
+          "lastname":"Last Name",
+          "name":"Name",
+          "afterName":"After Name",
+          "gradebook":"Grade Book Number",
+          "login":"Login Name",
+          "email":"Email address",
+          "password":"Password",
+          "passwordConfirm":"Confirm Password",
+          "uploadPhoto":"Add Photo",
+          "updatePhoto":"Update Photo"
+        },
+        "placeholders": {
+          "lastname":"Shevchenko",
+          "name":"Andrew / Catherine",
+          "afterName":"Mykolayovych / Mykolayivna",
+          "gradebook":"07-AS-IP",
+          "login":"andrew_sheva7",
+          "email":"Ex. pat@example.com",
+          "password":"The password should contain only letters, numbers, and common punctuation",
+          "passwordConfirm":"Re-enter the password you entered in the previous field",
+          "uploadPhoto":"Add Photo",
+          "updatePhoto":"Update Photo"
+        },
+        "messages": {
+          "lastnameRequired": "Field not filled! Please enter the student's last name",
+          "firstnameRequired": "Field not filled! Please enter the student's name",
+          "fathernameRequired": "Field not filled! Please enter the student's after name",
+          "gradebookIdRequired": "Field not filled! Please enter the student's grade book number",
+          "gradebookIdNotValid": "A user with this grade book number already exists",
+          "usernameMatches": "Username should consist of QWERTY letters, numbers, and common punctuation, except -.",
+          "usernameRequired": "Field not filled! Please enter the student's system username",
+          "usernameMin": "The minimum length of the username is 6 characters",
+          "usernameMax": "The username must not be longer than 12 characters",
+          "usernameNotValid": "A user with this system name already exists",
+          "emailMatches": "Incorrect data! Please enter an existing email",
+          "emailRequired": "Field not filled! Please enter the student's email",
+          "emailIsEmail": "Incorrect data! Please enter a valid email",
+          "emailNotValid": "A user with this email already exists",
+          "passwordMatches": "Password should contain only QWERTY letters (uppercase and lowercase), numbers, and common punctuation",
+          "passwordRequired": "Field not filled! Please enter a unique student password",
+          "passwordMin": "The minimum password length is 8 characters",
+          "passwordConfirmRequired": "Field not filled! Please re-enter the student password that was entered in the previous field",
+          "passwordConfirmTest": "Passwords do not match. The password in the previous field must match the password of this field"
+        }
+      }
+    },
+    "transfer":{
+      "title":"Student transfer",
+      "messages": {
+        "closeDueError": "Closed due to an error",
+        "canceled": "Canceled",
+        "studentTransfer": "The student is transferred",
+        "noFaculties": "There are no faculties",
+        "notGroups": "There are no groups",
+        "notData": "An error occurred while retrieving data! Please try again",
+        "selectedGroup": "Group selected",
+        "sameGroup": "You have selected the current student group! Change group!",
+        "selectedFaculty": "Faculty selected"
+      },
+      "placeholders": {
+        "chooseFaculty":"Select Faculty / Institute",
+        "chooseGroup":"Select a group"
+      },
+      "errors": {
+        "getStudentInfo": "An error occurred while retrieving student data. Please try again",
+        "typeError": "Error",
+        "typeWarning": "Warning",
+        "transferStudent": "An error occurred while transferring the student. Please try again",
+        "facultyError": "An error occurred with the list of faculties. Please try again",
+        "groupError": "An error occurred while retrieving the group list! Please try again"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "transfer":"Transfer"
+      }
+    }
+  },
+  "results": {
+    "page": {
+      "title": "Test results",
+      "text": "Select the group whose results you want to see",
+      "messages": {
+        "resultsUpload": "Results uploaded",
+        "noResults": "No results"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getResultsError": "An error occurred while obtaining and generating test results! Please try again"
+      }
+    },
+    "table": {
+      "noResults": "No results",
+      "search": "Search",
+      "searchPlaceholder": "Search by student's full name",
+      "no": "No.",
+      "fullname": "Student Full Name",
+      "mark": "Rating",
+      "date": "Date",
+      "start": "Start",
+      "duration": "Duration",
+      "details": "Read more",
+      "tooltips": {
+        "details": "View test details"
+      }
+    },
+    "filters": {
+      "labels": {
+        "all": "All results",
+        "min": "The lowest result",
+        "max": "Maximum result",
+        "titleResultsFilter": "Filter by result"
+      },
+      "placeholders": {
+        "resultsFilter": "Select a result filter",
+        "dateFilter": "Select the date of the test"
+      },
+      "messages": {
+        "min": "Filtered by the lowest student scores",
+        "max": "Filtered by the highest student results",
+        "all": "All student results are shown",
+        "dateSuccess": "Showing all student results for",
+        "dateFail": "Student results for",
+        "noDateResults": "missing"
+      }
+    },
+    "filter": {
+      "messages": {
+        "selectFaculty": "Faculty selected",
+        "noFaculties": "There are no faculties",
+        "selectGroup": "Group selected",
+        "noGroups": "There are no groups",
+        "selectTest": "Test selected",
+        "noTests": "There are no tests",
+        "noGroupTests": "There are no tests available for the selected group",
+        "getDataError": "An error occurred while retrieving data! Please try again"
+      },
+      "labels": {
+        "faculty": "Select Faculty / Institute",
+        "group": "Select Group",
+        "test": "Select Test"
+      },
+      "placeholders": {
+        "faculty": "Faculty / Institute",
+        "group": "Group",
+        "test": "Group tests"
+      },
+      "buttons": {
+        "get": "Get test results"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getFacultiesError": "An error occurred while obtaining the list of faculties! Please try again",
+        "getTestsError": "An error occurred while retrieving the test list! Please try again",
+        "getGroupTestsError": "An error occurred while retrieving the group test list! Please try again",
+        "getGroupsError": "An error occurred while retrieving the group list! Please try again"
+      }
+    },
+    "detailsModal": {
+      "table": {
+        "no": "No.",
+        "id": "Identifier",
+        "text": "Question text",
+        "answer": "Answer",
+        "details": "Read more",
+        "true": "Right",
+        "false": "Wrong"
+      },
+      "messages": {
+        "detailsUpload": "Test details downloaded",
+        "noDetails": "Details about testing are missing",
+        "close": "Closed"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getDetailsError": "An error occurred while retrieving test details! Please try again"
+      },
+      "tooltips": {
+        "details": "View details of the question"
+      },
+      "buttons": {
+        "close": "Close"
+      }
+    },
+    "detailsByQuestion": {
+      "texts": {
+        "noStudentAnswer": "The student did not answer this question"
+      },
+      "types": {
+        "first": "Choosing one correct answer",
+        "second": "Choosing a few correct answers",
+        "third": "Text answer",
+        "fourth": "Numerical answer"
+      },
+      "labels": {
+        "details": "Details of the question №",
+        "id": "Identifier №",
+        "question": "Question:",
+        "info": "Details of the question:",
+        "level": "Level:",
+        "type": "Type:",
+        "answer": "Student answer:",
+        "options": "Options for answering the question",
+        "true": "Right",
+        "false": "Wrong"
+      },
+      "buttons": {
+        "close": "Close"
+      },
+      "messages": {
+        "detailsUpload": "Details of the test questions are loaded",
+        "noDetails": "There is no data on the details of this question",
+        "close": "Closed"
+      },
+      "errors": {
+        "typeError": "Error",
+        "getDetailsError": "An error occurred while retrieving the question details! Please try again"
+      }
+    }
+  },
     "labelRowsPerPage": "Rows per page:",
     "validation": {
         "tooShortName": "Name is too short!",

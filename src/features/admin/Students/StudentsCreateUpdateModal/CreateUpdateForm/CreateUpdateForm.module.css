@@ -59,6 +59,7 @@
 .FormActionsBtn:first-of-type {
     margin-right: 15px;
     background: #e1e1e1;
+    color: #000;
 }
 
 .FormActionsBtn:first-of-type:hover {

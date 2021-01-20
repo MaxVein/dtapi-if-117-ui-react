@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { UseLanguage } from '../../../../lang/LanguagesContext';
 import { ResultsServiceApi } from '../services/ResultsService';
 import PropTypes from 'prop-types';
 import classes from './ResultsDetailsByQuestionModal.module.css';
@@ -36,12 +37,21 @@ const ResultsDetailsByQuestionModal = ({
     messageHandler,
     errorHandler,
 }) => {
+    const { t } = UseLanguage();
     const [answers, setAnswers] = useState([]);
 
     useEffect(() => {
         (async function answersByQuestionId(id) {
             await getAnswersByQuestionId(id);
         })(question.question_id);
+        return () => {
+            setLoading({
+                filter: false,
+                table: false,
+                detailsModal: false,
+                detailsByQuestionModal: true,
+            });
+        };
     }, [question]);
 
     const getAnswersByQuestionId = async (id) => {
@@ -54,44 +64,58 @@ const ResultsDetailsByQuestionModal = ({
                 detailsModal: false,
                 detailsByQuestionModal: false,
             });
+            messageHandler(t('results.detailsByQuestion.messages.detailsUpload'), 'success');
         } else if (!data.length) {
-            setAnswers([]);
-            messageHandler('Немає даних щодо деталей даного запитання', 'warning');
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: false,
-                detailsByQuestionModal: false,
-            });
-            setOpen({ open: false, data: {}, q_num: '' });
+            getAnswersByQuestionIdErrorHandler(false);
         } else if (data.error) {
-            setLoading({
-                filter: false,
-                table: false,
-                detailsModal: false,
-                detailsByQuestionModal: true,
-            });
-            setOpen({ open: false, data: {}, q_num: '' });
-            errorHandler('Сталася помилка під час отримання деталей тестування! Спробуйте знову');
+            getAnswersByQuestionIdErrorHandler(true);
+        }
+    };
+
+    const getQuestionTypeText = (type) => {
+        switch (type) {
+            case '1': {
+                return t('results.detailsByQuestion.types.first');
+            }
+            case '2': {
+                return t('results.detailsByQuestion.types.second');
+            }
+            case '3': {
+                return t('results.detailsByQuestion.types.third');
+            }
+            case '4': {
+                return t('results.detailsByQuestion.types.fourth');
+            }
         }
     };
 
     const getAnswersText = () => {
         const details = answers.filter((item) => {
             if (!question.answer_ids) {
-                return 'Студент не дав відповіді на дане запитання';
+                return t('results.detailsByQuestion.texts.noStudentAnswer');
             }
             return question.answer_ids.some((i) => i === item.answer_id);
         });
 
         if (!details.length) {
             if (!question.answer_ids[0]) {
-                return 'Студент не дав відповіді на дане запитання';
+                return t('results.detailsByQuestion.texts.noStudentAnswer');
             }
             return question.answer_ids;
         }
         const toText = details.map((i) => i.answer_text).join(', ');
         return toText;
+    };
+
+    const getAnswersByQuestionIdErrorHandler = (error) => {
+        setOpen({ open: false, data: {}, q_num: '' });
+        setAnswers([]);
+        error
+            ? errorHandler(
+                  t('results.detailsByQuestion.errors.getDetailsError'),
+                  t('results.detailsByQuestion.errors.typeError'),
+              )
+            : messageHandler(t('results.detailsByQuestion.messages.noDetails'), 'warning');
     };
 
     return (
@@ -109,7 +133,9 @@ const ResultsDetailsByQuestionModal = ({
                         <DialogTitle disableTypography={true} className={classes.Title}>
                             <Typography component="h3" variant="h3">
                                 <InfoIcon className={classes.TitleIcon} />
-                                Деталі запитання №{q_num} ( Ідентифікатор №{question.question_id} )
+                                {`${t('results.detailsByQuestion.labels.details')}${q_num} ( ${t(
+                                    'results.detailsByQuestion.labels.id',
+                                )}${question.question_id} )`}
                             </Typography>
                         </DialogTitle>
                         <DialogContent className={classes.Content}>
@@ -118,7 +144,7 @@ const ResultsDetailsByQuestionModal = ({
                                     <CardContent className={classes.QuestionCardContent}>
                                         <h3>
                                             <ContactSupportIcon className={classes.CardIcon} />
-                                            Запитання:
+                                            {t('results.detailsByQuestion.labels.question')}
                                         </h3>
                                         <div className={classes.Question}>
                                             <h3>
@@ -137,7 +163,7 @@ const ResultsDetailsByQuestionModal = ({
                                             <SettingsApplicationsIcon
                                                 className={classes.CardIcon}
                                             />
-                                            Деталі запитання:
+                                            {t('results.detailsByQuestion.labels.info')}
                                         </h3>
                                         <div className={classes.DetailsCardChips}>
                                             <span>
@@ -145,14 +171,16 @@ const ResultsDetailsByQuestionModal = ({
                                                     color="primary"
                                                     className={classes.CardIcon}
                                                 />
-                                                Рівень: {question.level}
+                                                {t('results.detailsByQuestion.labels.level')}{' '}
+                                                {question.level}
                                             </span>
                                             <span>
                                                 <ExtensionIcon
                                                     color="primary"
                                                     className={classes.CardIcon}
                                                 />
-                                                Тип: {question.type}
+                                                {t('results.detailsByQuestion.labels.type')}{' '}
+                                                {getQuestionTypeText(question.type)}
                                             </span>
                                         </div>
                                     </CardContent>
@@ -161,7 +189,7 @@ const ResultsDetailsByQuestionModal = ({
                                     <CardContent className={classes.AnswerCardContent}>
                                         <h3>
                                             <CheckCircleOutlineIcon className={classes.CardIcon} />
-                                            Відповідь студента:
+                                            {t('results.detailsByQuestion.labels.answer')}
                                         </h3>
                                         <div className={classes.Answer}>
                                             <h3>
@@ -177,7 +205,7 @@ const ResultsDetailsByQuestionModal = ({
                                 <Card className={classes.AnswersCard}>
                                     <h3>
                                         <TocIcon className={classes.CardIcon} />
-                                        Варіанти відповіді запитання
+                                        {t('results.detailsByQuestion.labels.options')}
                                     </h3>
                                     <CardContent className={classes.AnswersCardContent}>
                                         {answers.map((elem, index) => (
@@ -185,9 +213,11 @@ const ResultsDetailsByQuestionModal = ({
                                                 key={index + Math.random()}
                                                 className={classes.SAnswerCard}
                                             >
-                                                <h3>
-                                                    {index + 1}. {elem.answer_text}
-                                                </h3>
+                                                <div className={classes.SAnswerCardHeader}>
+                                                    <h3>
+                                                        {index + 1}. {elem.answer_text}
+                                                    </h3>
+                                                </div>
                                                 <CardContent className={classes.SAnswerCardContent}>
                                                     <span
                                                         className={
@@ -206,8 +236,12 @@ const ResultsDetailsByQuestionModal = ({
                                                             />
                                                         )}
                                                         {+elem.true_answer
-                                                            ? 'Правильна'
-                                                            : 'Неправильна'}
+                                                            ? t(
+                                                                  'results.detailsByQuestion.labels.true',
+                                                              )
+                                                            : t(
+                                                                  'results.detailsByQuestion.labels.false',
+                                                              )}
                                                     </span>
                                                 </CardContent>
                                             </Card>
@@ -223,17 +257,14 @@ const ResultsDetailsByQuestionModal = ({
                                 className={classes.Button}
                                 onClick={() => {
                                     setOpen({ open: false, data: {}, q_num: null });
-                                    messageHandler('Закрито', 'info');
-                                    setLoading({
-                                        filter: false,
-                                        table: false,
-                                        detailsModal: false,
-                                        detailsByQuestionModal: true,
-                                    });
+                                    messageHandler(
+                                        t('results.detailsByQuestion.messages.close'),
+                                        'info',
+                                    );
                                 }}
                                 type="reset"
                             >
-                                Закрити
+                                {t('results.detailsByQuestion.buttons.close')}
                             </Button>
                         </div>
                     </div>

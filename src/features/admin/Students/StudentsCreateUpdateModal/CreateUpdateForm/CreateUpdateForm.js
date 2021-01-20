@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { StudentsServiceAPI } from '../../services/StudentsService';
+import { UseLanguage } from '../../../../../lang/LanguagesContext';
+import { StudentsServiceApi } from '../../services/StudentsService';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
@@ -14,18 +15,9 @@ import EmailIcon from '@material-ui/icons/Email';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { UseLanguage } from '../../../../../lang/LanguagesContext';
 
-const CreateUpdateForm = ({
-    isUpdate,
-    setOpen,
-    updateData,
-    setSnackBar,
-    setStudentData,
-    setSubmit,
-}) => {
+const CreateUpdateForm = ({ isUpdate, setOpen, updateData, messageHandler, start }) => {
     const { t } = UseLanguage();
-
     const initialValues = {
         lastname: updateData && isUpdate ? updateData.student_surname : '',
         firstname: updateData && isUpdate ? updateData.student_name : '',
@@ -36,57 +28,55 @@ const CreateUpdateForm = ({
         password: updateData && isUpdate ? updateData.plain_password : '',
         password_confirm: updateData && isUpdate ? updateData.plain_password : '',
     };
-
     const validationSchema = Yup.object().shape({
-        lastname: Yup.string().required('Поле не заповнене! Будь-ласка введіть прізвище студента'),
-        firstname: Yup.string().required("Поле не заповнене! Будь-ласка введіть ім'я студента"),
+        lastname: Yup.string().required(t('students.createUpdate.form.messages.lastnameRequired')),
+        firstname: Yup.string().required(
+            t('students.createUpdate.form.messages.firstnameRequired'),
+        ),
         fathername: Yup.string().required(
-            "Поле не заповнене! Будь-ласка введіть ім'я по-батькові студента",
+            t('students.createUpdate.form.messages.fathernameRequired'),
         ),
         gradebookID: Yup.string().required(
-            'Поле не заповнене! Будь-ласка введіть номер залікової книжки студента',
+            t('students.createUpdate.form.messages.gradebookIdRequired'),
         ),
         username: Yup.string()
             .matches(
                 /^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
-                "Ім'я користувача повинно складатись з QWERTY літер, цифер та поширених розділових знаків, окрім знаку - .",
+                t('students.createUpdate.form.messages.usernameMatches'),
             )
-            .required("Поле не заповнене! Будь-ласка введіть системне ім'я користувача студента")
-            .min(6, "Мінімальна довжина ім'я користувача 6 символів")
-            .max(12, "Довжина ім'я користувача не повинна бути більша ніж 12 символів"),
+            .required(t('students.createUpdate.form.messages.usernameRequired'))
+            .min(6, t('students.createUpdate.form.messages.usernameMin'))
+            .max(12, t('students.createUpdate.form.messages.usernameMax')),
         email: Yup.string()
             .matches(
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                'Некоректні дані! Будь-ласка введіть існуючу електронну пошту',
+                t('students.createUpdate.form.messages.emailMatches'),
             )
-            .required('Поле не заповнене! Будь-ласка введіть електронну пошту студента')
-            .email('Некоректні дані! Будь-ласка введіть коректну електронну пошту'),
+            .required(t('students.createUpdate.form.messages.emailRequired'))
+            .email(t('students.createUpdate.form.messages.emailIsEmail')),
         password: Yup.string()
             .matches(
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                'Пароль має містити лише QWERTY літери (великі та малі), цифри та поширені розділові знаки',
+                t('students.createUpdate.form.messages.passwordMatches'),
             )
-            .required('Поле не заповнене! Будь-ласка введіть унікальний пароль студента')
-            .min(8, 'Мінімальна довжина паролю 8 символів'),
+            .required(t('students.createUpdate.form.messages.passwordRequired'))
+            .min(8, t('students.createUpdate.form.messages.passwordMin')),
         password_confirm: Yup.string()
-            .required(
-                'Поле не заповнене! Будь-ласка введіть повторно пароль студента, який був введений у попередньому полі',
-            )
+            .required(t('students.createUpdate.form.messages.passwordConfirmRequired'))
             .test(
                 'password-match',
-                'Паролі не збігаються. Пароль у попередньому полі повинен співпадати з паролем даного поля',
+                t('students.createUpdate.form.messages.passwordConfirmTest'),
                 function (value) {
                     return form.values.password === value;
                 },
             ),
     });
-
     const form = useFormik({
         initialValues,
         validationSchema,
         validateOnMount: true,
-        onSubmit: (values) => {
-            submit(values);
+        onSubmit: async (values) => {
+            await submit(values);
         },
     });
     const [image, setImage] = useState(isUpdate && updateData ? updateData.photo : '');
@@ -108,7 +98,7 @@ const CreateUpdateForm = ({
         if (isUpdate && updateData && updateData[check] === value) {
             return updateData[check] === value;
         } else {
-            return StudentsServiceAPI.check(entity, method, value);
+            return StudentsServiceApi.check(entity, method, value);
         }
     };
 
@@ -132,8 +122,8 @@ const CreateUpdateForm = ({
         if (!gradebook_id) {
             notValid(
                 'gradebookID',
-                'Користувач з таким номером залікової книжки вже існує',
-                'Некоректні дані номеру залікової книжки! Операцію скасовано!',
+                t('students.createUpdate.form.messages.gradebookIdNotValid'),
+                t('students.createUpdate.messages.incorrectGradebookId'),
             );
             return;
         }
@@ -141,8 +131,8 @@ const CreateUpdateForm = ({
         if (!username) {
             notValid(
                 'username',
-                'Користувач з таким системним ім`я вже існує',
-                'Некоректні дані системного імені користувача! Операцію скасовано!',
+                t('students.createUpdate.form.messages.usernameNotValid'),
+                t('students.createUpdate.messages.incorrectUsername'),
             );
             return;
         }
@@ -150,8 +140,8 @@ const CreateUpdateForm = ({
         if (!email) {
             notValid(
                 'email',
-                'Користувач з такою електронною адресою вже існує',
-                'Некоректні дані електронної пошти користувача! Операцію скасовано!',
+                t('students.createUpdate.form.messages.emailNotValid'),
+                t('students.createUpdate.messages.incorrectEmail'),
             );
             return;
         }
@@ -180,17 +170,14 @@ const CreateUpdateForm = ({
             plain_password: data.password,
             email: data.email,
             username: data.username,
+            user_id: updateData.user_id,
         };
 
         if (image === '' && isUpdate) {
             formData.photo = updateData.photo;
         }
 
-        setStudentData((prevState) => ({
-            ...prevState,
-            ...formData,
-        }));
-        setSubmit(true);
+        start(updateData.user_id, formData);
     };
 
     const fileInput = () => {
@@ -205,21 +192,13 @@ const CreateUpdateForm = ({
             reader.readAsDataURL(file);
             reader.onload = () => {
                 setImage(reader.result);
-                setSnackBar({
-                    open: true,
-                    message: 'Фото завантажено',
-                });
+                messageHandler(t('students.createUpdate.messages.photoUpload'), 'success');
             };
         }
     };
 
-    const errorHandler = (
-        message = 'Заповнена форма не відповідає вимогам! Будь ласка введіть коректні дані',
-    ) => {
-        setSnackBar({
-            open: true,
-            message,
-        });
+    const errorHandler = (message = t('students.createUpdate.messages.formNotValid')) => {
+        messageHandler(message, 'warning');
     };
 
     return (
@@ -231,10 +210,10 @@ const CreateUpdateForm = ({
                         value={form.values.lastname}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.lastName')}
+                        label={t('students.createUpdate.form.fields.lastname')}
                         type="text"
                         id="lastname"
-                        placeholder="Шевченко"
+                        placeholder={t('students.createUpdate.form.placeholders.lastname')}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -256,10 +235,10 @@ const CreateUpdateForm = ({
                         value={form.values.firstname}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.name')}
+                        label={t('students.createUpdate.form.fields.name')}
                         type="text"
                         id="firstname"
-                        placeholder="Андрій/Катерина"
+                        placeholder={t('students.createUpdate.form.placeholders.name')}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -281,10 +260,10 @@ const CreateUpdateForm = ({
                         value={form.values.fathername}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.afterName')}
+                        label={t('students.createUpdate.form.fields.afterName')}
                         type="text"
                         id="fathername"
-                        placeholder="Миколайович/Миколаївна"
+                        placeholder={t('students.createUpdate.form.placeholders.afterName')}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -306,9 +285,9 @@ const CreateUpdateForm = ({
                         value={form.values.gradebookID}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.сode')}
+                        label={t('students.createUpdate.form.fields.gradebook')}
                         type="text"
-                        placeholder="07-AS-IP"
+                        placeholder={t('students.createUpdate.form.placeholders.gradebook')}
                         id="gradebookID"
                         InputProps={{
                             endAdornment: (
@@ -331,10 +310,10 @@ const CreateUpdateForm = ({
                         value={form.values.username}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.login')}
+                        label={t('students.createUpdate.form.fields.login')}
                         type="text"
                         id="username"
-                        placeholder="andrew_sheva7"
+                        placeholder={t('students.createUpdate.form.placeholders.login')}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -356,10 +335,10 @@ const CreateUpdateForm = ({
                         value={form.values.email}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.email')}
+                        label={t('students.createUpdate.form.fields.email')}
                         type="email"
                         id="email"
-                        placeholder="Ex. pat@example.com"
+                        placeholder={t('students.createUpdate.form.placeholders.email')}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -379,18 +358,18 @@ const CreateUpdateForm = ({
                         value={form.values.password}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.password')}
+                        label={t('students.createUpdate.form.fields.password')}
                         type={showPassword.password ? 'text' : 'password'}
                         id="password"
-                        placeholder="Пароль має містити лише літери, цифри та поширені розділові знаки"
+                        placeholder={t('students.createUpdate.form.placeholders.password')}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <Tooltip
                                         title={
                                             showPassword.password
-                                                ? 'Сховати пароль'
-                                                : 'Показати пароль'
+                                                ? t('students.createUpdate.tooltips.hidePassword')
+                                                : t('students.createUpdate.tooltips.showPassword')
                                         }
                                     >
                                         <IconButton
@@ -432,18 +411,18 @@ const CreateUpdateForm = ({
                         value={form.values.password_confirm}
                         className={classes.TextField}
                         onBlur={form.handleBlur}
-                        label={t('students.modal.passwordConfirm')}
+                        label={t('students.createUpdate.form.fields.passwordConfirm')}
                         type={showPassword.password_confirm ? 'text' : 'password'}
                         id="password_confirm"
-                        placeholder="Введіть повторно пароль, який був введений у попередньому полі"
+                        placeholder={t('students.createUpdate.form.placeholders.passwordConfirm')}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <Tooltip
                                         title={
                                             showPassword.password_confirm
-                                                ? 'Сховати пароль'
-                                                : 'Показати пароль'
+                                                ? t('students.createUpdate.tooltips.hidePassword')
+                                                : t('students.createUpdate.tooltips.showPassword')
                                         }
                                     >
                                         <IconButton
@@ -489,8 +468,8 @@ const CreateUpdateForm = ({
                         <Tooltip
                             title={
                                 isUpdate
-                                    ? 'Нажміть, щоб оновити фото'
-                                    : 'Нажміть, щоб завантажити фото'
+                                    ? t('students.createUpdate.tooltips.updatePhoto')
+                                    : t('students.createUpdate.tooltips.uploadPhoto')
                             }
                         >
                             <Button
@@ -501,13 +480,17 @@ const CreateUpdateForm = ({
                                 startIcon={<CloudUploadIcon />}
                             >
                                 {isUpdate && updateData && image === ''
-                                    ? t('students.modal.uploadPhoto')
+                                    ? t('students.createUpdate.form.fields.uploadPhoto')
                                     : null}
                                 {isUpdate && updateData && image !== ''
-                                    ? t('students.modal.updatePhoto')
+                                    ? t('students.createUpdate.form.fields.updatePhoto')
                                     : null}
-                                {!isUpdate && image === '' ? t('students.modal.uploadPhoto') : null}
-                                {!isUpdate && image !== '' ? t('students.modal.updatePhoto') : null}
+                                {!isUpdate && image === ''
+                                    ? t('students.createUpdate.form.fields.uploadPhoto')
+                                    : null}
+                                {!isUpdate && image !== ''
+                                    ? t('students.createUpdate.form.fields.updatePhoto')
+                                    : null}
                             </Button>
                         </Tooltip>
                         <input
@@ -524,11 +507,11 @@ const CreateUpdateForm = ({
                         className={classes.FormActionsBtn}
                         onClick={() => {
                             setOpen({ open: false });
-                            setSnackBar({ open: true, message: 'Скасовано' });
+                            messageHandler(t('students.createUpdate.messages.canceled'), 'warning');
                         }}
                         type="reset"
                     >
-                        {t('students.modal.cancelButton')}
+                        {t('students.createUpdate.buttons.cancel')}
                     </Button>
                     <Button
                         className={classes.FormActionsBtn}
@@ -539,7 +522,9 @@ const CreateUpdateForm = ({
                                 : !(form.isValid && form.dirty) || form.isSubmitting
                         }
                     >
-                        {isUpdate ? t('students.modal.updateTitle') : t('students.modal.addTitle')}
+                        {isUpdate
+                            ? t('students.createUpdate.buttons.updateStudent')
+                            : t('students.createUpdate.buttons.addStudent')}
                     </Button>
                 </div>
             </form>
@@ -553,7 +538,6 @@ CreateUpdateForm.propTypes = {
     isUpdate: PropTypes.bool,
     setOpen: PropTypes.func,
     updateData: PropTypes.object,
-    setSnackBar: PropTypes.func,
-    setStudentData: PropTypes.func,
-    setSubmit: PropTypes.func,
+    messageHandler: PropTypes.func,
+    start: PropTypes.func,
 };
