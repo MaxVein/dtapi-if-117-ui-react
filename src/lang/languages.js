@@ -15,6 +15,7 @@ i18n.use(Backend)
     .use(initReactI18next)
     .init({
         fallbackLng: setLanguage(),
+        debug: false,
         detection: {
             order: ['queryString', 'cookie'],
             cache: ['cookie'],

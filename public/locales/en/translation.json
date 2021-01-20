@@ -124,7 +124,10 @@
             "name": "Name",
             "email": "Email",
             "password": "Password",
-            "passwordConfirm": "Password Confirm"
+            "passwordConfirm": "Password Confirm",
+            "addTooltip":"Add admin",
+            "updateTooltip":"Update admin",
+            "deleteTooltip":"Delete admin"
         },
         "messages": {
             "deleteSuccess": "Admin successfully deleted",
