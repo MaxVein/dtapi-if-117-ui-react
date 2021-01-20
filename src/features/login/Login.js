@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { isLogged, login } from '../../common/utils';
+import { isLogged, login, getLogo } from '../../common/utils';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 const useStyles = makeStyles((theme) => ({
@@ -24,15 +22,24 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(1),
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    logo: {
+        backgroundColor: '#fafafa',
+    },
 }));
 
 const Login = ({ setAuthInfo }) => {
+    const [logo, setLogo] = useState('');
+    useEffect(() => {
+        getLogo().then((res) => {
+            setLogo(res.data.logo);
+        });
+    }, []);
     const classes = useStyles();
 
     const initialValues = {
@@ -54,9 +61,11 @@ const Login = ({ setAuthInfo }) => {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
+                {logo !== '' && (
+                    <div className={classes.logo}>
+                        <img src={logo} alt="Logo" />
+                    </div>
+                )}
                 <Typography component="h1" variant="h5">
                     Log in
                 </Typography>
