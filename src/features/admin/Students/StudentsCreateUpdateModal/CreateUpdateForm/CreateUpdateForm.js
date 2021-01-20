@@ -91,7 +91,7 @@ const CreateUpdateForm = ({ isUpdate, setOpen, updateData, messageHandler, start
         form.isValid = true;
         form.dirty = true;
         form.setFieldError(field, value);
-        errorHandler(message);
+        messageHandler(message, 'warning');
     };
 
     const uniqueValidator = (value, entity, method, check) => {
@@ -147,12 +147,12 @@ const CreateUpdateForm = ({ isUpdate, setOpen, updateData, messageHandler, start
         }
 
         if (!isUpdate && !(form.isValid && form.dirty)) {
-            errorHandler();
+            messageHandler(t('students.createUpdate.messages.formNotValid'), 'warning');
             return;
         }
 
         if (isUpdate && !form.isValid && !form.dirty) {
-            errorHandler();
+            messageHandler(t('students.createUpdate.messages.formNotValid'), 'warning');
             return;
         }
 
@@ -195,10 +195,6 @@ const CreateUpdateForm = ({ isUpdate, setOpen, updateData, messageHandler, start
                 messageHandler(t('students.createUpdate.messages.photoUpload'), 'success');
             };
         }
-    };
-
-    const errorHandler = (message = t('students.createUpdate.messages.formNotValid')) => {
-        messageHandler(message, 'warning');
     };
 
     return (

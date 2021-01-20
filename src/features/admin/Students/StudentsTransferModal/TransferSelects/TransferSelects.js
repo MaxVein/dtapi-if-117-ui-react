@@ -48,12 +48,13 @@ const TransferSelects = ({
         }
     };
 
-    const getGroupsList = async (id) => {
-        if (id) {
-            await getGroupList(id);
-        } else {
-            messageHandler(t('students.transfer.messages.notData'), 'error');
-        }
+    const facultiesChangeHandler = async (event) => {
+        const id = event.target.value;
+        setFaculty(id);
+        messageHandler(t('students.transfer.messages.selectedFaculty'), 'success');
+        id
+            ? await getGroupList(id)
+            : messageHandler(t('students.transfer.messages.notData'), 'error');
     };
 
     const getGroupList = async (id) => {
@@ -69,20 +70,22 @@ const TransferSelects = ({
         }
     };
 
-    const getGroup = (id) => {
-        if (id) {
-            if (id !== oldGroupId) {
-                messageHandler(t('students.transfer.messages.selectedGroup'), 'success');
-                setStudentData((prevState) => {
-                    prevState.group_id = id.toString();
-                    return { ...prevState };
-                });
-                setSubmitted(true);
-            } else {
-                messageHandler(t('students.transfer.messages.sameGroup'), 'warning');
-            }
+    const groupsChangeHandler = (event) => {
+        const id = event.target.value;
+        setGroup(id);
+        id ? start(+id) : messageHandler(t('students.transfer.messages.notData'), 'error');
+    };
+
+    const start = (id) => {
+        if (id !== oldGroupId) {
+            messageHandler(t('students.transfer.messages.selectedGroup'), 'success');
+            setStudentData((prevState) => {
+                prevState.group_id = id.toString();
+                return { ...prevState };
+            });
+            setSubmitted(true);
         } else {
-            messageHandler(t('students.transfer.messages.notData'), 'error');
+            messageHandler(t('students.transfer.messages.sameGroup'), 'warning');
         }
     };
 
@@ -101,14 +104,7 @@ const TransferSelects = ({
                             required
                             value={faculty}
                             className={classes.Select}
-                            onChange={async (event) => {
-                                setFaculty(event.target.value);
-                                messageHandler(
-                                    t('students.transfer.messages.selectedFaculty'),
-                                    'success',
-                                );
-                                await getGroupsList(+event.target.value);
-                            }}
+                            onChange={facultiesChangeHandler}
                             disabled={disabled.faculties}
                         >
                             {faculties.map(({ faculty_id, faculty_name }) => (
@@ -133,10 +129,7 @@ const TransferSelects = ({
                             required
                             value={group}
                             className={classes.Select}
-                            onChange={async (event) => {
-                                setGroup(event.target.value);
-                                await getGroup(+event.target.value);
-                            }}
+                            onChange={groupsChangeHandler}
                             disabled={disabled.groups}
                         >
                             {groups.map(({ group_id, group_name }) => (
