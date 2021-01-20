@@ -80,6 +80,8 @@ export default function Tests() {
         getRecords('Subject')
             .then((res) => {
                 setSubjects([...res.data]);
+                setSubjectName(res.data.filter((elem) => elem.subject_id === id));
+                console.log(`subjectName`, subjectName);
             })
             .catch(() => {
                 setSnack({ open: true, type: 'erorr', message: messages.error });
@@ -94,7 +96,7 @@ export default function Tests() {
                     setTestData([]);
                     return;
                 }
-                setSubjectName(subjects.filter((elem) => elem.subject_id === testId));
+
                 setTestData(res.data);
             })
             .catch(() => {
