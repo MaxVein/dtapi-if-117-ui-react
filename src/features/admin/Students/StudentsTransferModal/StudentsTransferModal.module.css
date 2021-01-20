@@ -19,7 +19,7 @@
 
 .TitleIcon {
     vertical-align: middle;
-    font-size: 30px;
+    font-size: 30px !important;
     margin: -3.5px 10px auto auto;
 }
 

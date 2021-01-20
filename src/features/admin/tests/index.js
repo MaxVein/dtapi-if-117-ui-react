@@ -81,7 +81,6 @@ export default function Tests() {
             .then((res) => {
                 setSubjects([...res.data]);
                 setSubjectName(res.data.filter((elem) => elem.subject_id === id));
-                console.log(`subjectName`, subjectName);
             })
             .catch(() => {
                 setSnack({ open: true, type: 'erorr', message: messages.error });
