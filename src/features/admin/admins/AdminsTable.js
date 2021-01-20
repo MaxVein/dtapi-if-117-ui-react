@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TablePagination from '@material-ui/core/TablePagination';
-
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import { Typography } from '@material-ui/core';
-
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TablePagination,
+    Paper,
+    Button,
+    Typography,
+    Tooltip,
+} from '@material-ui/core';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AddCircle from '@material-ui/icons/AddCircle';
 
@@ -32,6 +33,7 @@ import { UseLanguage } from '../../../lang/LanguagesContext';
 
 export default function AdminsTable() {
     const { t } = UseLanguage();
+
     const [open, setOpen] = React.useState(false);
     const [snack, setSnack] = React.useState({ open: false, message: '', type: 'success' });
     const [page, setPage] = React.useState(0);
@@ -112,16 +114,18 @@ export default function AdminsTable() {
                             <SupervisedUserCircle fontSize="large" />
                             {t('admins.title')}
                         </Typography>
-                        <Button
-                            onClick={openModal}
-                            disableElevation
-                            variant="contained"
-                            color="primary"
-                            className={styles.entityHeaderButton}
-                        >
-                            <AddCircle />
-                            {t('admins.addButton')}
-                        </Button>
+                        <Tooltip title={t('admins.modal.addTooltip')} arrow>
+                            <Button
+                                onClick={openModal}
+                                disableElevation
+                                variant="contained"
+                                color="primary"
+                                className={styles.entityHeaderButton}
+                            >
+                                <AddCircle />
+                                {t('admins.addButton')}
+                            </Button>
+                        </Tooltip>
                     </div>
                     <Paper elevation={6}>
                         <TableContainer className={styles.entityTableContainer}>
