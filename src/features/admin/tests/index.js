@@ -10,6 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { findIndex } from 'lodash';
 
@@ -26,21 +27,11 @@ import TablePaginationActions from '../../../common/components/Table/tablePagina
 import FormDialog from './dialog/dialog';
 import classes from './test.module.scss';
 import TableHeadComponent from './table/tableHead';
-import SelectComponent from './selectTest';
+import SelectComponent from './SelectComponent/selectComponent';
 
 export default function Tests() {
-    const titleRow = [
-        {
-            name: 'ID',
-            sortingName: 'test_id',
-        },
-        { name: 'Назва', sortingName: 'test_name' },
-        { name: 'Предмет', sortingName: 'null' },
-        { name: 'Кількість тестів', sortingName: 'tasks' },
-        { name: 'Час для проходження тесту (хв)', sortingName: 'time_for_test' },
-    ];
-    const location = useLocation();
-    const { id, name } = location.state;
+    let location = useLocation();
+    let { id } = location.state;
     const [testData, setTestData] = useState([]);
     const [snack, setSnack] = useState({ open: false });
     const [deleteEntity, setDeleteEntity] = useState({ delete: false, id: '' });
@@ -58,18 +49,58 @@ export default function Tests() {
         time_for_test: true,
     });
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(7);
+    const [subjects, setSubjects] = useState([]);
+    const [subjectId, setSubjectId] = useState('');
+    const [subjectName, setSubjectName] = useState([]);
+    const noData = `Тести для даного предмету відсутні`;
+    const titleRow = [
+        {
+            name: 'ID',
+            sortingName: 'test_id',
+        },
+        { name: 'Назва', sortingName: 'test_name' },
+        { name: 'Кількість тестів', sortingName: 'tasks' },
+        { name: 'Час для проходження тесту (хв)', sortingName: 'time_for_test' },
+        { name: 'Кілікість спроб', sortingName: 'attempts' },
+    ];
+    const messages = {
+        error: 'Дані відсутні',
+        duplicate: 'Схоже тест з такою назвою уже існує',
+        create: 'Тест додано',
+        edit: 'Тест оновлено',
+        delete: 'Тест видалено',
+        noEdit: 'Внесіть зміни у форму',
+        noAnswer: 'Виникли проблеми на сервері спробуйте пізніше',
+    };
     //Read
-
     useEffect(() => {
-        getTestRecords(id)
+        setSubjectId(id);
+        getTestData(id);
+        getRecords('Subject')
             .then((res) => {
+                setSubjects([...res.data]);
+            })
+            .catch(() => {
+                setSnack({ open: true, type: 'erorr', message: messages.error });
+            });
+    }, []);
+
+    const getTestData = (testId) => {
+        getTestRecords(testId)
+            .then((res) => {
+                if (res.data.response === 'no records') {
+                    setRowsPerPage(0);
+                    setTestData([]);
+                    return;
+                }
+                setSubjectName(subjects.filter((elem) => elem.subject_id === testId));
                 setTestData(res.data);
             })
             .catch(() => {
-                setSnack({ open: true, type: 'erorr', message: 'Дані відсутні' });
+                setSnack({ open: true, type: 'erorr', message: messages.error });
             });
-    }, [id]);
+    };
 
     // Table
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, testData.length - page * rowsPerPage);
@@ -92,14 +123,14 @@ export default function Tests() {
                 .then((res) => {
                     setTestData((prevVal) => [...res.data, ...prevVal]);
                     setOpenForm(false);
-                    setSnack({ open: true, type: 'success', message: 'Тест додано' });
+                    setSnack({ open: true, type: 'success', message: messages.create });
                 })
                 .catch(() => {
                     setOpenSnackbar(true);
                     setSnack({
                         open: true,
                         type: 'erorr',
-                        message: 'Схоже тест з такою назвою уже існує',
+                        message: messages.duplicate,
                     });
                 });
         }
@@ -112,7 +143,7 @@ export default function Tests() {
     };
     useEffect(() => {
         if (editTest.equal && !editTest.first) {
-            setSnack({ open: true, type: 'warning', message: 'Внесіть зміни у форму' });
+            setSnack({ open: true, type: 'warning', message: messages.noEdit });
         } else if (editTest.edit && !editTest.equal) {
             updateEntities('test', editTest.data.test_id, editTest.data)
                 .then((res) => {
@@ -126,13 +157,13 @@ export default function Tests() {
                         return [...prevVal];
                     });
 
-                    setSnack({ open: true, type: 'success', message: 'Тест оновлено' });
+                    setSnack({ open: true, type: 'success', message: messages.edit });
                 })
                 .catch(() => {
                     setSnack({
                         open: true,
                         type: 'error',
-                        message: 'Виникли проблеми на сервері спробуйте пізніше',
+                        message: messages.noAnswer,
                     });
                 });
         }
@@ -147,14 +178,14 @@ export default function Tests() {
                         setTestData((prevVal) => {
                             return prevVal.filter((elem) => elem.test_id !== deleteEntity.id);
                         });
-                        setSnack({ open: true, type: 'success', message: 'Тест видалено' });
+                        setSnack({ open: true, type: 'success', message: messages.delete });
                     }
                 })
                 .catch(() => {
                     setSnack({
                         open: true,
                         type: 'error',
-                        message: 'Виникли проблеми на сервері спробуйте пізніше',
+                        message: messages.noAnswer,
                     });
                 });
         }
@@ -168,6 +199,7 @@ export default function Tests() {
             elem.tasks = +elem.tasks;
             elem.time_for_test = +elem.time_for_test;
             elem.test_id = +elem.test_id;
+            elem.attempts = +elem.attempts;
         });
 
         if (sort[key]) {
@@ -183,6 +215,13 @@ export default function Tests() {
         }
         setTestData(newTestData);
     };
+    // Select subject
+    useEffect(() => {
+        if (subjectId !== '') {
+            getTestData(subjectId);
+            setSubjectName(subjects.filter((elem) => elem.subject_id === subjectId));
+        }
+    }, [subjectId]);
 
     return (
         <div>
@@ -190,13 +229,22 @@ export default function Tests() {
                 <div className={classes.testTitle}>
                     Тести з предмета:
                     <b>
-                        <em> {name}</em>
+                        {subjectName.map((elem) => {
+                            return <em key={elem.subject_name}> {elem.subject_name}</em>;
+                        })}
                     </b>
                 </div>
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
-                    Додати тест
+                    <AddCircleIcon /> Додати тест
                 </Button>
             </div>
+            {subjects.length > 0 && (
+                <SelectComponent
+                    setSubjectId={setSubjectId}
+                    subjects={subjects}
+                    subjectId={subjectId}
+                />
+            )}
             {openForm && (
                 <FormDialog
                     editTest={editTest}
@@ -225,12 +273,18 @@ export default function Tests() {
                                 test={test}
                                 handleEditTest={handleEditTest}
                                 setDeleteEntity={setDeleteEntity}
-                                subjectName={name}
                             />
                         ))}
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
                                 <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                        {testData.length === 0 && (
+                            <TableRow>
+                                <TableCell className={classes.noInputData} colSpan={6}>
+                                    {noData}
+                                </TableCell>
                             </TableRow>
                         )}
                     </TableBody>

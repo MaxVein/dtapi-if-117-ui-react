@@ -2,7 +2,8 @@ import React from 'react';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import EditOutlined from '@material-ui/icons/EditOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import classes from './table.module.scss';
@@ -22,7 +23,15 @@ export default function TableList({ entity, setDeleteEntity, handleEditEntity })
             <TableCell align="left">
                 <div className={classes.actionBtnContainer}>
                     <Tooltip title="Редагувати">
-                        <EditOutlined onClick={() => handleEditEntity(entity)} />
+                        <Button
+                            className={classes.iconBtn}
+                            disableElevation
+                            variant="contained"
+                            color="primary"
+                            onClick={() => handleEditEntity(entity)}
+                        >
+                            <EditIcon />
+                        </Button>
                     </Tooltip>
                     <ConfirmDelete
                         id={entity.timetable_id}

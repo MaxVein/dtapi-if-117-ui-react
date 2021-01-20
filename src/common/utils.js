@@ -32,3 +32,7 @@ export const isLogged = () => {
 export const logOut = () => {
     return axios.get(`${environment.BASEURL}login/logout`);
 };
+
+export const getLogo = () => {
+    return axios.get(`${environment.BASEURL}welcome/logo`);
+};

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
+import CollectionsBookmarkIcon from '@material-ui/icons/CollectionsBookmark';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { findIndex } from 'lodash';
 
@@ -144,10 +146,11 @@ export default function Subjects() {
         <div className={classes.subjectsContainer}>
             <div className={classes.subjectBtn}>
                 <Typography component="h2" variant="h4" color="textPrimary" gutterBottom>
+                    <CollectionsBookmarkIcon />
                     {t('subjects.title')}
                 </Typography>
                 <Button variant="contained" color="primary" onClick={handleClickCreate}>
-                    {t('subjects.addButton')}
+                    <AddCircleIcon /> {t('subjects.addButton')}
                 </Button>
             </div>
             {openForm && (

@@ -21,6 +21,7 @@ export default function TableComponent({
     titleRow,
     TableList,
     entityNameId,
+    noData,
 }) {
     const { t } = UseLanguage();
     const [page, setPage] = useState(0);
@@ -30,10 +31,14 @@ export default function TableComponent({
         table: {
             minWidth: 400,
         },
+        noInputData: {
+            textAlign: 'center',
+            fontSize: 24,
+        },
     });
     const classes = useStyles();
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, entity.length - page * rowsPerPage);
-    const noData = 'Немає розкладу для заданого предмету.';
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -59,7 +64,7 @@ export default function TableComponent({
                     ))}
                     {entity.length === 0 && (
                         <TableRow>
-                            <TableCell className={classes.noInputData} colSpan={6}>
+                            <TableCell className={classes.noInputData} colSpan={titleRow.length}>
                                 {noData}
                             </TableCell>
                         </TableRow>

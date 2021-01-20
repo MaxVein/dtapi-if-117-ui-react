@@ -2,10 +2,11 @@ import React from 'react';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import EditOutlined from '@material-ui/icons/EditOutlined';
+import EditIcon from '@material-ui/icons/Edit';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import ConfirmDelete from '../../../../common/components/ComfirmDelete';
@@ -32,7 +33,14 @@ export default function TableList({ entity, handleEditEntity, setDeleteEntity })
                         }}
                     >
                         <Tooltip title={t('subjects.tableList.tooltipTest')}>
-                            <SpeakerNotesIcon />
+                            <Button
+                                disableElevation
+                                className={classes.iconBtn}
+                                variant="contained"
+                                color="primary"
+                            >
+                                <SpeakerNotesIcon />
+                            </Button>
                         </Tooltip>
                     </Link>
                     <Link
@@ -43,11 +51,26 @@ export default function TableList({ entity, handleEditEntity, setDeleteEntity })
                         }}
                     >
                         <Tooltip title={t('subjects.tableList.tooltipTimetable')}>
-                            <ScheduleIcon />
+                            <Button
+                                className={classes.iconBtn}
+                                disableElevation
+                                variant="contained"
+                                color="primary"
+                            >
+                                <ScheduleIcon />
+                            </Button>
                         </Tooltip>
                     </Link>
                     <Tooltip title={t('subjects.tableList.tooltipEdit')}>
-                        <EditOutlined onClick={() => handleEditEntity(entity)} />
+                        <Button
+                            className={classes.iconBtn}
+                            disableElevation
+                            variant="contained"
+                            color="primary"
+                            onClick={() => handleEditEntity(entity)}
+                        >
+                            <EditIcon />
+                        </Button>
                     </Tooltip>
                     <ConfirmDelete
                         id={entity.subject_id}
