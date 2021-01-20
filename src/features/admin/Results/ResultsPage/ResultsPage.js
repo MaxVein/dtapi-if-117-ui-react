@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { UseLanguage } from '../../../../lang/LanguagesContext';
 import { ResultsServiceApi } from '../services/ResultsService';
 import ResultsContext from './ResultsContext';
@@ -24,28 +24,6 @@ const ResultsPage = () => {
     });
     const [snackBar, setSnackBar] = useState({ open: false, message: '', type: 'success' });
     const [error, setError] = useState({ error: false, message: '', type: '' });
-
-    const errorHandler = useCallback(
-        (message, type) => {
-            setError({
-                error: true,
-                message,
-                type,
-            });
-        },
-        [setError],
-    );
-
-    const messageHandler = useCallback(
-        (message, type) => {
-            setSnackBar({
-                open: true,
-                message,
-                type,
-            });
-        },
-        [setSnackBar],
-    );
 
     const getTestInfoByGroup = async (testId, groupId, subjectId) => {
         setResults([]);
@@ -80,6 +58,22 @@ const ResultsPage = () => {
                   t('results.page.errors.typeError'),
               )
             : messageHandler(t('results.page.messages.noResults'), 'warning');
+    };
+
+    const errorHandler = (message, type) => {
+        setError({
+            error: true,
+            message,
+            type,
+        });
+    };
+
+    const messageHandler = (message, type) => {
+        setSnackBar({
+            open: true,
+            message,
+            type,
+        });
     };
 
     return (

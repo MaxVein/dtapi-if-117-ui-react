@@ -158,7 +158,7 @@ const ResultsTable = ({ results }) => {
                             component="div"
                             labelRowsPerPage={t('labelRowsPerPage')}
                             className={classes.TablePaginator}
-                            rowsPerPageOptions={[10, 15, 20, 25, 30, 40, 50, 100]}
+                            rowsPerPageOptions={[7, 10, 15, 20, 25, 30, 40, 50, 100]}
                             count={dataSource.length}
                             page={page}
                             onChangePage={(event, newPage) => setPage(newPage)}
